@@ -1,6 +1,6 @@
 Created by Surfpup
 
-version 0.2.2
+version 0.2.3
 
 Description
 -Overrides the vanilla prefix system entirely
@@ -26,6 +26,9 @@ Ideas:
 
 Changelog
 
+v0.2.3
+	-Updated to use new life variable in tConfig Beta 0.28.3h, should fix all HP affix issues
+	
 v0.2.2
 	-Updated to make use of new networking hooks in beta 0.28.3g, fixes NPC syncing
 	-In the default health system mode, HP affixes should be disabled (until I can figure out how to make them work)
