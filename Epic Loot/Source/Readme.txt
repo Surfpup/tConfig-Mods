@@ -28,6 +28,7 @@ Changelog
 
 v0.2.3
 	-Updated to use new life variable in tConfig Beta 0.28.3h, should fix all HP affix issues
+	-Fixed bug related to saving/loading NPC affixes
 	
 v0.2.2
 	-Updated to make use of new networking hooks in beta 0.28.3g, fixes NPC syncing

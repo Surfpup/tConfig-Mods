@@ -148,6 +148,7 @@ namespace Terraria
 
         public class GNPCAffix
         { //Generated, needs to save additional data
+            public string affixType;
             public string affix;
             public bool suffix;
             public List<float> randValues;
@@ -157,6 +158,7 @@ namespace Terraria
             public GNPCAffix(string name, bool suffix = false)
             {
                 this.affix = name;
+                this.affixType = name;
                 this.suffix = suffix;
                 randValues = new List<float>();
                 delegates = new Dictionary<string, Delegate>();
@@ -177,22 +179,22 @@ namespace Terraria
             }
             public void Save(BinaryWriter writer)
             {
-                writer.Write(this.affix);
+                writer.Write(this.affixType);
                 writer.Write(randValues.Count);
                 for (int i = 0; i < randValues.Count; i++) writer.Write(randValues[i]);
                 writer.Write(rarity);
             }
             public void Load(BinaryReader reader, int v)
             {
-                this.affix = reader.ReadString();
-                //Console.WriteLine("Loading Affix " + this.affix);
+                this.affixType = reader.ReadString();
+                Console.WriteLine("Loading Affix " + this.affixType);
                 int num = reader.ReadInt32();
                 randValues = new List<float>();
                 for (int i = 0; i < num; i++) randValues.Add(reader.ReadSingle());
                 this.rarity = reader.ReadSingle();
 
                 //Add dprefix stuff
-                NPCAffix d = ModGeneric.npcAffixByName[affix];
+                NPCAffix d = ModGeneric.npcAffixByName[affixType];
                 /*foreach(Requirement r in d.customRequirements)
                 {
                     this.customRequirements.Add(r);
@@ -218,13 +220,13 @@ namespace Terraria
                     //if(m.tip!=null) this.AddTip(m.tip(val));
                 }
 
-                /*if(d.affixes.Count > 0)
+                if(d.affixes.Count > 0)
                 { //Modify the affix depending on how good the roll is!
                     float avgRand = rarity;
                     double val = (avgRand * (double) (d.affixes.Count - 1));
                     int index = (int) Math.Round(val, System.MidpointRounding.AwayFromZero);
                     this.affix = d.affixes[index];
-                }*/
+                }
             }
             public void AffixName(ref string name)
             {
