@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B523708D-1331-4FD4-8A16-E17D98E7F5E6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Epic_Loot___Unlimited_Health</RootNamespace>
+    <AssemblyName>Epic Loot - Unlimited Health</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\..\..\ModPack_Objs\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\..\..\TerrariaCode\code\tConfig\code\Patcher\Resources\Microsoft.Xna.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\..\..\TerrariaCode\code\tConfig\code\Patcher\Resources\Microsoft.Xna.Framework.Game.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\..\..\TerrariaCode\code\tConfig\code\Patcher\Resources\Microsoft.Xna.Framework.Graphics.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="tConfig">
+      <HintPath>..\..\..\..\..\..\..\..\..\Games\Steam\steamapps\common\terraria\tConfig.exe</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\Global\Affixes\DPrefix.cs">
+      <Link>Global\Affixes\DPrefix.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Global\Affixes\DPrefixGroup.cs">
+      <Link>Global\Affixes\DPrefixGroup.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Global\Affixes\GPrefix.cs">
+      <Link>Global\Affixes\GPrefix.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Global\Affixes\Item Affixes.cs">
+      <Link>Global\Affixes\Item Affixes.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Global\Affixes\NPC Affixes.cs">
+      <Link>Global\Affixes\NPC Affixes.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Global\Affixes\NPCAffix.cs">
+      <Link>Global\Affixes\NPCAffix.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Global\Affixes\Rand.cs">
+      <Link>Global\Affixes\Rand.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Global\Generic.cs">
+      <Link>Global\Generic.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Global\World.cs">
+      <Link>Global\World.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Item\Item.cs">
+      <Link>Item\Item.cs</Link>
+    </Compile>
+    <Compile Include="..\..\NPC\NPC.cs">
+      <Link>NPC\NPC.cs</Link>
+    </Compile>
+    <Compile Include="Global\Player.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

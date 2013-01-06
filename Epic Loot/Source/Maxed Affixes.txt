@@ -1,0 +1,24 @@
+From armor/accessories, if you have 8 with maxed affix:
++32 Defense
++320 Mana
++320 Max HP
++24% Crit Chance
++40% Damage
++40% Melee Speed
++80% Magic Crit Chance
++80% Melee Crit Chance
++80% Ranged Crit Chance
++80% Magic Damage
++80% Melee Damage
++80% Ranged Damage
++80% Movement Speed
++400 HP on respawn
++320 Mana on respawn
++160% Magic Find
++80% Mining Speed
++160% Spawn Rate
+-40% Mana Cost
++16 Health Regen
+Reduced potion cooldown by 40 seconds
++16 increased block placement range
+
