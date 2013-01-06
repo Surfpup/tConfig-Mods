@@ -56,21 +56,10 @@ namespace Terraria
             p.statManaMax = 100;
         }
 
-        public static void IncreaseMaxHP(int amt)
-        {
-            Main.player[Main.myPlayer].statLifeMax += amt;
-        }
-
         public static void IncreaseMF(float amt)
         {
             magicFind += amt;
             if (magicFind > 1f) magicFind = 1f;
-        }
-
-        public static void LifeCrystalUse(Player p)
-        {
-            //Do nothing
-            Main.NewText("(??) Crystal used! oldHealth=" + oldHealth);
         }
     }
 }

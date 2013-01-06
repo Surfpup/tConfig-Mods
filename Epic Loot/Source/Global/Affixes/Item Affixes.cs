@@ -83,7 +83,7 @@ namespace Terraria
 					};
 					return d;
 				}, (float val) => { return new MouseTip("+"+Math.Round((float)(val*100f), 2)+"% Max Spawns", true); }, 0.01f, 0.20f),
-		new DPrefix("Vital").Require(armor).DMod( (int v) => { return (Player p) => { Codable.RunGlobalMethod("ModPlayer", "IncreaseMaxHP", v); }; }, (int val) => { return new MouseTip("+"+val+" Max HP", true); }, 1, 40),
+		new DPrefix("Vital").Require(armor).DMod( (int v) => { return (Player p) => { p.statLifeMax2+=v; }; }, (int val) => { return new MouseTip("+"+val+" Max HP", true); }, 1, 40),
 		new DPrefix("Mage's").Require(armor).DMod( (float val) => { return (Player player) => { player.manaCost -= val; }; } , (float val) => { return new MouseTip("-"+Math.Round(val, 2)+"% Mana Cost", true); }, 0.01f, 0.05f),
 		new DPrefix("Rejuvenating").Require(armor).DMod( (int v) => { return (Player p) => { p.lifeRegen += v; }; }, (int val) => { return new MouseTip("+"+val+" Life Regen", true); }, 1, 2),
 		new DPrefix("Thirsty").Require(armor).DMod( (int v) => { return (Player p) => { p.potionDelayTime -= (v*60); }; }, (int val) => { return new MouseTip("Reduces potion cooldown by "+val+" seconds", true); }, 1, 5),

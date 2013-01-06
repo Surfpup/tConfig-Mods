@@ -27,29 +27,11 @@ namespace Terraria
     public class ModPlayer
     {
         public static float magicFind = 0f; //Helps find better items!
-        //public static int oldHealth = 0;
-        public static int oldMana = 0;
 
         public static void PreUpdatePlayer(Player p)
         {
-            //if (p.statLifeMax != oldHealth) p.statLifeMax = oldHealth; //Reset health
             magicFind = 0f;
             if (Main.hardMode) magicFind += .2f;
-        }
-
-        /*public static void Save(BinaryWriter writer)
-        { //this is called before the regular data is saved
-            Main.player[Main.myPlayer].statLifeMax = oldHealth;
-        }
-
-        public static void PostLoad(Player p)
-        {
-            oldHealth = p.statLifeMax;
-        }*/
-
-        public static void IncreaseMaxHP(int amt)
-        {
-            //Main.player[Main.myPlayer].statLifeMax += amt;
         }
 
         public static void IncreaseMF(float amt)
@@ -57,11 +39,5 @@ namespace Terraria
             magicFind += amt;
             if (magicFind > 1f) magicFind = 1f;
         }
-
-        /*public static void LifeCrystalUse(Player p)
-        {
-            oldHealth += 20;
-            Main.NewText("Crystal used! oldHealth=" + oldHealth);
-        }*/
     }
 }
