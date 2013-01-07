@@ -61,6 +61,8 @@ namespace Terraria
 				}
 			}; return d; }, 1, 1000),*/
 		});
+
+            Codable.RunGlobalMethod("ModGeneric", "AddEpicNPCAffixes", ModGeneric.npcAffixes);
         }
     }
 }

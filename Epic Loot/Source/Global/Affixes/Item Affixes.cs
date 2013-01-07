@@ -182,6 +182,7 @@ namespace Terraria
                 );
 
             //ModGeneric.prefixes.Add(elementalDamage);
+            Codable.RunGlobalMethod("ModGeneric", "AddEpicItemAffixes", ModGeneric.prefixes);
         }
     }
 }
