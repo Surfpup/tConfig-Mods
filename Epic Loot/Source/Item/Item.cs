@@ -21,8 +21,9 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using System.Collections;
 using System.IO;
+using Terraria;
 
-namespace Terraria
+namespace Epic_Loot
 {
     public class Global_Item : CustomItem
     {
@@ -32,14 +33,12 @@ namespace Terraria
 
         }
 
-        int[] elemental;
         List<GPrefix> prefixes;
         Prefix combined = null;
         public void Initialize()
         {
             prefixes = new List<GPrefix>();
             combined = new Prefix("Combined");
-            elemental = new int[Enum.GetNames(typeof(ModGeneric.Elements)).Length];
         }
         public void Save(BinaryWriter writer)
         {
@@ -89,7 +88,6 @@ namespace Terraria
         public void InitAffixes()
         {
             combined = new Prefix("Combined");
-            elemental = new int[Enum.GetNames(typeof(ModGeneric.Elements)).Length];
 
             float avgRand = 0f;
             float totalRand = 0f;
@@ -194,10 +192,7 @@ namespace Terraria
                 }
             }
         }
-        public void IncreaseElement(int element, int amt)
-        {
-            elemental[element] += amt;
-        }
+
         /*public void Effects(Player player)
         {
             combined.Apply(player);
@@ -212,24 +207,7 @@ namespace Terraria
             //Main.NewText("Effects run");
             combined.Apply(player);
         }
-        public void DamageNPC(Player myPlayer, NPC npc, ref int damage, ref float knockback)
-        {
-            //Apply elemental damage
-            for (int i = 0; i < elemental.Length; i++)
-            {
-                if (elemental[i] > 0)
-                {
-                    float npcElement = 0f;
-                    if (npc.RunMethod("GetElement", i))
-                    {
-                        npcElement = (float) Codable.customMethodReturn;
-                    }
-                    damage += (int)(elemental[i] * (1f - npcElement));
-                    //npc.HitEffect(myPlayer.direction, dmg);
-                    //npc.StrikeNPC(dmg, 0f, myPlayer.direction, false);
-                }
-            }
-        }
+
         /*public void DealtNPC(Player myPlayer, NPC npc, double damage)
         {
             RunPrefixMethod("DealtNPC", myPlayer, npc, damage);

@@ -19,8 +19,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Terraria;
 
-namespace Terraria
+namespace Epic_Loot
 {
     public class Item_Affixes
     {
@@ -34,6 +35,7 @@ namespace Terraria
         //Also, make suffixes go into one group; each item should only have one suffix. Thus, suffixes should be more unique in nature.
         public static void DefinePrefixes()
         {
+            Console.WriteLine("Defining prefixes...");
             ModGeneric.prefixByName = new Dictionary<string, DPrefix>();
 
             Prefix.Requirement armor = (Item item) => { return (item.accessory || item.bodySlot != -1 || item.legSlot != -1 || item.headSlot != -1); };
@@ -167,19 +169,6 @@ namespace Terraria
                 );
 
             ModGeneric.prefixes.Add(debuffImmune);
-
-            DPrefixGroup elementalDamage = new DPrefixGroup("Elemental");
-            elementalDamage.AddPrefixes(
-                new DPrefix[]{
-                    new DPrefix("Flaming").DMod( (int val) => { return (Item item) => { item.RunMethod("IncreaseElement", (int) ModGeneric.Elements.Fire, val); }; } , (int val) => { return new MouseTip("+"+val+" Fire Damage", true); }, 1, 20),
-                    new DPrefix("Freezing").DMod( (int val) => { return (Item item) => { item.RunMethod("IncreaseElement", (int) ModGeneric.Elements.Cold, val); }; } , (int val) => { return new MouseTip("+"+val+" Cold Damage", true); }, 1, 20),
-                    new DPrefix("Corrupt").DMod( (int val) => { return (Item item) => { item.RunMethod("IncreaseElement",(int)  ModGeneric.Elements.Corrupt, val); }; } , (int val) => { return new MouseTip("+"+val+" Corrupt Damage", true); }, 1, 20),
-                    new DPrefix("Earthly").DMod( (int val) => { return (Item item) => { item.RunMethod("IncreaseElement", (int) ModGeneric.Elements.Earth, val); }; } , (int val) => { return new MouseTip("+"+val+" Earth Damage", true); }, 1, 20),
-                    new DPrefix("Holy").DMod( (int val) => { return (Item item) => { item.RunMethod("IncreaseElement", (int) ModGeneric.Elements.Holy, val); }; } , (int val) => { return new MouseTip("+"+val+" Holy Damage", true); }, 1, 20),
-                    new DPrefix("Nature's").DMod( (int val) => { return (Item item) => { item.RunMethod("IncreaseElement", (int) ModGeneric.Elements.Nature, val); }; } , (int val) => { return new MouseTip("+"+val+" Nature Damage", true); }, 1, 20),
-                    new DPrefix("Water").DMod( (int val) => { return (Item item) => { item.RunMethod("IncreaseElement", (int) ModGeneric.Elements.Water, val); }; } , (int val) => { return new MouseTip("+"+val+" Water Damage", true); }, 1, 20),
-                }, melee
-                );
 
             //ModGeneric.prefixes.Add(elementalDamage);
             Codable.RunGlobalMethod("ModGeneric", "AddEpicItemAffixes", ModGeneric.prefixes);

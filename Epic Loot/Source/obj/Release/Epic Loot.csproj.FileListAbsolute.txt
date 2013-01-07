@@ -3,3 +3,8 @@ C:\Users\Surfpup\Documents\My Games\Terraria\ModPack_Objs\Epic Loot.pdb
 C:\Users\Surfpup\Documents\My Games\Terraria\ModPacks\Epic Loot\obj\Release\ResolveAssemblyReference.cache
 C:\Users\Surfpup\Documents\My Games\Terraria\ModPacks\Epic Loot\obj\Release\Epic Loot.dll
 C:\Users\Surfpup\Documents\My Games\Terraria\ModPacks\Epic Loot\obj\Release\Epic Loot.pdb
+C:\TerrariaCode\tConfig Release\ModPacks\Epic Loot\Source\obj\Release\ResolveAssemblyReference.cache
+C:\TerrariaCode\tConfig Release\ModPacks\Epic Loot\Source\obj\Release\Epic Loot.dll
+C:\TerrariaCode\tConfig Release\ModPacks\Epic Loot\Source\obj\Release\Epic Loot.pdb
+C:\TerrariaCode\tConfig Release\ModPacks\ModPack_Objs\Epic Loot.dll
+C:\TerrariaCode\tConfig Release\ModPacks\ModPack_Objs\Epic Loot.pdb

@@ -19,8 +19,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Terraria;
 
-namespace Terraria
+namespace Epic_Loot
 {
     public class NPC_Affixes
     {

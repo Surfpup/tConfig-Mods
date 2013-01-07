@@ -20,8 +20,9 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
 using System.IO;
+using Terraria;
 
-namespace Terraria
+namespace Epic_Loot
 {
     public class GPrefix : Prefix
     { //Generated, needs to save additional data
@@ -63,20 +64,23 @@ namespace Terraria
         }
         public override void Load(BinaryReader reader, int v)
         {
+            Console.WriteLine("Loading stuff");
             base.Load(reader, v);
             int num = reader.ReadInt32();
             randValues = new List<float>();
             for (int i = 0; i < num; i++) randValues.Add(reader.ReadSingle());
             this.rarity = reader.ReadSingle();
 
+            Console.WriteLine("identifier:"+identifier);
             //Add dprefix stuff
+
             if (!ModGeneric.prefixByName.ContainsKey(identifier))
             {
                 this.affix = "";
                 this.identifier = "";
                 return;
             }
-
+            Console.WriteLine("Loading item affix: " + identifier);
             DPrefix d = ModGeneric.prefixByName[identifier];
             foreach (Requirement r in d.customRequirements)
             {

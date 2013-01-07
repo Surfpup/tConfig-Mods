@@ -19,8 +19,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Terraria;
 
-namespace Terraria
+namespace Epic_Loot
 {
     public class ModGeneric
     {
@@ -28,7 +29,7 @@ namespace Terraria
         public static float skewValue = 5.0f; //Once the magic find stat reachs 1 / skewValue, the RNG is normal distribution
 
         public static List<DPrefix> prefixes;
-        public static Dictionary<string, DPrefix> prefixByName;
+        public static Dictionary<string, DPrefix> prefixByName; // = new Dictionary<string, DPrefix>();
 
         public static List<NPCAffix> npcAffixes = new List<NPCAffix>();
         public static Dictionary<string, NPCAffix> npcAffixByName = new Dictionary<string, NPCAffix>();
@@ -37,9 +38,6 @@ namespace Terraria
         public static List<string> colorNames;
 
         public static Random rand = new Random();
-
-        public enum Elements { Fire, Cold, Holy, Corrupt, Water, Nature, Earth };
-        public static Color[] elementColors = new Color[] { Color.Red, Color.Aqua, Color.Gold, Color.DarkMagenta, Color.Blue, Color.Green, Color.Brown };
 
         public static void OnLoad()
         {
@@ -53,6 +51,7 @@ namespace Terraria
 		        colors.Add(color);
 		        colorNames.Add(prop.Name);
 	        }
+            Console.WriteLine("Epic Loot OnLoad ran");
 	        Item_Affixes.DefinePrefixes();
 	        NPC_Affixes.DefineNPCAffixes();
         }

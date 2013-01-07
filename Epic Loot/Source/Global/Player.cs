@@ -21,8 +21,9 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using System.Collections;
 using System.IO;
+using Terraria;
 
-namespace Terraria
+namespace Epic_Loot
 {
     public class ModPlayer
     {

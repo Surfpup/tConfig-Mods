@@ -20,7 +20,9 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
 
-namespace Terraria
+using Terraria;
+
+namespace Epic_Loot
 {
     public class DPrefixGroup : DPrefix
     {

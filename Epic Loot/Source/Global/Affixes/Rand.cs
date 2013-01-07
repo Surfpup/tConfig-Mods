@@ -21,7 +21,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Terraria
+using Terraria;
+
+namespace Epic_Loot
 {
     public class Rand
     {

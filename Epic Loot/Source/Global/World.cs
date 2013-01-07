@@ -23,7 +23,9 @@ using System.Collections;
 using System.IO;
 using System.Diagnostics;
 
-namespace Terraria
+using Terraria;
+
+namespace Epic_Loot
 {
     public class ModWorld
     {

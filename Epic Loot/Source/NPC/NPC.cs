@@ -22,7 +22,9 @@ using Microsoft.Xna.Framework;
 using System.IO;
 using System.Collections;
 
-namespace Terraria
+using Terraria;
+
+namespace Epic_Loot
 {
     public class Global_NPC : CustomNPC
     {
@@ -42,12 +44,12 @@ namespace Terraria
 
         public bool AIran = false;
 
-        public float[] elemental;
+        //public float[] elemental;
         public void Initialize()
         {
             AIran = false;
             affixes = new List<GNPCAffix>();
-            elemental = new float[(Enum.GetNames(typeof(ModGeneric.Elements)).Length)];
+            //elemental = new float[(Enum.GetNames(typeof(ModGeneric.Elements)).Length)];
             rarity = 0f;
             if (Main.netMode != 1)
             {
@@ -73,14 +75,14 @@ namespace Terraria
         public void AssignElements()
         {
             if (npc.townNPC) return;
-            int element = ModGeneric.rand.Next(elemental.Length);
-            npc.color = ModGeneric.elementColors[element];
-            elemental[element] += Rand.SkewedRand(0.5f, 1f);
+            //int element = ModGeneric.rand.Next(elemental.Length);
+            //npc.color = ModGeneric.elementColors[element];
+            //elemental[element] += Rand.SkewedRand(0.5f, 1f);
         }
-        public float GetElement(int element)
+        /*public float GetElement(int element)
         {
             return elemental[element];
-        }
+        }*/
         public void Save(BinaryWriter writer)
         {
             //if (!this.netTransferred)
