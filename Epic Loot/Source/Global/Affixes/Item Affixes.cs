@@ -115,12 +115,6 @@ namespace Epic_Loot
 		new DPrefix("Stabby").Require(melee).Require((Item i) => { return i.useStyle==1; })
 			.DMod( (int v) => { return (Item i) => { i.crit += v; i.useStyle=3; }; }, (int val) => { return new MouseTip("Stick 'em with the pointy end", true); }, 5, 15),
 		//new DPrefix("Thorned").Require(armor).AddDel( "DealtPlayer", (int val) => { DealtPlayer_Del d = (Player myPlayer, double damage, NPC npc) => {  }; return d; }, (int val) => { return new MouseTip("+"+val+" Mana On Hit", true); }, 1, 10),
-		new DPrefix("Heavy").Require(melee)
-			.DMod( (float v) => { return (Item i) => { i.damage = (int)Math.Round((double)((float)i.damage * (v))); i.knockBack *= (v); }; }, null, 1.05f, 1.30f)
-			.AddDel( "UpdatePlayer", (float val) => { UpdatePlayer_Del d = (Player player) => { player.moveSpeed -= (0.51f - val); }; return d; } , (float val) => { return new MouseTip("-"+Math.Round((float)((0.51f - val)*100f), 2)+"% Movement Speed", true, true); }, 0.01f, 0.50f),
-		new DPrefix("Light").Require(melee)
-			.DMod( (float v) => { return (Item i) => { i.damage = (int)Math.Round((double)((float)i.damage * (1f-v))); i.knockBack *= (1f-v); }; }, null, 0.3f, 0.05f)
-			.AddDel( "UpdatePlayer", (float val) => { UpdatePlayer_Del d = (Player player) => { player.moveSpeed += val; }; return d; } , (float val) => { return new MouseTip("+"+Math.Round((float)(val*100f), 2)+"% Movement Speed", true, false); }, 0.01f, 0.25f),
         new DPrefix("of Willpower", true).Require(weapon).Require((Item item) => { return (int)Math.Round((double)((float)item.damage * (0.15f))) > 0; }).DMod( (float v) => { return (Item i) => { i.damage = (int)Math.Round((double)((float)i.damage * v)); i.magic=true; i.mana+=(int)Math.Round((double)(((float)i.damage * (v-1f))/2f)) + 1; }; }, null, 1.15f, 1.25f),
         new DPrefix("Vengeful").Require(melee).Require((Item item) => { return (int)Math.Round((double)((float)item.damage * (0.20f))) > 0; }).AddDel( "DamageNPC", (float val) => { Events.Player.DamageNPC_Del d = (Player p, NPC npc, ref int dmg, ref float k) => { dmg+=(int)Math.Round((double)((float)dmg * ((1f - (p.statLife / p.statLifeMax)) * val))); }; return d; }, (float val) => { return new MouseTip("+"+Math.Round((float)(val*100f), 2)+" Vengeance Damage", true); }, 0.20f, 0.5f),
         /*new DPrefix("Vengeful Ranged").AddAffix("Vengeful").Require(proj).Require((Item item) => { return (int)Math.Round((double)((float)item.damage * (0.20f))) > 0; }).
@@ -138,6 +132,19 @@ namespace Epic_Loot
                 colorPrefix.AddAffix(c);
             }
             prefixes.Add(colorPrefix);*/
+
+            DPrefixGroup heavyOrLight = new DPrefixGroup("Heavy/Light");
+            heavyOrLight.AddPrefixes(new DPrefix[]
+                {
+                    new  DPrefix("Heavy").Require(melee)
+			            .DMod( (float v) => { return (Item i) => { i.damage = (int)Math.Round((double)((float)i.damage * (v))); i.knockBack *= (v); }; }, null, 1.05f, 1.30f)
+			            .AddDel( "UpdatePlayer", (float val) => { UpdatePlayer_Del d = (Player player) => { player.moveSpeed -= (0.51f - val); }; return d; } , (float val) => { return new MouseTip("-"+Math.Round((float)((0.51f - val)*100f), 2)+"% Movement Speed", true, true); }, 0.01f, 0.50f),
+		            new DPrefix("Light").Require(melee)
+			            .DMod( (float v) => { return (Item i) => { i.damage = (int)Math.Round((double)((float)i.damage * (1f-v))); i.knockBack *= (1f-v); }; }, null, 0.3f, 0.05f)
+			            .AddDel( "UpdatePlayer", (float val) => { UpdatePlayer_Del d = (Player player) => { player.moveSpeed += val; }; return d; } , (float val) => { return new MouseTip("+"+Math.Round((float)(val*100f), 2)+"% Movement Speed", true, false); }, 0.01f, 0.25f),
+                }, melee) ;
+
+            ModGeneric.prefixes.Add(heavyOrLight);
 
             DPrefixGroup debuffImmune = new DPrefixGroup("Suffixes");
             debuffImmune.AddPrefixes(
