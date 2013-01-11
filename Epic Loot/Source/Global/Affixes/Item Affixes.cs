@@ -17,7 +17,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Terraria;
 
@@ -38,12 +37,12 @@ namespace Epic_Loot
             Console.WriteLine("Defining prefixes...");
             ModGeneric.prefixByName = new Dictionary<string, DPrefix>();
 
-            Prefix.Requirement armor = (Item item) => { return (item.accessory || item.bodySlot != -1 || item.legSlot != -1 || item.headSlot != -1); };
-            Prefix.Requirement melee = (Item item) => { return item.melee; };
-            Prefix.Requirement ranged = (Item item) => { return item.ranged; };
-            Prefix.Requirement magic = (Item item) => { return item.magic; };
-            Prefix.Requirement proj = (Item item) => { return item.ranged || item.magic; };
-            Prefix.Requirement weapon = (Item item) => { return item.melee || item.ranged || item.magic; };
+            Prefix.Requirement armor = (Item item) => (item.accessory || item.bodySlot != -1 || item.legSlot != -1 || item.headSlot != -1);
+            Prefix.Requirement melee = (Item item) => item.melee;
+            Prefix.Requirement ranged = (Item item) => item.ranged;
+            Prefix.Requirement magic = (Item item) => item.magic;
+            Prefix.Requirement proj = (Item item) => item.ranged || item.magic;
+            Prefix.Requirement weapon = (Item item) => item.melee || item.ranged || item.magic;
 
             ModGeneric.prefixes = new List<DPrefix>();
             ModGeneric.prefixes.AddRange(
