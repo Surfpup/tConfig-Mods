@@ -36,7 +36,16 @@ namespace Epic_Loot
             if (p.statLifeMax > 100) p.statLifeMax = 100; //These only go up with affixes
             if (p.statManaMax > 100) p.statManaMax = 100;
             magicFind = 0f;
+
+            //Calculate base magic find
+
+            //Environmental effects
             if (Main.hardMode) magicFind += .2f;
+
+            //Bosses
+            if (NPC.downedBoss1) magicFind += 0.05f;
+            if (NPC.downedBoss2) magicFind += 0.05f;
+            if (NPC.downedBoss3) magicFind += 0.05f;
         }
 
         public static void Save(BinaryWriter writer)

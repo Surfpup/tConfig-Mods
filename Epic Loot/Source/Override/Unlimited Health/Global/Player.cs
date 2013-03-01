@@ -33,7 +33,16 @@ namespace Epic_Loot
         public static void PreUpdatePlayer(Player p)
         {
             magicFind = 0f;
+
+            //Calculate base magic find
+
+            //Environmental effects
             if (Main.hardMode) magicFind += .2f;
+
+            //Bosses
+            if (NPC.downedBoss1) magicFind += 0.05f;
+            if (NPC.downedBoss2) magicFind += 0.05f;
+            if (NPC.downedBoss3) magicFind += 0.05f;
         }
 
         public static void IncreaseMF(float amt)
