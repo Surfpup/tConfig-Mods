@@ -31,11 +31,13 @@ namespace Epic_Loot
         public static int oldHealth = 0;
         public static int oldMana = 0;
 
+        public static float magicFindBonus = 0f; //Bonus from current playthrough
+
         public static void PreUpdatePlayer(Player p)
         {
             if (p.statLifeMax > 100) p.statLifeMax = 100; //These only go up with affixes
             if (p.statManaMax > 100) p.statManaMax = 100;
-            magicFind = 0f;
+            magicFind = magicFindBonus;
 
             //Calculate base magic find
 
@@ -46,6 +48,8 @@ namespace Epic_Loot
             if (NPC.downedBoss1) magicFind += 0.05f;
             if (NPC.downedBoss2) magicFind += 0.05f;
             if (NPC.downedBoss3) magicFind += 0.05f;
+
+            if (magicFind > 1f) magicFind = 1f;
         }
 
         public static void Save(BinaryWriter writer)
@@ -56,12 +60,16 @@ namespace Epic_Loot
 
         public static void PostLoad(Player p)
         {
+            magicFindBonus = 0f; //Reset bonus
+
             oldHealth = p.statLifeMax;
             oldMana = p.statManaMax;
         }
 
         public static void CreatePlayer(Player p)
         {
+            magicFindBonus = 0f; //Reset bonus
+
             //Start with 100 mana
             p.statManaMax = 100;
         }

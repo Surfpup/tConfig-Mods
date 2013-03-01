@@ -35,7 +35,7 @@ namespace Epic_Loot
         }
 
         public const int MAX_DROP_AMT = 3;
-        public const float itemChanceModifier = 10f;
+        public static float itemChanceModifier = 10f;
 
         public bool netTransferred = false;
         List<GNPCAffix> affixes;
@@ -206,6 +206,7 @@ namespace Epic_Loot
 
             int amt = Rand.SkewedRand(0, MAX_DROP_AMT, itemChanceModifier - (this.rarity * 10f));
             if (amt == 0) return;
+            if (npc.boss) amt *= 3; //Bosses drop 3 times the stuff!
             List<Item> items = new List<Item>(Config.itemDefs.byName.Values);
             List<Item> valid = new List<Item>();
 
@@ -242,6 +243,9 @@ namespace Epic_Loot
                 valid.RemoveAt(Rindex);
             }
             //DropItems(toDrop.ToArray());
+
+            //Add to player's current MF bonus
+            if(npc.boss) ModPlayer.magicFindBonus += 0.02f;
         }
         public void DropItems(params int[] items)
         { //Spawn the specified items

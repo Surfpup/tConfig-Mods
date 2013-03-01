@@ -30,9 +30,11 @@ namespace Epic_Loot
     {
         public static float magicFind = 0f; //Helps find better items!
 
+        public static float magicFindBonus = 0f; //Bonus from current playthrough
+
         public static void PreUpdatePlayer(Player p)
         {
-            magicFind = 0f;
+            magicFind = magicFindBonus;
 
             //Calculate base magic find
 
@@ -43,12 +45,24 @@ namespace Epic_Loot
             if (NPC.downedBoss1) magicFind += 0.05f;
             if (NPC.downedBoss2) magicFind += 0.05f;
             if (NPC.downedBoss3) magicFind += 0.05f;
+
+            if (magicFind > 1f) magicFind = 1f;
         }
 
         public static void IncreaseMF(float amt)
         {
             magicFind += amt;
             if (magicFind > 1f) magicFind = 1f;
+        }
+
+        public static void PostLoad(Player p)
+        {
+            magicFindBonus = 0f; //Reset bonus
+        }
+
+        public static void CreatePlayer(Player p)
+        {
+            magicFindBonus = 0f; //Reset bonus
         }
     }
 }
