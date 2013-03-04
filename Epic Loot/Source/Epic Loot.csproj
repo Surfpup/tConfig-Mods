@@ -52,7 +52,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="tConfig">
-      <HintPath>..\..\..\..\..\..\..\..\..\Games\Steam\steamapps\common\terraria\tConfig.exe</HintPath>
+      <HintPath>..\..\..\..\Program Files (x86)\Steam\steamapps\common\terraria\tConfig.exe</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,31 @@
+Give the player some customization over what the character starts with, as opposed to always having 100 health and 100 mana.
+
+This is done via a menu shown after creating a character. The menu will let you choose two affixes to imbue upon a starter accessory item. This item could be permanent, I'm not sure about that aspect of it yet. But certainly I don't want someone to make a bunch of new chars and taking these items off of them, so some method will be implemented to prevent the starter items from being traded with other players.
+
+Also, once this feature is implemented, I'm sure we'll see that some affixes need to be tweaked in terms of balancing. I think the actual affix power on the starter item will be twice the usual amount. For instance, the highest HP affix is +40 HP. So, if you select HP affix for your starter item, it will give +80 HP.
+
+Regarding the health and mana, the base amount will need to be reduced, to maybe 20 HP and 0 MP. I'm sure these values may need to be tweaked as well.
+
+If a player decides not to start with mana, then in order for them to use any magic, they will have to rely on +MP affixes to do so. Is this a negative? It might not be. This could mean that players of different 'classes' and playstyles may rely on different affixes, which results in a great diversity in character builds (essentially composed of their equipment). Character diversity is always a huge plus.
+
+Possible affixes (double the max):
++80 HP
++80 MP
++8 Defense
++10% Damage
++10% Melee Speed
++20% Magic Crit Chance
++20% Melee Crit Chance
++20% Ranged Crit Chance
++20% Magic Damage
++20% Melee Damage
++20% Ranged Damage
++100 HP On Respawn
++40% Magic Find
++20% Mining Speed
++40% Spawn Rate
+-10% Mana Cost
++4 Health Regen
+Reduced potion cooldown by 10 seconds
++4 Increased Block Placement Range
+
