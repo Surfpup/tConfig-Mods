@@ -1,6 +1,6 @@
 Created by Surfpup
 
-version 0.2.3
+version 0.2.4
 
 Description
 -Overrides the vanilla prefix system entirely
@@ -25,6 +25,11 @@ Ideas:
 -Add Nephalem Valor-like system, and Elite monsters?
 
 Changelog
+
+v0.2.4 (March 4th, 2013)
+	-Updated magic find bonuses - Magic find is increased for each of the three (pre-hardmode) bosses that are defeated in the world.
+	-Playthrough magic find bonus - For each boss you defeat, your magic find goes up for the current playthrough. Exiting the world or restarting the game will reset this bonus.
+	
 
 v0.2.3
 	-Updated to use new life variable in tConfig Beta 0.28.3h, should fix all HP affix issues
