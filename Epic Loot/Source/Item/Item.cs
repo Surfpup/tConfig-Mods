@@ -76,6 +76,16 @@ namespace Epic_Loot
             }
             if (pre == 0) return true;
             if (pre > 0) return item.RealPrefix(pre);
+
+            if (pre == -2)
+            {
+                //Reset item stats to clear prefixes
+                Item i;
+                if (this.item.name != null && Config.itemDefs.byName.TryGetValue(this.item.name, out i))
+                {
+                    Config.CopyAttributes(this.item, i);
+                }
+            }
             prefixes = new List<GPrefix>();
             int num = Rand.SkewedRand(0, ModGeneric.MAX_AFFIX); //Number of prefixes to add
 
