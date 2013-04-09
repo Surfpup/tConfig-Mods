@@ -21,11 +21,18 @@ const int PLACEPORTAL = 2;
 const int DESTROYPORTAL = 3;
 
 //Max number of portal pairs
-public const int maxPortals = 5;
+public const int maxPortals = 15;
 
 static int modIndex;
 
-public static string[] portalTypes = new string[]{"Blue Portal", "Green Portal", "Yellow Portal", "Purple Portal", "Red Portal"};
+public static string[] portalTypes = new string[]{
+//Craftable:
+	"Blue Portal", "Green Portal", "Yellow Portal", "Purple Portal", "Red Portal",
+//Spawned
+	"Black Blue Portal", "Black Empty Portal", "Black Green Portal", "Black Magenta Portal", "Black Red Portal", "Black Yellow Portal", "Dark Orange Portal", "Magenta Portal", "Rainbow Portal", "Turquoise Portal"
+	};
+
+//
 
 //We need to store the location of every portal in the world
 static Vector2[] locA; //Two arrays for each set of colors. locA[0] teleports to locB[0]
