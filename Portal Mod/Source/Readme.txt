@@ -1,26 +1,26 @@
 Portal Mod - Created by Surfpup, Sprites by Yoraiz0r
 
 -Each portal links to exactly one other portal of the same color.
--Portals cannot be crafted. They must be found in the world. When you generate a new world, portals will randomly spawn!
--Portals cannot be destroyed. We don't want them to be too overpowered, do we?
--When used, portals take a way a percentage of your health.
+-5 pairs of portals may be crafted
+	-Portals must be crafted at a Demon Altar with the following: 1 Mana Crystal, 1 Life Crystal, and 24 Colored Gem
+	-The color of the portal created depends on the color of the gem you use.
+		-Red Portal: Ruby
+		-Green Portal: Emerald
+		-Blue Portal: Sapphire
+		-Yellow Portal: Topaz
+		-Purple Portal: Amethyst
+	-Crafted Portals can be destroyed and placed as you would expect
+-10 pairs of portals spawn at random locations during world generation. These portals cannot be destroyed or moved. (If they can, it's a bug!)
+-When used, portals damage you by about 10% of your total health.
 -At least one portal will always spawn in the Dungeon.
 -Networking code implemented to make it work as expected in multiplayer
--I worked hard to get this to work in multiplayer, but there may still be bugs in that regard.
-
--Portal Mod - Craftable: Alternate version for those too lazy to go searching for a portal
-	-An alternate version that does not spawn portals in the world, but lets you craft them instead.
-	-Portals must be crafted at a Demon Altar with the following: 1 Mana Crystal, 1 Life Crystal, and 24 Colored Gem
-		-The color of the portal created depends on the color of the gem you use.
-			-Red Portal: Ruby
-			-Blue Portal: Sapphire
-			-Green Portal: Emerald
-			-Purple Portal: Amethyst
-			-Yellow Portal: Topaz
-	-Portals can be destroyed and placed as you would expect
-
 
 Changelog
+v1.1.0
+	-Merged the two 'versions' of the mod into one. Some portals will spawn, others must be crafted.
+		-Added 10 new portals, which spawn during world generation and cannot be destroyed.
+		-The other 5 portals are craftable
+	
 v1.0.7
 	-Added light to the portals. Works only in tConfig 0.27.1+
 	
