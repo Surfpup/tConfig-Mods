@@ -92,7 +92,10 @@ public static void Teleport(int x, int y) {
 	Main.player[Main.myPlayer].AddBuff(8, 150, false); //Prevent fall damage
 	Main.player[Main.myPlayer].position.X = (dest.X * 0x10) + 8; //- (player.width / 2);
 	Main.player[Main.myPlayer].position.Y = ((dest.Y+3) * 0x10) - Main.player[Main.myPlayer].height;
-	Main.player[Main.myPlayer].statLife -= (int)(Main.player[Main.myPlayer].statLifeMax * .1); //Subtract 10% of max life
+	
+	//Main.player[Main.myPlayer].statLife -= (int)(Main.player[Main.myPlayer].statLifeMax * .1); //Subtract 10% of max life
+	Main.player[Main.myPlayer].Hurt((int)(Main.player[Main.myPlayer].statLifeMax * .01 * (Main.player[Main.myPlayer].statDefense/2)), 0);
+	
 	Main.player[Main.myPlayer].AddBuff(23, 360, false); //Curse - Can't use items for a little while
 	//Paralyze the player into place for a bit while loading tiles
 	if(Main.netMode==1) Main.player[Main.myPlayer].AddBuff("Portal Sickness", 120, false);
