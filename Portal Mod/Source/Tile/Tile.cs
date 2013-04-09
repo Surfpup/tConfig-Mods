@@ -38,7 +38,7 @@ public static string[] portalTypes = new string[]{
 	"Black Blue Portal", "Black Empty Portal", "Black Green Portal", "Black Magenta Portal", "Black Red Portal", "Black Yellow Portal", "Dark Orange Portal", "Magenta Portal", "Rainbow Portal", "Turquoise Portal"
 	};
 	
-public int maxPortals = 5;
+public int maxPortals = 10;
 
 public static void ModifyWorld() {
 	//Pick random x, y, search for nearest ground tile to place on
@@ -46,13 +46,13 @@ public static void ModifyWorld() {
 	int dungeonPortal = WorldGen.genRand.Next(ModWorld.maxPortals);
 	while(i<ModWorld.maxPortals) {
 		if(i==dungeonPortal) {
-			PlaceTileRandomXYOnDungeon(3, 4, Config.tileDefs.ID[ModWorld.portalTypes[i]]);
-			PlaceTileRandomXY(3, 4, Config.tileDefs.ID[ModWorld.portalTypes[i]]);
+			PlaceTileRandomXYOnDungeon(3, 4, Config.tileDefs.ID[portalTypes[i]]);
+			PlaceTileRandomXY(3, 4, Config.tileDefs.ID[portalTypes[i]]);
 		}
 		else {
 			//int y=WorldGen.genRand.Next((int)Main.worldSurface, Main.maxTilesY - 150);
-			PlaceTileRandomXY(3, 4, Config.tileDefs.ID[ModWorld.portalTypes[i]]);
-			PlaceTileRandomXY(3, 4, Config.tileDefs.ID[ModWorld.portalTypes[i]]);
+			PlaceTileRandomXY(3, 4, Config.tileDefs.ID[portalTypes[i]]);
+			PlaceTileRandomXY(3, 4, Config.tileDefs.ID[portalTypes[i]]);
 		}
 		i++;
 	}
