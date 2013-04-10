@@ -1,6 +1,6 @@
 From armor/accessories, if you have 8 with maxed affix:
 +32 Defense
-+320 Mana
++240 Mana
 +240 Max HP (Grand total: 640HP)
 +24% Crit Chance
 +40% Damage
