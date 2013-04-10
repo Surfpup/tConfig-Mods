@@ -56,7 +56,7 @@ namespace Epic_Loot
             for (int i = 0; i < num; i++)
             {
                 GPrefix p = new GPrefix("bla");
-                p.Load(reader, v, "0.29.0");
+                p.Load(reader, v);
                 if (p.identifier != "")
                     prefixes.Add(p);
             }

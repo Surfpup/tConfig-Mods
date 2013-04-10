@@ -62,7 +62,7 @@ namespace Epic_Loot
             for (int i = 0; i < randValues.Count; i++) writer.Write(randValues[i]);
             writer.Write(rarity);
         }
-        public override void Load(BinaryReader reader, int v, string pointlessArg)
+        public override void Load(BinaryReader reader, int v)
         {
             Console.WriteLine("Loading stuff");
             base.Load(reader, v, pointlessArg);
