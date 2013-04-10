@@ -29,3 +29,6 @@ Possible affixes (double the max):
 Reduced potion cooldown by 10 seconds
 +4 Increased Block Placement Range
 
+Another idea is to balance it by requiring a negative affix. For instance, the player might have 20% less HP, but get +10% damage.
+
+These affixes should be permanent effects on the char. It might be possible to implement them as permanent buffs/debuffs.
