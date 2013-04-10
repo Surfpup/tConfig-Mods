@@ -229,6 +229,7 @@ namespace Epic_Loot
                     int index = (int) Math.Round(val, System.MidpointRounding.AwayFromZero);
                     this.affix = d.affixes[index];
                 }
+                else this.affix=this.affixType;
             }
             public void AffixName(ref string name)
             {

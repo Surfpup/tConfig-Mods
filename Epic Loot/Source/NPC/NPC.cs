@@ -87,7 +87,7 @@ namespace Epic_Loot
         {
             //if (!this.netTransferred)
             //{
-                writer.Write(affixes.Count);
+                writer.Write((byte) affixes.Count);
                 foreach (GNPCAffix p in affixes)
                 {
                     p.Save(writer);
@@ -100,7 +100,7 @@ namespace Epic_Loot
         {
             if (!netTransferred)
             {
-                int num = reader.ReadInt32();
+                int num = (int) reader.ReadByte();
 
                 affixes = new List<GNPCAffix>();
                 for (int i = 0; i < num; i++)
@@ -111,7 +111,7 @@ namespace Epic_Loot
                 }
                 if (num > 0) InitAffixes();
                 netTransferred = true;
-                //Main.NewText("Loaded " + num + " affixes for NPC "+this.npc.name);
+                Main.NewText("Loaded " + num + " affixes for NPC "+this.npc.name);
             }
         }
         /*public bool PreAI()
