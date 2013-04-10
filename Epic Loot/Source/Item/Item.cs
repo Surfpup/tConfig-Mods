@@ -56,7 +56,7 @@ namespace Epic_Loot
             for (int i = 0; i < num; i++)
             {
                 GPrefix p = new GPrefix("bla");
-                p.Load(reader, v);
+                p.Load(reader, v, "0.29.0");
                 if (p.identifier != "")
                     prefixes.Add(p);
             }
@@ -270,13 +270,14 @@ namespace Epic_Loot
             return prefixes;
         }
 
-        /*public void UseItem(Player p, int pID)
+        public bool CanUse(Player p, int pID)
         {
-            if (item.type == 29)
+            if (item.type == 29 || item.type==109) //Life crystal or mana crystal
             { //Life Crystal
-                ModPlayer.LifeCrystalUse(p);
+                return ModPlayer.CrystalUse(p);
             }
             //Main.NewText("Something was used! "+item.type);
-        }*/
+            return true;
+        }
     }
 }

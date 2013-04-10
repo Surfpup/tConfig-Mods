@@ -64,5 +64,9 @@ namespace Epic_Loot
         {
             magicFindBonus = 0f; //Reset bonus
         }
+
+        public static bool CrystalUse(Player p) {
+            return true;
+        }
     }
 }

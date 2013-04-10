@@ -79,5 +79,10 @@ namespace Epic_Loot
             magicFind += amt;
             if (magicFind > 1f) magicFind = 1f;
         }
+
+        public static bool CrystalUse(Player p) {
+            Main.NewText("This item is disabled; switch the mod to the default health/mana system to use this item.");
+            return false;
+        }
     }
 }
