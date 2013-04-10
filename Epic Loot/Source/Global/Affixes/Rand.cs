@@ -36,6 +36,16 @@ namespace Epic_Loot
             r = Math.Pow(r, skewMod);
             return r;
         }
+        public static double Skew(Random rng, float skewMod = 1f)
+        {
+            double r = rng.NextDouble();
+            float mod = ModGeneric.skewValue;
+            r = Math.Pow(r, mod);
+            r = Math.Pow(r, 1f - ModPlayer.magicFind);
+            r = Math.Pow(r, skewMod);
+            return r;
+        }
+
         public static int SkewedRand(int min, int max, double r = -1.0, float skewMod = 1f)
         { //Higher values are more rare
             /*Use exponents to make higher values harder to achieve

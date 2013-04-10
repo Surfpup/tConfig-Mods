@@ -68,15 +68,20 @@ namespace Epic_Loot
             public virtual GNPCAffix Roll()
             { //Roll the dice!
                 GNPCAffix p = new GNPCAffix(this.affix, this.suffix);
+                //Get a seed; the seed will be stored and used for saving/loading
+                int seed = ModGeneric.rand.Next();
+                p.Roll(seed);
+                //Random newRand = new Random(seed); 
+
 
                 /*foreach(Requirement r in this.customRequirements)
                 {
                     p.customRequirements.Add(r);
-                }*/
+                }*
 
                 foreach (DelMod<int> m in delModGens)
                 {
-                    int val = SkewedRand(m.min, m.max, p);
+                    int val = SkewedRand(newRand, m.min, m.max, p);
 
                     p.AddDel(m.name, m.gen(val));
                     //if(m.tip!=null) p.AddTip(m.tip(val));
@@ -104,26 +109,26 @@ namespace Epic_Loot
                 else p.affix = this.affix;
 
                 randAmt = 0f;
-                randTotal = 0f;
+                randTotal = 0f;*/
                 return p;
             }
-            public virtual int SkewedRand(int min, int max, GNPCAffix p = null)
+            public virtual int SkewedRand(Random rng, int min, int max, GNPCAffix p = null)
             { //Higher values are more rare
                 int range = max - min;
                 if (range == 0) return min;
-                double r = Rand.Skew();
-                if (p != null) p.AddRand((float)r);
+                double r = Rand.Skew(rng);
+                //if (p != null) p.AddRand((float)r);
                 randAmt += (float)r;
                 randTotal += 1f;
                 double val = ((r * (float)range) + (float)min); //Normal value
                 return (int)Math.Round(val, System.MidpointRounding.AwayFromZero);
             }
-            public virtual float SkewedRand(float min, float max, GNPCAffix p = null)
+            public virtual float SkewedRand(Random rng, float min, float max, GNPCAffix p = null)
             { //Higher values are more rare
                 float range = max - min;
                 if (range == 0f) return min;
-                double r = Rand.Skew();
-                if (p != null) p.AddRand((float)r);
+                double r = Rand.Skew(rng);
+                //if (p != null) p.AddRand((float)r);
                 randAmt += (float)r;
                 randTotal += 1f;
 
@@ -153,16 +158,19 @@ namespace Epic_Loot
             public string affixType;
             public string affix;
             public bool suffix;
-            public List<float> randValues;
-            public int curRand = 0;
+            public int seed;
+            //public List<float> randValues;
+            //public int curRand = 0;
             public float rarity;
+            public float randAmt;
+            public float randTotal;
             public Dictionary<string, Delegate> delegates;
             public GNPCAffix(string name, bool suffix = false)
             {
                 this.affix = name;
                 this.affixType = name;
                 this.suffix = suffix;
-                randValues = new List<float>();
+                //randValues = new List<float>();
                 delegates = new Dictionary<string, Delegate>();
             }
             public GNPCAffix AddDel(string name, Delegate d)
@@ -174,22 +182,28 @@ namespace Epic_Loot
                 else delegates[name] = d;
                 return this;
             }
-            public GNPCAffix AddRand(float r)
+            /*public GNPCAffix AddRand(float r)
             {
                 this.randValues.Add(r);
                 return this;
-            }
+            }*/
             public void Save(BinaryWriter writer)
             {
                 writer.Write(this.affixType);
-                writer.Write(randValues.Count);
-                for (int i = 0; i < randValues.Count; i++) writer.Write(randValues[i]);
-                writer.Write(rarity);
+                writer.Write(this.seed);
+                //writer.Write(randValues.Count);
+                //for (int i = 0; i < randValues.Count; i++) writer.Write(randValues[i]);
+                //writer.Write(rarity);
             }
             public void Load(BinaryReader reader, int v)
             {
                 this.affixType = reader.ReadString();
                 Console.WriteLine("Loading Affix " + this.affixType);
+                this.seed = reader.ReadInt32();
+
+                this.Roll(this.seed);
+
+                /*
                 int num = reader.ReadInt32();
                 randValues = new List<float>();
                 for (int i = 0; i < num; i++) randValues.Add(reader.ReadSingle());
@@ -205,7 +219,7 @@ namespace Epic_Loot
                 foreach(ItemMod m in d.itemMods)
                 {
                     this.Mod(m);
-                }*/
+                }*
 
                 foreach (NPCAffix.DelMod<int> m in d.delModGens)
                 {
@@ -229,13 +243,59 @@ namespace Epic_Loot
                     int index = (int) Math.Round(val, System.MidpointRounding.AwayFromZero);
                     this.affix = d.affixes[index];
                 }
-                else this.affix=this.affixType;
+                else this.affix=this.affixType;*/
+            }
+
+            public virtual void Roll(int seed)
+            { //Roll the dice!
+                this.seed = seed;
+                Random newRand = new Random(seed); 
+
+                /*foreach(Requirement r in this.customRequirements)
+                {
+                    p.customRequirements.Add(r);
+                }*/
+
+                NPCAffix d = ModGeneric.npcAffixByName[affixType];
+
+                foreach (NPCAffix.DelMod<int> m in d.delModGens)
+                {
+                    int val = SkewedRand(newRand, m.min, m.max);
+
+                    AddDel(m.name, m.gen(val));
+                    //if(m.tip!=null) p.AddTip(m.tip(val));
+                }
+                foreach (NPCAffix.DelMod<float> m in d.delModGensF)
+                {
+                    float val = SkewedRand(newRand, m.min, m.max);
+
+                    AddDel(m.name, m.gen(val));
+                    //if(m.tip!=null) p.AddTip(m.tip(val));
+                }
+
+                float avgRand = 0f;
+                if (randTotal > 0f)
+                {
+                    avgRand = randAmt / randTotal;
+                }
+                rarity = avgRand;
+                if (d.affixes.Count > 0)
+                { //Modify the affix depending on how good the roll is!
+                    double val = (avgRand * (double)(d.affixes.Count - 1));
+                    int index = (int)Math.Round(val, System.MidpointRounding.AwayFromZero);
+                    affix = d.affixes[index];
+                }
+                else affix = this.affixType;
+
+                randAmt = 0f;
+                randTotal = 0f;
             }
             public void AffixName(ref string name)
             {
                 if (this.suffix) name = name + " " + this.affix;
                 else name = this.affix + " " + name;
             }
+            /*
             public int SkewedRand(int min, int max)
             {
                 float range = max - min;
@@ -253,6 +313,29 @@ namespace Epic_Loot
                 //float v = ModGeneric.Range(min, max, (double) randValues[curRand]);
                 curRand++;
                 return v;
+            }*/
+            public virtual int SkewedRand(Random rng, int min, int max)
+            { //Higher values are more rare
+                int range = max - min;
+                if (range == 0) return min;
+                double r = Rand.Skew(rng);
+
+                randAmt += (float)r;
+                randTotal += 1f;
+                double val = ((r * (float)range) + (float)min); //Normal value
+                return (int)Math.Round(val, System.MidpointRounding.AwayFromZero);
+            }
+            public virtual float SkewedRand(Random rng, float min, float max)
+            { //Higher values are more rare
+                float range = max - min;
+                if (range == 0f) return min;
+                double r = Rand.Skew(rng);
+
+                randAmt += (float)r;
+                randTotal += 1f;
+
+                double val = ((r * range) + (float)min); //Normal value
+                return (float)val;
             }
         }
 }
