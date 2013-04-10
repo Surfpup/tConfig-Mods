@@ -48,7 +48,7 @@ namespace Epic_Loot
             ModGeneric.prefixes.AddRange(
                 new DPrefix[]{
 		new DPrefix("Guarding").AddAffix("Hard", "Guarding", "Armored", "Warding").Require(armor).AddPlayerDefense(1,4),
-		new DPrefix("Arcane").Require(armor).AddPlayerMana(1, 40),
+		new DPrefix("Arcane").Require(armor).AddPlayerMana(1, 30),
 		new DPrefix("Precise").Require(armor).AddPlayerCrit(1,3),
 		new DPrefix("Spiked").AddAffix("Jagged", "Spiked", "Angry", "Menacing").Require(armor).AddPlayerDmg(0.01f,0.05f),
 		new DPrefix("Rash").AddAffix("Brisk", "Fleeting", "Hasty", "Quick").Require(armor).AddPlayerMeleespeed(0.01f,0.05f),
@@ -84,7 +84,7 @@ namespace Epic_Loot
 					};
 					return d;
 				}, (float val) => { return new MouseTip("+"+Math.Round((float)(val*100f), 2)+"% Max Spawns", true); }, 0.01f, 0.20f),
-		new DPrefix("Vital").Require(armor).DMod( (int v) => { return (Player p) => { p.statLifeMax2+=v; }; }, (int val) => { return new MouseTip("+"+val+" Max HP", true); }, 1, 40),
+		new DPrefix("Vital").Require(armor).DMod( (int v) => { return (Player p) => { p.statLifeMax2+=v; }; }, (int val) => { return new MouseTip("+"+val+" Max HP", true); }, 1, 30),
 		new DPrefix("Mage's").Require(armor).DMod( (float val) => { return (Player player) => { player.manaCost -= val; }; } , (float val) => { return new MouseTip("-"+Math.Round(val, 2)+"% Mana Cost", true); }, 0.01f, 0.05f),
 		new DPrefix("Rejuvenating").Require(armor).DMod( (int v) => { return (Player p) => { p.lifeRegen += v; }; }, (int val) => { return new MouseTip("+"+val+" Life Regen", true); }, 1, 2),
 		new DPrefix("Thirsty").Require(armor).DMod( (int v) => { return (Player p) => { p.potionDelayTime -= (v*60); }; }, (int val) => { return new MouseTip("Reduces potion cooldown by "+val+" seconds", true); }, 1, 5),

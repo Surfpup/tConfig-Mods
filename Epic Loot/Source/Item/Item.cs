@@ -269,15 +269,5 @@ namespace Epic_Loot
         {
             return prefixes;
         }
-
-        public bool CanUse(Player p, int pID)
-        {
-            if (item.type == 29 || item.type==109) //Life crystal or mana crystal
-            { //Life Crystal
-                return ModPlayer.CrystalUse(p);
-            }
-            //Main.NewText("Something was used! "+item.type);
-            return true;
-        }
     }
 }

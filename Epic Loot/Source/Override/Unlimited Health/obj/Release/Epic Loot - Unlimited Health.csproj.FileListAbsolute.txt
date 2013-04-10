@@ -1,6 +1,0 @@
-C:\Users\Surfpup\Documents\My Games\Terraria\ModPack_Objs\Epic Loot - Unlimited Health.dll
-C:\Users\Surfpup\Documents\My Games\Terraria\ModPacks\Epic Loot\Override\Unlimited Health\obj\Release\ResolveAssemblyReference.cache
-C:\Users\Surfpup\Documents\My Games\Terraria\ModPacks\Epic Loot\Override\Unlimited Health\obj\Release\Epic Loot - Unlimited Health.dll
-C:\TerrariaCode\tConfig Release\ModPacks\Epic Loot\Source\Override\Unlimited Health\obj\Release\ResolveAssemblyReference.cache
-C:\TerrariaCode\tConfig Release\ModPacks\Epic Loot\Source\Override\Unlimited Health\obj\Release\Epic Loot - Unlimited Health.dll
-C:\TerrariaCode\tConfig Release\ModPacks\ModPack_Objs\Epic Loot - Unlimited Health.dll

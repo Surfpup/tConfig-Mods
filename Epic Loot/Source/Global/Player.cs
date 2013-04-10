@@ -28,6 +28,46 @@ namespace Epic_Loot
     public class ModPlayer
     {
         public static float magicFind = 0f; //Helps find better items!
+
+        public static float magicFindBonus = 0f; //Bonus from current playthrough
+
+        public static void PreUpdatePlayer(Player p)
+        {
+            magicFind = magicFindBonus;
+
+            //Calculate base magic find
+
+            //Environmental effects
+            if (Main.hardMode) magicFind += .2f;
+
+            //Bosses
+            if (NPC.downedBoss1) magicFind += 0.05f;
+            if (NPC.downedBoss2) magicFind += 0.05f;
+            if (NPC.downedBoss3) magicFind += 0.05f;
+
+            if (magicFind > 1f) magicFind = 1f;
+        }
+
+        public static void IncreaseMF(float amt)
+        {
+            magicFind += amt;
+            if (magicFind > 1f) magicFind = 1f;
+        }
+
+        public static void PostLoad(Player p)
+        {
+            magicFindBonus = 0f; //Reset bonus
+        }
+
+        public static void CreatePlayer(Player p)
+        {
+            magicFindBonus = 0f; //Reset bonus
+        }
+    }
+    //Keeping old version of this in case of possible usefulness
+    /*public class ModPlayer
+    {
+        public static float magicFind = 0f; //Helps find better items!
         public static int oldHealth = 0;
         public static int oldMana = 0;
 
@@ -84,5 +124,5 @@ namespace Epic_Loot
             Main.NewText("This item is disabled; switch the mod to the default health/mana system to use this item.");
             return false;
         }
-    }
+    }*/
 }
