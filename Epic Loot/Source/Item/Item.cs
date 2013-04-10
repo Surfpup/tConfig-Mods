@@ -193,13 +193,17 @@ namespace Epic_Loot
         {
             //Assign an affix for each stat that's modified, by a range
             //I.e. Large is +12-17% size, Massive is +18% and higher
-            foreach (GPrefix prefix in prefixes)
-            {
-                if (!name.Contains(prefix.affix))
+            try {
+                foreach (GPrefix prefix in prefixes)
                 {
-                    if (!prefix.suffix) name = prefix.affix + " " + name;
-                    else name = name + " " + prefix.affix;
+                    if (!name.Contains(prefix.affix))
+                    {
+                        if (!prefix.suffix) name = prefix.affix + " " + name;
+                        else name = name + " " + prefix.affix;
+                    }
                 }
+            } catch(Exception e) {
+                Main.NewText("AffixName Exception: "+e.Message);
             }
         }
 

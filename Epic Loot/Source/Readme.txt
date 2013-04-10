@@ -1,6 +1,6 @@
 Created by Surfpup
 
-version 0.2.5
+version 0.2.6
 
 Description
  * Overrides the vanilla prefix system entirely
@@ -25,6 +25,10 @@ Ideas:
  * Add Nephalem Valor-like system, and Elite monsters?
 
 Changelog
+
+v0.2.6
+ * Fixed issue with npc affixes appearing as 'bla' in multiplayer
+ * Improved NPC syncing logic to use a RNG seed, reduces network data transferring significantly
 
 v0.2.5 (April 9th, 2013)
  * Removed the 'Complete' system that overrode health/mana crytal use.
