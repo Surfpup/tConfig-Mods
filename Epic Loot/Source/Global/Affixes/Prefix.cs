@@ -24,12 +24,12 @@ It is included here due to some minor changes to the class in tConfig's codebase
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Reflection;
 using System.IO;
 using Gajatko.IniFiles;
 using System.Diagnostics;
+using Terraria;
 
 namespace Epic_Loot
 {
@@ -238,14 +238,14 @@ namespace Epic_Loot
                 if (dict.ContainsKey((int)prefix))
                 {
                     string pname = dict[(int)prefix];
-                    Debug.WriteLine("Loading prefix " + pname);
+                    //Debug.WriteLine("Loading prefix " + pname);
                     try
                     {
                         prefix = ID[pname];
                     }
                     catch (Exception)
                     {
-                        Debug.WriteLine("Failed to load prefix, setting as an unloaded");
+                        //Debug.WriteLine("Failed to load prefix, setting as an unloaded");
                         item.Prefix((byte)(ID[":Mysterious"]));
                         item.unloadedPrefix = pname;
                         return;
@@ -253,7 +253,7 @@ namespace Epic_Loot
                 }
                 else //else if(!(prefix <= 84 && dict.Count == 0))
                 {
-                    Debug.WriteLine("Prefix " + prefix + " epic failed, ID invalid, setting prefix to zero");
+                    //Debug.WriteLine("Prefix " + prefix + " epic failed, ID invalid, setting prefix to zero");
                     prefix = 0;
                     item.Prefix(0);
                     return;
@@ -263,7 +263,7 @@ namespace Epic_Loot
             if (prefix == ID[":Mysterious"])
             {
                 string name = r.ReadString();
-                Debug.WriteLine("Found unloaded prefix " + name + ". Attempting to load");
+                //Debug.WriteLine("Found unloaded prefix " + name + ". Attempting to load");
                 try
                 {
                     prefix = Prefix.ID[name];
@@ -271,7 +271,7 @@ namespace Epic_Loot
                 }
                 catch (Exception)
                 {
-                    Debug.WriteLine("Failed to load custom prefix");
+                    //Debug.WriteLine("Failed to load custom prefix");
                     item.unloadedPrefix = name;
                     item.Prefix((byte)(ID[":Mysterious"]));
                 }
@@ -328,7 +328,7 @@ namespace Epic_Loot
             if (String.IsNullOrEmpty(ini["Stats"]["name"])) throw new Exception("Name required for prefix!");
             else this.affix = ini["Stats"]["name"];
 
-            Debug.WriteLine("Created prefix " + affix);
+            //Debug.WriteLine("Created prefix " + affix);
 
             if (!String.IsNullOrEmpty(ini["Stats"]["suffix"])) this.suffix = Convert.ToBoolean(ini["Stats"]["suffix"]);
 

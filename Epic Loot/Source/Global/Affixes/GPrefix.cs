@@ -20,11 +20,11 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
 using System.IO;
-using Terraria;
+//using Terraria;
 
 namespace Epic_Loot
 {
-    public class GPrefix : Prefix
+    public class GPrefix : Epic_Loot.Prefix
     { //Generated, needs to save additional data
         public List<float> randValues;
         public int curRand = 0;
@@ -65,7 +65,7 @@ namespace Epic_Loot
         public override void Load(BinaryReader reader, int v)
         {
             Console.WriteLine("Loading stuff");
-            base.Load(reader, v, pointlessArg);
+            base.Load(reader, v);
             int num = reader.ReadInt32();
             randValues = new List<float>();
             for (int i = 0; i < num; i++) randValues.Add(reader.ReadSingle());
@@ -137,7 +137,7 @@ namespace Epic_Loot
             {
                 this.Mod(m);
             }
-            foreach (MouseTip s in d.toolTips)
+            foreach (Terraria.MouseTip s in d.toolTips)
             {
                 this.AddTip(s);
             }

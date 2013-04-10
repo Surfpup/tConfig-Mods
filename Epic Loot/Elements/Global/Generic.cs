@@ -3,12 +3,12 @@ public static Color[] elementColors = new Color[] { Color.Red, Color.Aqua, Color
 
 public void AddEpicItemAffixes(List<Epic_Loot.DPrefix> prefixes) {
 	Console.WriteLine("Defining Element Affixes...");
-	Prefix.Requirement armor = (Item item) => { return (item.accessory || item.bodySlot != -1 || item.legSlot != -1 || item.headSlot != -1); };
-	Prefix.Requirement melee = (Item item) => { return item.melee; };
-	Prefix.Requirement ranged = (Item item) => { return item.ranged; };
-	Prefix.Requirement magic = (Item item) => { return item.magic; };
-	Prefix.Requirement proj = (Item item) => { return item.ranged || item.magic; };
-	Prefix.Requirement weapon = (Item item) => { return item.melee || item.ranged || item.magic; };
+	Epic_Loot.Prefix.Requirement armor = (Item item) => { return (item.accessory || item.bodySlot != -1 || item.legSlot != -1 || item.headSlot != -1); };
+	Epic_Loot.Prefix.Requirement melee = (Item item) => { return item.melee; };
+	Epic_Loot.Prefix.Requirement ranged = (Item item) => { return item.ranged; };
+	Epic_Loot.Prefix.Requirement magic = (Item item) => { return item.magic; };
+	Epic_Loot.Prefix.Requirement proj = (Item item) => { return item.ranged || item.magic; };
+	Epic_Loot.Prefix.Requirement weapon = (Item item) => { return item.melee || item.ranged || item.magic; };
 	
 	Epic_Loot.DPrefixGroup elementalDamage = new Epic_Loot.DPrefixGroup("Elemental");
 	elementalDamage.AddPrefixes(
