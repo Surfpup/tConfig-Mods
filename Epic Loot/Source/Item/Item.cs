@@ -203,7 +203,7 @@ namespace Epic_Loot
                     }
                 }
             } catch(Exception e) {
-                Main.NewText("AffixName Exception: "+e.Message);
+                //Main.NewText("AffixName Exception: "+e.Message);
             }
         }
 

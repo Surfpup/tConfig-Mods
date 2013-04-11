@@ -111,7 +111,7 @@ namespace Epic_Loot
                 }
                 if (num > 0) InitAffixes();
                 netTransferred = true;
-                Main.NewText("Loaded " + num + " affixes for NPC "+this.npc.name);
+                //Main.NewText("Loaded " + num + " affixes for NPC "+this.npc.name);
             }
         }
         /*public bool PreAI()
