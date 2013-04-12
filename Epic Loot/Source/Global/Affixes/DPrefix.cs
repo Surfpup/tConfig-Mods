@@ -29,54 +29,36 @@ namespace Epic_Loot
         //public delegate PlayerMod PlayerModGen(Player player, int val);
         //public delegate PlayerMod PlayerModGenF(Player player, float val);
 
-        public class PModifier<T>
-        {
-            public delegate PlayerMod PlayerModGen(T val);
-            public delegate MouseTip ToolTip(T val);
-            public T min;
-            public T max;
-            public PlayerModGen gen;
-            public ToolTip tip;
-            public int valIndex = -1;
-            public PModifier(PlayerModGen gen, T min, T max, ToolTip tip = null)
-            {
-                this.gen = gen;
-                this.min = min;
-                this.max = max;
-                this.tip = tip;
-            }
+        public delegate MouseTip ToolTip<T>(T[] val);
 
-            public PModifier(PlayerModGen gen, int valIndex, ToolTip tip = null)
+        public class BaseModifier<T>
+        {   
+            public ToolTip<T> tip;
+        }
+
+        public class PModifier<T> : BaseModifier<T>
+        {
+            public delegate PlayerMod PlayerModGen(T[] val);
+            public PlayerModGen gen;
+
+            public PModifier(PlayerModGen gen, ToolTip<T> tip = null)
             {
                 this.gen = gen;
                 this.tip = tip;
-                this.valIndex = valIndex; //Which rand value to use
             }
         }
         public List<PModifier<int>> playerModGens;
         public List<PModifier<float>> playerModGensF;
 
-        public class IModifier<T>
+        public class IModifier<T> : BaseModifier<T>
         {
-            public delegate ItemMod ItemModGen(T val);
-            public delegate MouseTip ToolTip(T val);
-            public T min;
-            public T max;
+            public delegate ItemMod ItemModGen(T[] val);
             public ItemModGen gen;
-            public ToolTip tip;
-            public int valIndex = -1;
-            public IModifier(ItemModGen gen, T min, T max, ToolTip tip = null)
-            {
-                this.gen = gen;
-                this.min = min;
-                this.max = max;
-                this.tip = tip;
-            }
-            public IModifier(ItemModGen gen, int valIndex, ToolTip tip = null)
+
+            public IModifier(ItemModGen gen, ToolTip<T> tip = null)
             {
                 this.gen = gen;
                 this.tip = tip;
-                this.valIndex = valIndex;
             }
         }
         public List<IModifier<int>> itemModGens;
@@ -102,31 +84,20 @@ namespace Epic_Loot
         public List<int> randIntMin;
         public List<int> randIntMax;
 
-        public class DelMod<T>
-        {
-            public delegate Delegate DelModifier(T val);
-            public delegate MouseTip ToolTip(T val);
-            public T min;
-            public T max;
-            public DelModifier gen;
+        public List<ToolTip<int>> intTips;
+        public List<ToolTip<float>> floatTips;
 
-            public ToolTip tip;
-            public int valIndex = -1;
+        public class DelMod<T> : BaseModifier<T>
+        {
+            public delegate Delegate DelModifier(T[] val);
+            public DelModifier gen;
             public string name;
-            public DelMod(string name, DelModifier gen, T min, T max, ToolTip tip = null)
-            {
-                this.name = name;
-                this.gen = gen;
-                this.min = min;
-                this.max = max;
-                this.tip = tip;
-            }
-            public DelMod(string name, DelModifier gen, int valIndex, ToolTip tip = null)
+
+            public DelMod(string name, DelModifier gen, ToolTip<T> tip = null)
             {
                 this.name = name;
                 this.gen = gen;
                 this.tip = tip;
-                this.valIndex = valIndex;
             }
         }
 
@@ -150,6 +121,9 @@ namespace Epic_Loot
             randFloatMax = new List<float>();
             randIntMin = new List<int>();
             randIntMax = new List<int>();
+
+            intTips = new List<ToolTip<int>>();
+            floatTips = new List<ToolTip<float>>();
 
             //Initialize multiply floats to 1f
             multiplyMin.defense = 1f;
@@ -228,94 +202,50 @@ namespace Epic_Loot
 
             //Generate values ahead of time
             //This way we can use the same value in multiple modifiers
-            List<float> randedFloats = new List<float>();
-            List<int> randedInts = new List<int>();
+            List<float> randedFloatsL = new List<float>();
+            List<int> randedIntsL = new List<int>();
             for(int i=0;i<randIntMin.Count;i++)
             {
-                randedInts.Add(SkewedRand(randIntMin[i], randIntMax[i], p));
+                randedIntsL.Add(SkewedRand(randIntMin[i], randIntMax[i], p));
             }
             for(int i=0;i<randFloatMin.Count;i++)
             {
-                randedFloats.Add(SkewedRand(randFloatMin[i], randFloatMax[i], p));
+                randedFloatsL.Add(SkewedRand(randFloatMin[i], randFloatMax[i], p));
             }
+
+            //Use arrays for passing data
+            float[] randedFloats = randedFloatsL.ToArray();
+            int[] randedInts = randedIntsL.ToArray();
 
             foreach (PModifier<float> m in playerModGensF)
             {
-                float val;
-                if(m.valIndex==-1) {
-                    val = SkewedRand(m.min, m.max, p);
-                }
-                else {
-                    val = randedFloats[m.valIndex];
-                }
-
-                p.Mod(m.gen(val));
-                if (m.tip != null) p.AddTip(m.tip(val));
+                p.Mod(m.gen(randedFloats));
+                if (m.tip != null) p.AddTip(m.tip(randedFloats));
             }
             foreach (PModifier<int> m in playerModGens)
             {
-                int val;
-                if(m.valIndex==-1) {
-                    val = SkewedRand(m.min, m.max, p);
-                }
-                else {
-                    val = randedInts[m.valIndex];
-                }
-
-                p.Mod(m.gen(val));
-                if (m.tip != null) p.AddTip(m.tip(val));
+                p.Mod(m.gen(randedInts));
+                if (m.tip != null) p.AddTip(m.tip(randedInts));
             }
             foreach (IModifier<float> m in itemModGensF)
             {
-                float val;
-                if(m.valIndex==-1) {
-                    val = SkewedRand(m.min, m.max, p);
-                }
-                else {
-                    val = randedFloats[m.valIndex];
-                }
-
-                p.Mod(m.gen(val));
-                if (m.tip != null) p.AddTip(m.tip(val));
+                p.Mod(m.gen(randedFloats));
+                if (m.tip != null) p.AddTip(m.tip(randedFloats));
             }
             foreach (IModifier<int> m in itemModGens)
             {
-                int val;
-                if(m.valIndex==-1) {
-                    val = SkewedRand(m.min, m.max, p);
-                }
-                else {
-                    val = randedInts[m.valIndex];
-                }
-
-                p.Mod(m.gen(val));
-                if (m.tip != null) p.AddTip(m.tip(val));
+                p.Mod(m.gen(randedInts));
+                if (m.tip != null) p.AddTip(m.tip(randedInts));
             }
             foreach (DelMod<int> m in delModGens)
             {
-                int val;
-                if(m.valIndex==-1) {
-                    val = SkewedRand(m.min, m.max, p);
-                }
-                else {
-                    val = randedInts[m.valIndex];
-                }
-
-                p.AddDel(m.name, m.gen(val));
-                if (m.tip != null) p.AddTip(m.tip(val));
+                p.AddDel(m.name, m.gen(randedInts));
+                if (m.tip != null) p.AddTip(m.tip(randedInts));
             }
             foreach (DelMod<float> m in delModGensF)
             {
-                float val;
-                if(m.valIndex==-1) {
-                    val = SkewedRand(m.min, m.max, p);
-                }
-                else {
-                    val = randedFloats[m.valIndex];
-                }
-
-                p.AddDel(m.name, m.gen(val));
-                if (m.tip != null) p.AddTip(m.tip(val));
+                p.AddDel(m.name, m.gen(randedFloats));
+                if (m.tip != null) p.AddTip(m.tip(randedFloats));
             }
             foreach (PlayerMod m in playerMods)
             {
@@ -345,7 +275,6 @@ namespace Epic_Loot
             else p.affix = this.affix;
 
             p.SetID(this.identifier);
-
 
             randAmt = 0f;
             randTotal = 0f;
@@ -393,6 +322,16 @@ namespace Epic_Loot
             return (int) Math.Round(val, System.MidpointRounding.AwayFromZero);
         }*/
 
+        public DPrefix AddTip(ToolTip<int> tip)
+        {
+            this.intTips.Add(tip);
+            return this;
+        }
+        public DPrefix AddTip(ToolTip<float> tip)
+        {
+            this.floatTips.Add(tip);
+            return this;
+        }
         public DPrefix AddVal(int min, int max)
         {
             this.randIntMin.Add(min);
@@ -405,12 +344,12 @@ namespace Epic_Loot
             this.randFloatMax.Add(max);
             return this;
         }
-        public DPrefix AddDel(string name, DelMod<int>.DelModifier del, DelMod<int>.ToolTip t, int min, int max)
+        public DPrefix AddDel(string name, DelMod<int>.DelModifier del, ToolTip<int> t, int min, int max)
         {
             this.delModGens.Add(new DelMod<int>(name, del, min, max, t));
             return this;
         }
-        public DPrefix AddDel(string name, DelMod<float>.DelModifier del, DelMod<float>.ToolTip t, float min, float max)
+        public DPrefix AddDel(string name, DelMod<float>.DelModifier del, ToolTip<float> t, float min, float max)
         {
             this.delModGensF.Add(new DelMod<float>(name, del, min, max, t));
             return this;
@@ -430,22 +369,22 @@ namespace Epic_Loot
             playerMods.Add(m);
             return this;
         }
-        public DPrefix DMod(PModifier<int>.PlayerModGen m, PModifier<int>.ToolTip t, int min, int max)
+        public DPrefix DMod(PModifier<int>.PlayerModGen m, ToolTip<int> t, int min, int max)
         {
             this.playerModGens.Add(new PModifier<int>(m, min, max, t));
             return this;
         }
-        public DPrefix DMod(PModifier<float>.PlayerModGen m, PModifier<float>.ToolTip t, float min, float max)
+        public DPrefix DMod(PModifier<float>.PlayerModGen m, ToolTip<float> t, float min, float max)
         {
             this.playerModGensF.Add(new PModifier<float>(m, min, max, t));
             return this;
         }
-        public DPrefix DMod(IModifier<int>.ItemModGen m, IModifier<int>.ToolTip t, int min, int max)
+        public DPrefix DMod(IModifier<int>.ItemModGen m, ToolTip<int> t, int min, int max)
         {
             this.itemModGens.Add(new IModifier<int>(m, min, max, t));
             return this;
         }
-        public DPrefix DMod(IModifier<float>.ItemModGen m, IModifier<float>.ToolTip t, float min, float max)
+        public DPrefix DMod(IModifier<float>.ItemModGen m, ToolTip<float> t, float min, float max)
         {
             this.itemModGensF.Add(new IModifier<float>(m, min, max, t));
             return this;
