@@ -3,6 +3,5 @@ set modpack_dir=C:\Users\Surfpup\Documents\My Games\Terraria\ModPacks
 
 cd "%builder_dir%"
 
-"Modpack Builder.exe" "%~dp0\" "Epic Loot" "%~dp0..\\"
+"Modpack Builder.exe" "%~dp0\" "Epic Loot" "%~dp0..\\" true
 copy "%~dp0\..\*.obj" "%modpack_dir%"
-pause
