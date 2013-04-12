@@ -24,6 +24,8 @@ namespace Epic_Loot
 {
     public class Item_Affixes
     {
+    	public delegate void UseItem_Del(Player p, int i);
+    	public delegate bool CanUse(Player player, int playerID);
         public delegate void OnSpawn_Del(Player p, int i);
         public delegate bool PreShoot_Del(Player P, Vector2 ShootPos, Vector2 ShootVelocity, int projType, int Damage, float knockback, int owner);
         public delegate void DealtNPC_Del(Player myPlayer, NPC npc, double damage);
@@ -47,13 +49,40 @@ namespace Epic_Loot
             ModGeneric.prefixes = new List<DPrefix>();
             ModGeneric.prefixes.AddRange(
                 new DPrefix[]{
-		new DPrefix("Guarding").AddAffix("Hard", "Guarding", "Armored", "Warding").Require(armor).AddPlayerDefense(1,4),
-		new DPrefix("Arcane").Require(armor).AddPlayerMana(1, 30),
-		new DPrefix("Precise").Require(armor).AddPlayerCrit(1,3),
-		new DPrefix("Spiked").AddAffix("Jagged", "Spiked", "Angry", "Menacing").Require(armor).AddPlayerDmg(0.01f,0.05f),
-		new DPrefix("Rash").AddAffix("Brisk", "Fleeting", "Hasty", "Quick").Require(armor).AddPlayerMeleespeed(0.01f,0.05f),
+            
+		new DPrefix("Guarding")
+			.AddAffix("Hard", "Guarding", "Armored", "Warding")
+			.Require(armor)
+			.AddPlayerDefense(1,4),
+
+		new DPrefix("Arcane")
+			.Require(armor)
+			.AddPlayerMana(1, 30),
+
+		new DPrefix("Precise")
+			.Require(armor)
+			.AddPlayerCrit(1,3),
+
+		new DPrefix("Spiked")
+			.AddAffix("Jagged", "Spiked", "Angry", "Menacing")
+			.Require(armor)
+			.AddPlayerDmg(0.01f,0.05f),
+
+		new DPrefix("Rash")
+			.AddAffix("Brisk", "Fleeting", "Hasty", "Quick")
+			.Require(armor)
+			.AddPlayerMeleespeed(0.01f,0.05f),
+
 		//new DPrefix("Fleeting").Require(armor).AddPlayerMovespeed(0.01f,0.05f),
-		new DPrefix("Speedy").Require(armor).DMod( (float val) => { return (Player player) => { player.baseSpeed += val; player.maximumMaxSpeed += val; }; } , (float val) => { return new MouseTip("+"+Math.Round((float)(val*100f), 2)+"% Movement Speed & Max Speed", true); }, 0.01f, 0.10f),
+		new DPrefix("Speedy")
+			.Require(armor)
+			.DMod( (float val) => { 
+				return (Player player) => { player.baseSpeed += val; player.maximumMaxSpeed += val; };
+			}, (float val) => { 
+				return new MouseTip("+"+Math.Round((float)(val*100f), 2)+"% Movement Speed & Max Speed", true);
+			}, 0.01f, 0.10f),
+
+
 		new DPrefix("Strong").AddAffix("Strong", "Knockbackity").Require(melee).DMod( (float v) => { return (Item i) => { i.knockBack *= v; }; }, null, 1.05f,1.20f), //, (float v) => { return "+"+((v-1f)*100f)+"% Knockback"; }
 		new DPrefix("Large").AddAffix("Large", "Huge", "Hugemongous").Require(melee).DMod( (float v) => { return (Item i) => { i.scale *= v; }; }, null, 1.05f,1.20f), //, (float v) => { return "+"+((v-1f)*100f)+"% Size"; }
 		new DPrefix("Swift").Require(ranged).DMod( (float v) => { return (Item i) => { i.shootSpeed *= v; }; }, null, 1.01f,1.20f), //, (float v) => { return "+"+((v-1f)*100f)+"% Projectile Velocity"; }
@@ -119,6 +148,15 @@ namespace Epic_Loot
         /*new DPrefix("Vengeful Ranged").AddAffix("Vengeful").Require(proj).Require((Item item) => { return (int)Math.Round((double)((float)item.damage * (0.20f))) > 0; }).
             AddDel( "RegisterProjectile", (float val) => { Action<Projectile> code = (Projectile pr) => {  pr.RegisterDel(ref pr.DamageNPC, (NPC npc, ref int dmg, ref float k) => { dmg+=(int)Math.Round((double)((float)dmg * ((1f - (p.statLife / p.statLifeMax)) * val))) }, "DamageNPC"); }; return code; }, (float val) => { return new MouseTip("+"+Math.Round((float)(val*100f), 2)+" Vengeance Damage", true); }, 0.20f, 0.5f),
         */
+
+       /* new DPrefix("Sacrificial")
+        	.Require(magic)
+        	.AddDel( "CanUse", (float val) => { 
+        		UseItem_Del d = (Player p, int i) => { p.statMana += val; }; return d; 
+        	}, (int val) => { 
+        		return new MouseTip("+"+val+" Mana On Hit", true); 
+        	}, 1, 5),*/
+
          });
 
             /*DPrefix colorPrefix = new DPrefix("Colored").DMod( (int index) => { return (Item i) => 
