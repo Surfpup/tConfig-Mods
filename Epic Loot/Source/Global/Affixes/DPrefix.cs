@@ -154,6 +154,7 @@ namespace Epic_Loot
             this.skewMod = skewMod;
 
             GPrefix p = new GPrefix(this.affix, this.suffix);
+
             p.pAdd.defense += SkewedRand((int)pAddMin.defense, (int)pAddMax.defense);
             p.pAdd.crit += SkewedRand((int)pAddMin.crit, (int)pAddMax.crit);
             p.pAdd.mana += SkewedRand((int)pAddMin.mana, (int)pAddMax.mana);
@@ -172,10 +173,6 @@ namespace Epic_Loot
             p.multiply.knockback = SkewedRand(multiplyMin.knockback, multiplyMax.knockback);
             p.multiply.shootSpeed = SkewedRand(multiplyMin.shootSpeed, multiplyMax.shootSpeed);
 
-            foreach (Requirement r in this.customRequirements)
-            {
-                p.customRequirements.Add(r);
-            }
             p.requirements.accessory = requirements.accessory;
             p.requirements.melee = requirements.melee;
             p.requirements.ranged = requirements.ranged;
@@ -186,60 +183,7 @@ namespace Epic_Loot
             p.requirements.headArmor = requirements.headArmor;
             p.requirements.notVanity = requirements.notVanity;
 
-            foreach (ItemMod m in itemMods)
-            {
-                p.Mod(m);
-            }
-            foreach (PModifier<float> m in playerModGensF)
-            {
-                float val = SkewedRand(m.min, m.max, p);
-
-                p.Mod(m.gen(val));
-                if (m.tip != null) p.AddTip(m.tip(val));
-            }
-            foreach (PModifier<int> m in playerModGens)
-            {
-                int val = SkewedRand(m.min, m.max, p);
-
-                p.Mod(m.gen(val));
-                if (m.tip != null) p.AddTip(m.tip(val));
-            }
-            foreach (IModifier<float> m in itemModGensF)
-            {
-                float val = SkewedRand(m.min, m.max, p);
-
-                p.Mod(m.gen(val));
-                if (m.tip != null) p.AddTip(m.tip(val));
-            }
-            foreach (IModifier<int> m in itemModGens)
-            {
-                int val = SkewedRand(m.min, m.max, p);
-
-                p.Mod(m.gen(val));
-                if (m.tip != null) p.AddTip(m.tip(val));
-            }
-            foreach (DelMod<int> m in delModGens)
-            {
-                int val = SkewedRand(m.min, m.max, p);
-
-                p.AddDel(m.name, m.gen(val));
-                if (m.tip != null) p.AddTip(m.tip(val));
-            }
-            foreach (DelMod<float> m in delModGensF)
-            {
-                float val = SkewedRand(m.min, m.max, p);
-
-                p.AddDel(m.name, m.gen(val));
-                if (m.tip != null) p.AddTip(m.tip(val));
-            }
-            foreach (PlayerMod m in playerMods)
-            {
-                p.Mod(m);
-            }
-            foreach (MouseTip s in toolTips)
-            {
-                p.AddTip(s);
-            }
+            p.Roll();
 
             float avgRand = 0f;
             if (randTotal > 0f)
@@ -260,7 +204,6 @@ namespace Epic_Loot
             else p.affix = this.affix;
 
             p.SetID(this.identifier);
-
 
             randAmt = 0f;
             randTotal = 0f;
