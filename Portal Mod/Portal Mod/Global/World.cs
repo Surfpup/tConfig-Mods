@@ -94,7 +94,10 @@ public static void Teleport(int x, int y) {
 	Main.player[Main.myPlayer].position.Y = ((dest.Y+3) * 0x10) - Main.player[Main.myPlayer].height;
 	
 	//Main.player[Main.myPlayer].statLife -= (int)(Main.player[Main.myPlayer].statLifeMax * .1); //Subtract 10% of max life
-	Main.player[Main.myPlayer].Hurt((int)(Main.player[Main.myPlayer].statLifeMax * .01 * (Main.player[Main.myPlayer].statDefense/2)), 0);
+
+	float defMod = (float) (Main.player[Main.myPlayer].statDefense/2f);
+	//if(defMod<1) defMod=1;
+	Main.player[Main.myPlayer].Hurt((int)(Main.player[Main.myPlayer].statLifeMax * 0.1f + defMod), 0);
 	
 	Main.player[Main.myPlayer].AddBuff(23, 360, false); //Curse - Can't use items for a little while
 	//Paralyze the player into place for a bit while loading tiles
