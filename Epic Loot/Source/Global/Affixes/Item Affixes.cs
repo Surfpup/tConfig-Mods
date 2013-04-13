@@ -24,8 +24,6 @@ namespace Epic_Loot
 {
     public class Item_Affixes
     {
-    	public delegate void UseItem_Del(Player p, int i);
-    	public delegate bool CanUse(Player player, int playerID);
         public delegate void OnSpawn_Del(Player p, int i);
         public delegate bool PreShoot_Del(Player P, Vector2 ShootPos, Vector2 ShootVelocity, int projType, int Damage, float knockback, int owner);
         public delegate void DealtNPC_Del(Player myPlayer, NPC npc, double damage);
@@ -49,188 +47,49 @@ namespace Epic_Loot
             ModGeneric.prefixes = new List<DPrefix>();
             ModGeneric.prefixes.AddRange(
                 new DPrefix[]{
-
-		new DPrefix("Guarding")
-			.AddAffix("Hard", "Guarding", "Armored", "Warding")
-			.Require(armor)
-			.AddPlayerDefense(1,4),
-
-		new DPrefix("Arcane")
-			.Require(armor)
-			.AddPlayerMana(1, 30),
-
-		new DPrefix("Precise")
-			.Require(armor)
-			.AddPlayerCrit(1,3),
-
-		new DPrefix("Spiked")
-			.AddAffix("Jagged", "Spiked", "Angry", "Menacing")
-			.Require(armor)
-			.AddPlayerDmg(0.01f,0.05f),
-
-		new DPrefix("Rash")
-			.AddAffix("Brisk", "Fleeting", "Hasty", "Quick")
-			.Require(armor)
-			.AddPlayerMeleespeed(0.01f,0.05f),
-
+		new DPrefix("Guarding").AddAffix("Hard", "Guarding", "Armored", "Warding").Require(armor).AddPlayerDefense(1,4),
+		new DPrefix("Arcane").Require(armor).AddPlayerMana(1, 30),
+		new DPrefix("Precise").Require(armor).AddPlayerCrit(1,3),
+		new DPrefix("Spiked").AddAffix("Jagged", "Spiked", "Angry", "Menacing").Require(armor).AddPlayerDmg(0.01f,0.05f),
+		new DPrefix("Rash").AddAffix("Brisk", "Fleeting", "Hasty", "Quick").Require(armor).AddPlayerMeleespeed(0.01f,0.05f),
 		//new DPrefix("Fleeting").Require(armor).AddPlayerMovespeed(0.01f,0.05f),
-		new DPrefix("Speedy")
-			.Require(armor)
-			.AddVal(0.01f, 0.10f)
-			.DMod( (float[] val) => { 
-				return (Player player) => { player.baseSpeed += val[0]; player.maximumMaxSpeed += val[0]; };
-			}, (List<float> val) => { 
-				return new MouseTip("+"+Math.Round((float)(val[0]*100f), 2)+"% Movement Speed & Max Speed", true);
-			}),
-
-
-		new DPrefix("Strong")
-			.AddAffix("Strong", "Knockbackity")
-			.Require(melee)
-			.AddVal(1.05f, 1.20f)
-			.DMod( (float[] v) => { 
-				return (Item i) => { i.knockBack *= v[0]; }; 
-			}),
-
-		new DPrefix("Large")
-			.AddAffix("Large", "Huge", "Hugemongous")
-			.Require(melee)
-			.AddVal(1.05f, 1.20f)
-			.DMod( (float[] v) => { 
-				return (Item i) => { i.scale *= v[0]; };
-			}),
-
-		new DPrefix("Swift")
-			.Require(ranged)
-			.AddVal(1.01f, 1.20f)
-			.DMod( (float[] v) => { 
-				return (Item i) => { i.shootSpeed *= v[0]; }; 
-			}),
-
-		new DPrefix("Adept")
-			.Require(magic)
-			.AddVal(0.01f, 0.20f)
-			.DMod( (float[] v) => { 
-				return (Item i) => { i.mana = (int)Math.Round((double)((float)i.mana * (1f-v[0]))); }; 
-			}),
-
-		new DPrefix("Quick")
-			.Require(weapon)
-			.AddVal(1.01f, 1.20f)
-			.DMod( (float[] v) => { 
-				return (Item i) => { 
-					v = 1f-(v[0]-1f);
-					i.useAnimation = (int)Math.Round((double)((float)i.useAnimation * v[0]));
-		            i.useTime = (int)Math.Round((double)((float)i.useTime * v[0]));
-		            i.reuseDelay = (int)Math.Round((double)((float)i.reuseDelay * v[0])); 
-	        	}; 
-            }),
-
-		new DPrefix("Dangerous")
-			.Require(weapon)
-			.AddVal(1, 10)
-			.DMod( (int[] v) => { 
-				return (Item i) => { i.crit += v[0]; }; 
-			}),
-
-		new DPrefix("Painful")
-			.Require(weapon)
-			.Require((Item item) => { 
-				return (int)Math.Round((double)((float)item.damage * (0.10f))) > 0; 
-			})
-			.AddVal(1.10f, 1.20f)
-			.DMod( (float[] v) => { 
-				return (Item i) => { i.damage = (int)Math.Round((double)((float)i.damage * v[0])); }; 
-			}),
-
-		new DPrefix("Miner's")
-			.Require(armor)
-			.AddVal(0.01f, 0.10f)
-			.DMod( (float[] val) => { 
-				return (Player player) => { player.pickSpeed -= val[0]; }; 
-			} , (float[] val) => { 
-				return new MouseTip("+"+Math.Round((float)(val[0]*100f), 2)+"% Mining Speed", true); 
-			}),
-
-		new DPrefix("Lucky")
-			.Require(armor)
-			.AddVal(0.001f, 0.10f)
-			.DMod( (float[] val) => { 
-				return (Player player) => { Codable.RunGlobalMethod("ModPlayer", "IncreaseMF", val[0]); }; 
-			} , (float val) => { 
-				return new MouseTip("+"+Math.Round((float)(val[0]*100f), 4)+"% Magic Find", true); 
-			}),
-
-		new DPrefix("Angelic")
-			.Require(armor)
-			.AddVal(10, 50)
-			.AddDel( "OnSpawn", (int[] val) => { 
-				OnSpawn_Del d = (Player p, int i) => { p.statLife += val[0]; }; return d; 
-			}, (int[0] val) => { 
-				return new MouseTip("+"+val[0]+" HP On Respawn"); 
-			}),
-
-		new DPrefix("Celestial")
-			.Require(armor)
-			.AddVal(10, 40)
-			.AddDel( "OnSpawn", (int[] val) => { 
-				OnSpawn_Del d = (Player p, int i) => { p.statMana += val[0]; }; return d; 
-			}, (int[] val) => { 
-				return new MouseTip("+"+val[0]+" MP On Respawn"); 
-			}),
-
+		new DPrefix("Speedy").Require(armor).DMod( (float val) => { return (Player player) => { player.baseSpeed += val; player.maximumMaxSpeed += val; }; } , (float val) => { return new MouseTip("+"+Math.Round((float)(val*100f), 2)+"% Movement Speed & Max Speed", true); }, 0.01f, 0.10f),
+		new DPrefix("Strong").AddAffix("Strong", "Knockbackity").Require(melee).DMod( (float v) => { return (Item i) => { i.knockBack *= v; }; }, null, 1.05f,1.20f), //, (float v) => { return "+"+((v-1f)*100f)+"% Knockback"; }
+		new DPrefix("Large").AddAffix("Large", "Huge", "Hugemongous").Require(melee).DMod( (float v) => { return (Item i) => { i.scale *= v; }; }, null, 1.05f,1.20f), //, (float v) => { return "+"+((v-1f)*100f)+"% Size"; }
+		new DPrefix("Swift").Require(ranged).DMod( (float v) => { return (Item i) => { i.shootSpeed *= v; }; }, null, 1.01f,1.20f), //, (float v) => { return "+"+((v-1f)*100f)+"% Projectile Velocity"; }
+		new DPrefix("Adept").Require(magic).DMod( (float v) => { return (Item i) => { i.mana = (int)Math.Round((double)((float)i.mana * (1f-v))); }; }, null, 0.01f,0.20f), //, (float v) => { return "-"+((v)*100f)+"% Mana Cost"; }
+		new DPrefix("Quick").Require(weapon).DMod( (float v) => { return (Item i) => { 
+			v = 1f-(v-1f);
+			i.useAnimation = (int)Math.Round((double)((float)i.useAnimation * v));
+            i.useTime = (int)Math.Round((double)((float)i.useTime * v));
+            i.reuseDelay = (int)Math.Round((double)((float)i.reuseDelay * v)); }; }, null, 1.01f,1.20f),
+		new DPrefix("Dangerous").Require(weapon).DMod( (int v) => { return (Item i) => { i.crit += v; }; }, null, 1, 10),
+		new DPrefix("Painful").Require(weapon).Require((Item item) => { return (int)Math.Round((double)((float)item.damage * (0.10f))) > 0; }).DMod( (float v) => { return (Item i) => { i.damage = (int)Math.Round((double)((float)i.damage * v)); }; }, null, 1.10f, 1.20f),	
+		new DPrefix("Miner's").Require(armor).DMod( (float val) => { return (Player player) => { player.pickSpeed -= val; }; } , (float val) => { return new MouseTip("+"+Math.Round((float)(val*100f), 2)+"% Mining Speed", true); }, 0.01f, 0.10f),
+		new DPrefix("Lucky").Require(armor).DMod( (float val) => { return (Player player) => { Codable.RunGlobalMethod("ModPlayer", "IncreaseMF", val); }; } , (float val) => { return new MouseTip("+"+Math.Round((float)(val*100f), 4)+"% Magic Find", true); }, 0.001f, 0.10f),
+		new DPrefix("Angelic").Require(armor).AddDel( "OnSpawn", (int val) => { OnSpawn_Del d = (Player p, int i) => { p.statLife += val; }; return d; }, (int val) => { return new MouseTip("+"+val+" HP On Respawn"); }, 10, 50),
+		new DPrefix("Celestial").Require(armor).AddDel( "OnSpawn", (int val) => { OnSpawn_Del d = (Player p, int i) => { p.statMana += val; }; return d; }, (int val) => { return new MouseTip("+"+val+" MP On Respawn"); }, 10, 40),
 		new DPrefix("Battle-Ready")
-			.AddVal(0.01f, 0.20f)
-			.AddVal(0.01f, 0.20f)
 			.AddDel("UpdateSpawn", 
-				(float[] val) => { 
+				(float val) => { 
 					Action d = () => { 
-						NPC.spawnRate = (int)((double)NPC.spawnRate * (1f - val[0]));
+						NPC.spawnRate = (int)((double)NPC.spawnRate * (1f - val));
 					};
 					return d;
-				}, (float[] val) => { return new MouseTip("+"+Math.Round((float)(val[0]*100f), 2)+"% Increased Spawn Rate", true); })
+				}, (float val) => { return new MouseTip("+"+Math.Round((float)(val*100f), 2)+"% Increased Spawn Rate", true); }, 0.01f, 0.20f)
 			.AddDel("UpdateSpawn", 
-				(float[] val) => { 
+				(float val) => { 
 					Action d = () => { 
-						NPC.maxSpawns = (int)((float)NPC.maxSpawns * (1f + val[1]));
+						NPC.maxSpawns = (int)((float)NPC.maxSpawns * (1f + val));
 					};
 					return d;
-				}, (float[] val) => { return new MouseTip("+"+Math.Round((float)(val[1]*100f), 2)+"% Max Spawns", true); }),
-
-		new DPrefix("Vital")
-			.Require(armor)
-			.AddVal(1, 30)
-			.DMod( (int[] v) => { return (Player p) => { p.statLifeMax2+=v[0]; }; }, 
-				(int[] val) => { return new MouseTip("+"+val[0]+" Max HP", true); }),
-
-		new DPrefix("Mage's")
-			.Require(armor)
-			.AddVal(0.01f, 0.05f)
-			.DMod( (float[] val) => { return (Player player) => { player.manaCost -= val[0]; }; } , 
-				(float[] val) => { return new MouseTip("-"+Math.Round(val[0], 2)+"% Mana Cost", true); }),
-
-		new DPrefix("Rejuvenating")
-			.Require(armor)
-			.AddVal(1,2)
-			.DMod( (int[] v) => { return (Player p) => { p.lifeRegen += v[0]; }; }, 
-				(int[] val) => { return new MouseTip("+"+val[0]+" Life Regen", true); }),
-
-		new DPrefix("Thirsty")
-			.Require(armor)
-			.AddVal(1, 5)
-			.DMod( (int[] v) => { return (Player p) => { p.potionDelayTime -= (v[0]*60); }; }, 
-				(int[] val) => { return new MouseTip("Reduces potion cooldown by "+val[0]+" seconds", true); }),
-
-		new DPrefix("Builder's")
-			.Require(armor)
-			.AddVal(1, 2)
-			.DMod( (int[] v) => { return (Player p) => { p.blockRange += v[0]; }; }, 
-				(int[] val) => { return new MouseTip("Increases range of block placement by "+val[0], true); }),
-
-		new DPrefix("Magnum")
-			.Require(ranged)
-			.AddVal(0.01f, 0.10f)
-			.AddDel( "PreShoot", (float[] v) => { 
+				}, (float val) => { return new MouseTip("+"+Math.Round((float)(val*100f), 2)+"% Max Spawns", true); }, 0.01f, 0.20f),
+		new DPrefix("Vital").Require(armor).DMod( (int v) => { return (Player p) => { p.statLifeMax2+=v; }; }, (int val) => { return new MouseTip("+"+val+" Max HP", true); }, 1, 30),
+		new DPrefix("Mage's").Require(armor).DMod( (float val) => { return (Player player) => { player.manaCost -= val; }; } , (float val) => { return new MouseTip("-"+Math.Round(val, 2)+"% Mana Cost", true); }, 0.01f, 0.05f),
+		new DPrefix("Rejuvenating").Require(armor).DMod( (int v) => { return (Player p) => { p.lifeRegen += v; }; }, (int val) => { return new MouseTip("+"+val+" Life Regen", true); }, 1, 2),
+		new DPrefix("Thirsty").Require(armor).DMod( (int v) => { return (Player p) => { p.potionDelayTime -= (v*60); }; }, (int val) => { return new MouseTip("Reduces potion cooldown by "+val+" seconds", true); }, 1, 5),
+		new DPrefix("Builder's").Require(armor).DMod( (int v) => { return (Player p) => { p.blockRange += v; }; }, (int val) => { return new MouseTip("Increases range of block placement by "+val, true); }, 1, 2),
+		new DPrefix("Magnum").Require(ranged).AddDel( "PreShoot", (float v) => { 
 				PreShoot_Del d = (Player P,Vector2 ShootPos,Vector2 ShootVelocity,int projType,int Damage,float knockback,int owner) => 
 					{ 
 						int num41 = Projectile.NewProjectile(ShootPos.X, ShootPos.Y, ShootVelocity.X, ShootVelocity.Y, projType, Damage, knockback, owner);
@@ -239,107 +98,27 @@ namespace Epic_Loot
 							Main.projectile[num41].ai[0] = (float)Player.tileTargetX;
 							Main.projectile[num41].ai[1] = (float)Player.tileTargetY;
 						}
-						Main.projectile[num41].scale += (1f+v[0]);
+						Main.projectile[num41].scale += (1f+v);
 						return false; 
-					}; return d; }, 
-				(float[] v) => { return new MouseTip("+"+Math.Round((float)(v[0]*100f), 2)+"% Increased Projectile Size", true); }),
-
-		new DPrefix("Vampiric")
-			.Require(melee)
-			.AddVal(1,5)
-			.AddDel( "DealtNPC", (int[] val) => { DealtNPC_Del d = (Player p, NPC npc, double dmg) => { p.statLife += val[0]; }; return d; }, 
-				(int[] val) => { return new MouseTip("+"+val[0]+" HP On Hit", true); }),
-
-        new DPrefix("Vampiric Ranged")
-        	.AddAffix("Vampiric")
-        	.Require(proj)
-        	.AddVal(1,5)
-            .AddDel( "RegisterProjectile", (int[] val) => {
-                Action<Projectile> code = (Projectile p) => { p.RegisterDel(ref p.DealtNPC, (NPC npc, double dmg, Player pl) => { pl.statLife += val[0]; }, "DealtNPC"); };
-                return code; 
-                }, (int[] val) => { return new MouseTip("+"+val[0]+" HP On Hit", true); }),
-
-		new DPrefix("Leeching")
-			.Require(melee)
-			.AddVal(1,5)
-			.AddDel( "DealtNPC", (int[] val) => { DealtNPC_Del d = (Player p, NPC npc, double dmg) => { p.statMana += val[0]; }; return d; },
-			 (int[] val) => { return new MouseTip("+"+val[0]+" Mana On Hit", true); }),
-
-        new DPrefix("Leeching Ranged")
-	        .AddAffix("Leeching")
-	        .Require(proj)
-	        .AddVal(1,5)
-            .AddDel( "RegisterProjectile", (int[] val) => {
-                Action<Projectile> code = (Projectile p) => { p.RegisterDel(ref p.DealtNPC, (NPC npc, double dmg, Player pl) => { pl.statMana += val[0]; }, "DealtNPC"); };
-                return code; }, (int[] val) => { return new MouseTip("+"+val[0]+" HP On Hit", true); }),
-
-		new DPrefix("Stabby")
-			.Require(melee)
-			.Require((Item i) => { return i.useStyle==1; })
-			.AddVal(5,15)
-			.DMod( (int[] v) => { return (Item i) => { i.crit += v[0]; i.useStyle=3; }; }, 
-				(int[] val) => { return new MouseTip("Stick 'em with the pointy end", true); }),
-
+					}; return d; }, (float v) => { return new MouseTip("+"+Math.Round((float)(v*100f), 2)+"% Increased Projectile Size", true); }, 0.01f, 0.10f),
+		new DPrefix("Vampiric").Require(melee).AddDel( "DealtNPC", (int val) => { DealtNPC_Del d = (Player p, NPC npc, double dmg) => { p.statLife += val; }; return d; }, (int val) => { return new MouseTip("+"+val+" HP On Hit", true); }, 1, 5),
+        new DPrefix("Vampiric Ranged").AddAffix("Vampiric").Require(proj)
+            .AddDel( "RegisterProjectile", (int val) => {
+                Action<Projectile> code = (Projectile p) => { p.RegisterDel(ref p.DealtNPC, (NPC npc, double dmg, Player pl) => { pl.statLife += val; }, "DealtNPC"); };
+                return code; }, (int val) => { return new MouseTip("+"+val+" HP On Hit", true); }, 1, 5),
+		new DPrefix("Leeching").Require(melee).AddDel( "DealtNPC", (int val) => { DealtNPC_Del d = (Player p, NPC npc, double dmg) => { p.statMana += val; }; return d; }, (int val) => { return new MouseTip("+"+val+" Mana On Hit", true); }, 1, 5),
+        new DPrefix("Leeching Ranged").AddAffix("Leeching").Require(proj)
+            .AddDel( "RegisterProjectile", (int val) => {
+                Action<Projectile> code = (Projectile p) => { p.RegisterDel(ref p.DealtNPC, (NPC npc, double dmg, Player pl) => { pl.statMana += val; }, "DealtNPC"); };
+                return code; }, (int val) => { return new MouseTip("+"+val+" HP On Hit", true); }, 1, 5),
+		new DPrefix("Stabby").Require(melee).Require((Item i) => { return i.useStyle==1; })
+			.DMod( (int v) => { return (Item i) => { i.crit += v; i.useStyle=3; }; }, (int val) => { return new MouseTip("Stick 'em with the pointy end", true); }, 5, 15),
 		//new DPrefix("Thorned").Require(armor).AddDel( "DealtPlayer", (int val) => { DealtPlayer_Del d = (Player myPlayer, double damage, NPC npc) => {  }; return d; }, (int val) => { return new MouseTip("+"+val+" Mana On Hit", true); }, 1, 10),
-        new DPrefix("of Willpower", true)
-        	.Require(weapon)
-        	.Require((Item item) => { return (int)Math.Round((double)((float)item.damage * (0.15f))) > 0; })
-        	.AddVal(1.15f, 1.25f)
-        	.DMod( (float[] v) => { return (Item i) => { 
-        		i.damage = (int)Math.Round((double)((float)i.damage * v[0])); 
-        		i.magic=true; 
-        		int manaBonus = (int)Math.Round((double)(((float)i.damage * (v[0]-1f))/2f)) + 1; 
-        		i.mana+=manaBonus; i.toolTip7 = "+"+manaBonus+" mana cost"; }; 
-        	}),
-
-        new DPrefix("Vengeful")
-        	.Require(melee)
-        	.Require((Item item) => { return (int)Math.Round((double)((float)item.damage * (0.20f))) > 0; })
-        	.AddVal(0.20f, 0.5f)
-        	.AddDel( "DamageNPC", (float[] val) => { 
-        		Events.Player.DamageNPC_Del d = (Player p, NPC npc, ref int dmg, ref float k) => { 
-        			dmg+=(int)Math.Round((double)((float)dmg * ((1f - (p.statLife / p.statLifeMax)) * val[0]))); 
-        		}; return d; 
-        	}, (float[] val) => { return new MouseTip("+"+Math.Round((float)(val[0]*100f), 2)+" Vengeance Damage", true); }),
-
+        new DPrefix("of Willpower", true).Require(weapon).Require((Item item) => { return (int)Math.Round((double)((float)item.damage * (0.15f))) > 0; }).DMod( (float v) => { return (Item i) => { i.damage = (int)Math.Round((double)((float)i.damage * v)); i.magic=true; int manaBonus = (int)Math.Round((double)(((float)i.damage * (v-1f))/2f)) + 1; i.mana+=manaBonus; i.toolTip7 = "+"+manaBonus+" mana cost"; }; }, null, 1.15f, 1.25f),
+        new DPrefix("Vengeful").Require(melee).Require((Item item) => { return (int)Math.Round((double)((float)item.damage * (0.20f))) > 0; }).AddDel( "DamageNPC", (float val) => { Events.Player.DamageNPC_Del d = (Player p, NPC npc, ref int dmg, ref float k) => { dmg+=(int)Math.Round((double)((float)dmg * ((1f - (p.statLife / p.statLifeMax)) * val))); }; return d; }, (float val) => { return new MouseTip("+"+Math.Round((float)(val*100f), 2)+" Vengeance Damage", true); }, 0.20f, 0.5f),
         /*new DPrefix("Vengeful Ranged").AddAffix("Vengeful").Require(proj).Require((Item item) => { return (int)Math.Round((double)((float)item.damage * (0.20f))) > 0; }).
             AddDel( "RegisterProjectile", (float val) => { Action<Projectile> code = (Projectile pr) => {  pr.RegisterDel(ref pr.DamageNPC, (NPC npc, ref int dmg, ref float k) => { dmg+=(int)Math.Round((double)((float)dmg * ((1f - (p.statLife / p.statLifeMax)) * val))) }, "DamageNPC"); }; return code; }, (float val) => { return new MouseTip("+"+Math.Round((float)(val*100f), 2)+" Vengeance Damage", true); }, 0.20f, 0.5f),
         */
-
-        new DPrefix("Sacrificial")
-        	//This affix will replace mana cost with health cost
-        	//The crappier affixes will make the health to mana ratio bad..
-        	//As in, it might reduce mana cost by 2 but increase health cost by 10.
-        	.Require(magic)
-        	.AddVal(0.1f, 1f)
-        	.DMod( (float[] v) => {  //Reduce mana cost
-				return (Item i) => { 
-					i.mana = (int)Math.Round((double)((float)i.mana * (1f - v[0]))); 
-				}; 
-			})
-			.AddTip((float[] v) => {
-				int amt = (int)Math.Round((double)((float)i.mana * v[0]));
-				return new MouseTip("-"+v[0]+"% ("+amt+") Mana Cost", true);
-			})
-
-			.AddVal(4f, 1f)
-        	.AddDel( "CanUse", (float[] v) => { 
-        		CanUse_Del d = (Player p, int i) => { 
-        			int amt = (int)Math.Round((double)((float)i.mana * v[0]));
-
-        			int healthCost = (int)Math.Round((double)(amt * v[1]));
-        			if(healthCost<p.statLife) return false;
-
-        			float defMod = 1f;
-        			if(p.statDefense>0) defMod=(Main.player[Main.myPlayer].statDefense/2) * .01;
-        			int dmg = (int)(healthCost * defMod);
-        			p.Hurt(dmg, 0);
-        			return true;
-        		}; return d;
-        	}, (float[] val) => { 
-        		return new MouseTip("+"+val[1]+" Health Cost"); 
-        	}),
-
          });
 
             /*DPrefix colorPrefix = new DPrefix("Colored").DMod( (int index) => { return (Item i) => 
