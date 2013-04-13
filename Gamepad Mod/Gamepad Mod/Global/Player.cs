@@ -327,7 +327,18 @@ namespace Terraria_Control
 									}
 									if(invSelectionX>11) invSelectionX = 11;
 									if(invSelectionX<0) invSelectionX = 0;
-									if(invSelectionY>3) invSelectionY = 3;
+									if(invSelectionY>3) {
+										if(Main.player[Main.myPlayer].chest!=-1) {
+											invMenu=CHEST;
+											chestSelY=0;
+											chestSelX=invSelectionX-1;
+											if(chestSelX>4) chestSelX=4;
+
+											invCool = invCoolAmt;
+											UpdateInvMouse();
+										}
+										else invSelectionY = 3;
+									}
 									if(invSelectionY<0) invSelectionY = 0;
 									if(oldSelectionX != invSelectionX || oldSelectionY != invSelectionY) {
 										invCool = invCoolAmt;
@@ -354,10 +365,16 @@ namespace Terraria_Control
 										else if (stickPoint.Y < 0) {
 											chestSelY++;
 										}
-										if(chestSelX>4) chestSelX = 4;
+										if(chestSelX>5) chestSelX = 5;
 										if(chestSelX<0) chestSelX = 0;
 										if(chestSelY>3) chestSelY = 3;
-										if(chestSelY<0) chestSelY = 0;
+										if(chestSelY<0) {
+											invMenu=ModPlayer.INVENTORY;
+											chestSelY = 0;
+											invSelectionY = 3;
+											invSelectionX = chestSelX+1;
+											invCool = invCoolAmt;
+										}
 										if(oldSelectionX != chestSelX || oldSelectionY != chestSelY) {
 											invCool = invCoolAmt;
 											UpdateInvMouse();

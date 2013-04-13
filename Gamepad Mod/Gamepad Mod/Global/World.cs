@@ -1038,6 +1038,118 @@ namespace Terraria_Control
         {
             this.spriteBatch = s;
 
+            Main.inventoryScale = 0.75f;
+
+            if (Main.mouseX > 73 && Main.mouseX < (int)(73f + 280f * Main.inventoryScale) && Main.mouseY > 210 && Main.mouseY < (int)(210f + 224f * Main.inventoryScale))
+                Main.player[Main.myPlayer].mouseInterface = true;
+            
+            for (int num164 = 0; num164 < 3; num164++)
+            {
+                int num165 = 286;
+                int num166 = 250;
+                float num167 = Config.mainInstance.chestLootScale;
+                string text23 = Lang.inter[29];
+                if (num164 == 1)
+                {
+                    num166 += 26;
+                    num167 = Config.mainInstance.chestDepositScale;
+                    text23 = Lang.inter[30];
+                }
+                else
+                {
+                    if (num164 == 2)
+                    {
+                        num166 += 52;
+                        num167 = Config.mainInstance.chestStackScale;
+                        text23 = Lang.inter[31];
+                    }
+                }
+                Vector2 vector15 = Main.fontMouseText.MeasureString(text23) / 2f;
+                Color color8 = new Color((int)((byte)((float)Main.mouseTextColor * num167)), (int)((byte)((float)Main.mouseTextColor * num167)), (int)((byte)((float)Main.mouseTextColor * num167)), (int)((byte)((float)Main.mouseTextColor * num167)));
+                num165 += (int)(vector15.X * num167);
+                Config.mainInstance.spriteBatch.DrawString(Main.fontMouseText, text23, new Vector2((float)num165, (float)num166), color8, 0f, vector15, num167, SpriteEffects.None, 0f);
+                vector15 *= num167;
+                if (ModPlayer.invMenu==ModPlayer.CHEST && ModPlayer.chestSelX==5 && ModPlayer.chestSelY==num164) //(float)Main.mouseX > (float)num165 - vector15.X && (float)Main.mouseX < (float)num165 + vector15.X && (float)Main.mouseY > (float)num166 - vector15.Y && (float)Main.mouseY < (float)num166 + vector15.Y)
+                {
+                    if (num164 == 0)
+                    {
+                        if (!Config.mainInstance.chestLootHover)
+                        {
+                            Main.PlaySound(12, -1, -1, 1);
+                        }
+                        Config.mainInstance.chestLootHover = true;
+                    }
+                    else
+                    {
+                        if (num164 == 1)
+                        {
+                            if (!Config.mainInstance.chestDepositHover)
+                            {
+                                Main.PlaySound(12, -1, -1, 1);
+                            }
+                            Config.mainInstance.chestDepositHover = true;
+                        }
+                        else
+                        {
+                            if (!Config.mainInstance.chestStackHover)
+                            {
+                                Main.PlaySound(12, -1, -1, 1);
+                            }
+                            Config.mainInstance.chestStackHover = true;
+                        }
+                    }
+                    Main.player[Main.myPlayer].mouseInterface = true;
+                    num167 += 0.05f;
+                    if (ModPlayer.invSelectItemRelease)
+                    {
+                        Interface.chestFunc(Main.player[Main.myPlayer].chest, num164);
+                        Recipe.FindRecipes();
+                    }
+                }
+                else
+                {
+                    num167 -= 0.5f;
+                    if (num164 == 0)
+                    {
+                        Config.mainInstance.chestLootHover = false;
+                    }
+                    else
+                    {
+                        if (num164 == 1)
+                        {
+                            Config.mainInstance.chestDepositHover = false;
+                        }
+                        else
+                        {
+                            Config.mainInstance.chestStackHover = false;
+                        }
+                    }
+                }
+                if ((double)num167 < 0.75)
+                {
+                    num167 = 0.75f;
+                }
+                if (num167 > 1.5f)
+                {
+                    num167 = 1.5f;
+                }
+                if (num164 == 0)
+                {
+                    Config.mainInstance.chestLootScale = num167;
+                }
+                else
+                {
+                    if (num164 == 1)
+                    {
+                        Config.mainInstance.chestDepositScale = num167;
+                    }
+                    else
+                    {
+                        Config.mainInstance.chestStackScale = num167;
+                    }
+                }
+            }
+
             drawChest(Main.player[Main.myPlayer].chest, ref Main.MouseTextString);
 
             return false;
@@ -1058,7 +1170,7 @@ namespace Terraria_Control
             if (type > -1) netUpdate = true;
             //Debug.WriteLine("drawChest:" + name + "," + chest.Length + "," + netUpdate);
 
-            Texture2D invTexture = null;
+            Texture2D invTexture = Main.inventoryBackTexture;
             if (type > -1) invTexture = Main.inventoryBack5Texture;
             if (type == -2 || type==-3) invTexture = Main.inventoryBack2Texture;
 
