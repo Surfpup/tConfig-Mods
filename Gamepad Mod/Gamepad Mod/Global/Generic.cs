@@ -128,6 +128,8 @@ bool downPressed=false;
 bool controlDown=false;
 bool enterPressed=false;
 bool backPressed=false;
+//int prevMenu=0;
+
 int scrollCooldown=0;
 public const int scrollCooldownAmt = 10;
 
@@ -184,18 +186,20 @@ public bool OverrideMenuSelection(int prevFocus, int numItems, Main main)
             enterPressed=true;
         } else if(enterPressed) {
             enterPressed=false;
+            //prevMenu=Main.menuMode;
             main.selectedMenu=selectedMenu;
         }
 
-       	if(selectedMenu<0) selectedMenu=numItems-1;
-       	if(selectedMenu>numItems-1) selectedMenu=0;
-
-        /*if (padState.IsButtonDown(Microsoft.Xna.Framework.Input.Buttons.B)) {
+        if (padState.Buttons.B == Microsoft.Xna.Framework.Input.ButtonState.Pressed) {
             backPressed=true;
-        } else if(enterPressed) {
+        } else if(backPressed) {
             backPressed=false;
-            main.selectedMenu=selectedMenu;
-        }*/
+            Main.menuMode=0;
+            selectedMenu=0;
+        }
+
+        if(selectedMenu<0) selectedMenu=numItems-1;
+       	if(selectedMenu>numItems-1) selectedMenu=0;
 
         main.focusMenu=selectedMenu;
     //}
