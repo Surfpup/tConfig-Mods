@@ -22,6 +22,8 @@ namespace Terraria_Control
         //public Dictionary<Microsoft.Xna.Framework.Input.Buttons, int> itemButtons { get; set; }
         //public IEnumerable<KeyValuePair<Microsoft.Xna.Framework.Input.Buttons, int>> ItemButtons { get; set; }
         public Point lastStickPoint = new Point(0,0);//{ get; set; }
+        public Vector2 velocity = new Vector2(0f,0f);
+        public Point mousePos = new Point(0,0);
         public Player tPlayer { get; set; }
 
         private int aimMode = 1;
@@ -134,8 +136,7 @@ namespace Terraria_Control
                 if (padState.IsConnected)
                 {
                 	int ScrollValue = HandleScroll();
-					
-						
+
 					//Open Inventory
 					if (padState.IsButtonDown(Microsoft.Xna.Framework.Input.Buttons.Y))
 					{
@@ -144,26 +145,29 @@ namespace Terraria_Control
 					
 					if (!Main.playerInventory)
 					{
+						HandleMovement();
+
 						//Aiming
-						
-						Point stickPoint = new Point(1, 0);
-                   
-						Vector2 stick = padState.ThumbSticks.Right;
-						if (stick.X != 0 || stick.Y != 0)
+						if(aimMode==0)
 						{
-							stickPoint = updateStick(stick, (float)Player.tileRangeX);
-						}
-						else if(aimMode==0)
-						{
-							stickPoint = new Point(1, 0);
-							stick = padState.ThumbSticks.Left;
-							if (stick.Y == 0)
+							Point stickPoint = new Point(1, 0);
+	                   
+							Vector2 stick = padState.ThumbSticks.Right;
+							if (stick.X != 0 || stick.Y != 0)
 							{
-								stick.X = ((float)1 * (float)tPlayer.direction);
+								stickPoint = updateStick(stick, (float)Player.tileRangeX);
 							}
-							stickPoint = updateStick(stick, 2F);
-						}
-						if(aimMode==0) {
+							else
+							{
+								stickPoint = new Point(1, 0);
+								stick = padState.ThumbSticks.Left;
+								if (stick.Y == 0)
+								{
+									stick.X = ((float)1 * (float)tPlayer.direction);
+								}
+								stickPoint = updateStick(stick, 2F);
+							}
+
 							if (Math.Abs(stickPoint.X) + Math.Abs(stickPoint.Y) > 0)
 							{
 								if (stickPoint.X != lastStickPoint.X || stickPoint.Y != lastStickPoint.Y)
@@ -175,16 +179,17 @@ namespace Terraria_Control
 							}
 						}
 						else if(aimMode==1) {
-							//if (Math.Abs(stickPoint.X) + Math.Abs(stickPoint.Y) > 3)
-							//{
-								if (stick.X !=0 || stick.Y!=0)
-								{
-									lastStickPoint.X += (int) stick.X;
-									lastStickPoint.Y += (int) stick.Y;
-									Microsoft.Xna.Framework.Input.Mouse.SetPosition((int) lastStickPoint.X, (int) lastStickPoint.Y);
-									//lastStickPoint = stickPoint;
-								}
-							//}
+							Vector2 stick = padState.ThumbSticks.Right;
+							Point stickPoint = new Point(0, 0);
+							//Add to velocity of mouse
+							velocity = padState.ThumbSticks.Right;
+
+							mousePos.X += (int) velocity.X;
+							mousePos.Y += (int) velocity.Y;
+							
+							int X = (int)((float)(Main.screenWidth / 2) + mousePos.X * (float)Player.tileRangeX * 16f);
+               				int Y = (int)((float)(Main.screenHeight / 2) - mousePos.Y * (float)Player.tileRangeX * 16f);
+							Microsoft.Xna.Framework.Input.Mouse.SetPosition(X, Y);
 						}
 
 						//Throw an Item!

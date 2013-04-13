@@ -3,5 +3,5 @@ set modpack_dir=C:\Users\Surfpup\Documents\My Games\Terraria\ModPacks
 
 cd "%builder_dir%"
 
-"Modpack Builder.exe" "%~dp0\" "Gamepad Support" "%~dp0..\\" true
+"Modpack Builder.exe" "%~dp0\" "Gamepad Mod" "%~dp0..\\" true
 copy "%~dp0\..\*.obj" "%modpack_dir%"
