@@ -110,7 +110,8 @@ namespace Terraria_Control
 				player.controlUp = true;
 			}
 
-			if (padState.DPad.Down == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
+			if (padState.DPad.Down == Microsoft.Xna.Framework.Input.ButtonState.Pressed
+					|| padState.ThumbSticks.Left.Y < 0)
 			{
 				player.controlDown = true;
 			}
