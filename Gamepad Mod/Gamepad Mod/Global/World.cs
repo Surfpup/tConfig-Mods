@@ -65,7 +65,7 @@ namespace Terraria_Control
 		public bool PreDrawInventorySlots(SpriteBatch s) {
             if(ModPlayer.invMenu!=ModPlayer.INVENTORY) return false;
 
-            Main.inventoryScale = 1.5f;
+            //Main.inventoryScale = 1.5f;
 
 			this.spriteBatch = s;
 			Vector2 origin;
@@ -667,6 +667,8 @@ namespace Terraria_Control
 						
 			return false;
 		}
+
+
 		
 #if DEBUG
     }
