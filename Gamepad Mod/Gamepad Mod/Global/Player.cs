@@ -319,7 +319,7 @@ namespace Terraria_Control
 									else if (stickPoint.Y < 0) {
 										invSelectionY++;
 									}
-									if(invSelectionX>10) invSelectionX = 10;
+									if(invSelectionX>11) invSelectionX = 11;
 									if(invSelectionX<0) invSelectionX = 0;
 									if(invSelectionY>3) invSelectionY = 3;
 									if(invSelectionY<0) invSelectionY = 0;
@@ -406,7 +406,7 @@ namespace Terraria_Control
 			if(invMenu==INVENTORY) {
 				x = (int)(28f + (float)(invSelectionX * 80) * Main.inventoryScale);
 				y = (int)(28f + (float)(invSelectionY * 80) * Main.inventoryScale);
-				if(invSelectionX==10) {
+				if(invSelectionX>=10) {
 					y=(int)(85f + (float)(invSelectionY * 80) * Main.inventoryScale);
 				}
 				
