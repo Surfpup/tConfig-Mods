@@ -23,7 +23,7 @@ namespace Terraria_Control
         //public IEnumerable<KeyValuePair<Microsoft.Xna.Framework.Input.Buttons, int>> ItemButtons { get; set; }
         public Point lastStickPoint = new Point(0,0);//{ get; set; }
         public Vector2 velocity = new Vector2(0f,0f);
-        public Point mousePos = new Point(0,0);
+        public Vector2 mousePos = new Vector2(0f,0f);
         public Player tPlayer { get; set; }
 
         private int aimMode = 1;
@@ -145,7 +145,7 @@ namespace Terraria_Control
 					
 					if (!Main.playerInventory)
 					{
-						HandleMovement();
+						HandleMovement(player);
 
 						//Aiming
 						if(aimMode==0)
@@ -184,11 +184,18 @@ namespace Terraria_Control
 							//Add to velocity of mouse
 							velocity = padState.ThumbSticks.Right;
 
-							mousePos.X += (int) velocity.X;
-							mousePos.Y += (int) velocity.Y;
+							mousePos.X += (velocity.X/2);
+							mousePos.Y += (velocity.Y/2);
+
+							if(mousePos.X > (float)Player.tileRangeX) mousePos.X = (float)Player.tileRangeX;
+							if(mousePos.X < (float)Player.tileRangeX*-1) mousePos.X = (float)Player.tileRangeX*-1;
+							if(mousePos.Y > (float)Player.tileRangeY) mousePos.Y = (float)Player.tileRangeY;
+							if(mousePos.Y < (float)Player.tileRangeY*-1) mousePos.Y = (float)Player.tileRangeY*-1;
+
+							//Main.NewText(velocity.X+","+velocity.Y);
 							
-							int X = (int)((float)(Main.screenWidth / 2) + mousePos.X * (float)Player.tileRangeX * 16f);
-               				int Y = (int)((float)(Main.screenHeight / 2) - mousePos.Y * (float)Player.tileRangeX * 16f);
+							int X = (int)((float)(Main.screenWidth / 2) + mousePos.X  * 16f); //* (float)Player.tileRangeX
+               				int Y = (int)((float)(Main.screenHeight / 2) - mousePos.Y * 16f); //* 2F
 							Microsoft.Xna.Framework.Input.Mouse.SetPosition(X, Y);
 						}
 
