@@ -44,14 +44,20 @@ namespace Terraria_Control
 		public static bool rightStick = false;
 		public static bool useTile=false;
 		
-		
+		public const int invMenuMax = 2;
 		public static int invMenu = 0; //Which section of the inventory menu is selected
 		public const int INVENTORY=0;
 		public static int invSelectionX = 0;
 		public static int invSelectionY = 0;
 		
-		public const int ARMOR=1;
+		public const int COINS=1;
+		public static int coinSel=0;
+
+		public const int ARMOR=2;
 		public static int armorSel=0;
+
+		public const int CRAFT=3;
+		public static int craftSel=0;
 		
 		
 		//0: Inventory
@@ -269,9 +275,9 @@ namespace Terraria_Control
 						}
 						if(ScrollValue!=0) {
 							invMenu+=ScrollValue;
-							
-							if(invMenu>1) invMenu=1;
-							if(invMenu<0) invMenu=0;
+							scrollCooldown = scrollCooldownAmt;
+							if(invMenu>invMenuMax) invMenu=0;
+							if(invMenu<0) invMenu=invMenuMax;
 							
 							UpdateInvMouse();
 						}
@@ -284,22 +290,21 @@ namespace Terraria_Control
 							invSelectItem=false;
 							invSelectItemRelease = true;
 						}
-							
-						if(invMenu==INVENTORY) { //Main inventory of items
-													
-							if(invCool<=0) {
-								//Inventory selection
-								Point stickPoint = new Point(0, 0);
-							
-								Vector2 stick = padState.ThumbSticks.Left;
-								if (stick.X != 0 || stick.Y != 0)
-								{
-									stickPoint.X = (int) stick.X;
-									stickPoint.Y = (int) stick.Y;
-								}
-						  
-								if (Math.Abs(stickPoint.X) + Math.Abs(stickPoint.Y) > 0)
-								{
+
+						if(invCool<=0) {							
+							Point stickPoint = new Point(0, 0);
+								
+							Vector2 stick = padState.ThumbSticks.Left;
+							if (stick.X != 0 || stick.Y != 0)
+							{
+								stickPoint.X = (int) stick.X;
+								stickPoint.Y = (int) stick.Y;
+							}
+							if(Math.Abs(stickPoint.X) + Math.Abs(stickPoint.Y) > 0) {
+								if(invMenu==INVENTORY) { //Main inventory of items
+
+									//Inventory selection
+							  
 									int oldSelectionX = invSelectionX;
 									int oldSelectionY = invSelectionY;
 									if(stickPoint.X > 0) {
@@ -323,22 +328,22 @@ namespace Terraria_Control
 										UpdateInvMouse();
 									}
 								}
-							}
-						}
-						else if(invMenu==ARMOR) {			
-							if(invCool<=0) {
-								//Inventory selection
-								Point stickPoint = new Point(0, 0);
-							
-								Vector2 stick = padState.ThumbSticks.Left;
-								if (stick.X != 0 || stick.Y != 0)
+								else if(invMenu==COINS)
 								{
-									stickPoint.X = (int) stick.X;
-									stickPoint.Y = (int) stick.Y;
+									int prev = coinSel;
+									if (stickPoint.Y > 0) {
+										coinSel--;
+									}
+									else if (stickPoint.Y < 0) {
+										coinSel++;
+									}
+									if(coinSel!=prev) {
+										invCool = invCoolAmt;
+									}
 								}
-						  
-								if (Math.Abs(stickPoint.X) + Math.Abs(stickPoint.Y) > 0)
-								{
+								else if(invMenu==ARMOR) {			
+									//Inventory selection
+							  
 									int oldSelectionX = armorSel;
 									//int oldSelectionY = invSelectionY;
 									if(stickPoint.Y > 0) {

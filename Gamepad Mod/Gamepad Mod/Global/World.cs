@@ -12,6 +12,10 @@ namespace Terraria_Control
     {
 #endif
 		private SpriteBatch spriteBatch;
+        public static Vector2 origin;
+        //public static string MouseTextString;
+        public static Color color2 = new Color((int)((byte)Main.invAlpha), (int)((byte)Main.invAlpha), (int)((byte)Main.invAlpha), (int)((byte)Main.invAlpha));
+
 
         public void PickItem(int num81)
         {
@@ -63,13 +67,11 @@ namespace Terraria_Control
         }
 
 		public bool PreDrawInventorySlots(SpriteBatch s) {
-            if(ModPlayer.invMenu!=ModPlayer.INVENTORY) return false;
+            //if(ModPlayer.invMenu!=ModPlayer.INVENTORY) return false;
 
             //Main.inventoryScale = 1.5f;
 
 			this.spriteBatch = s;
-			Vector2 origin;
-			Color color2 = new Color((int)((byte)Main.invAlpha), (int)((byte)Main.invAlpha), (int)((byte)Main.invAlpha), (int)((byte)Main.invAlpha));
 			string MouseTextString = Main.MouseTextString;
 					for (int num77 = 0; num77 < 10; num77++)
                     {
@@ -79,7 +81,7 @@ namespace Terraria_Control
                             int num80 = (int)(20f + (float)(num78 * 56) * Main.inventoryScale);
                             int num81 = num77 + num78 * 10;
                             Color white2 = new Color(100, 100, 100, 100);
-                            if (InvSlotHighlighted(num77, num78))
+                            if (ModPlayer.invMenu==ModPlayer.INVENTORY && InvSlotHighlighted(num77, num78))
                             {
                                 Main.player[Main.myPlayer].mouseInterface = true;
                                 if (ModPlayer.invSelectItemRelease) //(Main.mouseLeftRelease && Main.mouseLeft)
@@ -336,12 +338,10 @@ namespace Terraria_Control
 		}
 		
 		public bool PreDrawPlayerEquipment(SpriteBatch s) {
-            if(ModPlayer.invMenu!=ModPlayer.ARMOR) return false;
+            //if(ModPlayer.invMenu!=ModPlayer.ARMOR) return false;
 
 			Main.armorHide = false;
 			this.spriteBatch = s;
-			Vector2 origin;
-			Color color2 = new Color((int)((byte)Main.invAlpha), (int)((byte)Main.invAlpha), (int)((byte)Main.invAlpha), (int)((byte)Main.invAlpha));
 			string MouseTextString = Main.MouseTextString;
 			Color color5 = new Color((int)(Main.mouseTextColor * Main.armorAlpha), (int)(Main.mouseTextColor * Main.armorAlpha),
                                          (int)(Main.mouseTextColor * Main.armorAlpha), (int)(Main.mouseTextColor * Main.armorAlpha));
@@ -384,7 +384,7 @@ namespace Terraria_Control
 				float arg_47F0_5 = 0f;
 				origin = default(Vector2);
 				arg_47F0_0.DrawString(arg_47F0_1, arg_47F0_2, arg_47F0_3, arg_47F0_4, arg_47F0_5, origin, 1f, SpriteEffects.None, 0f);
-				if (num100==ModPlayer.armorSel) //Main.mouseX >= num101 && (float)Main.mouseX <= (float)num101 + (float)Main.inventoryBackTexture.Width * Main.inventoryScale && Main.mouseY >= num102 && (float)Main.mouseY <= (float)num102 + (float)Main.inventoryBackTexture.Height * Main.inventoryScale)
+				if (ModPlayer.invMenu==ModPlayer.ARMOR && num100==ModPlayer.armorSel) //Main.mouseX >= num101 && (float)Main.mouseX <= (float)num101 + (float)Main.inventoryBackTexture.Width * Main.inventoryScale && Main.mouseY >= num102 && (float)Main.mouseY <= (float)num102 + (float)Main.inventoryBackTexture.Height * Main.inventoryScale)
 				{
 					Main.armorHide = true;
 					Main.player[Main.myPlayer].mouseInterface = true;
@@ -667,6 +667,213 @@ namespace Terraria_Control
             else ModPlayer.invSelectItemRelease=true;*/
 			return false;
 		}
+
+        public bool PreDrawInventoryCoins(SpriteBatch s) {
+            string MouseTextString = Main.MouseTextString;
+            this.spriteBatch=s;
+
+            Vector2 vector11 = Main.fontMouseText.MeasureString("Coins");
+            Vector2 vector12 = Main.fontMouseText.MeasureString(Lang.inter[26]);
+            float num144 = vector11.X / vector12.X;
+            SpriteBatch arg_857B_0 = this.spriteBatch;
+            SpriteFont arg_857B_1 = Main.fontMouseText;
+            string arg_857B_2 = Lang.inter[26];
+            Vector2 arg_857B_3 = new Vector2(496f, 84f + (vector11.Y - vector11.Y * num144) / 2f);
+            Color arg_857B_4 = new Color((int)Main.mouseTextColor, (int)Main.mouseTextColor, (int)Main.mouseTextColor, (int)Main.mouseTextColor);
+            float arg_857B_5 = 0f;
+            origin = default(Vector2);
+            arg_857B_0.DrawString(arg_857B_1, arg_857B_2, arg_857B_3, arg_857B_4, arg_857B_5, origin, 0.75f * num144, SpriteEffects.None, 0f);
+            Main.inventoryScale = 0.6f;
+            for (int num145 = 0; num145 < 4; num145++)
+            {
+                int num146 = 497;
+                int num147 = (int)(85f + (float)(num145 * 56) * Main.inventoryScale + 20f);
+                int num148 = num145 + 40;
+                Color white11 = new Color(100, 100, 100, 100);
+                if (ModPlayer.invMenu==ModPlayer.COINS && ModPlayer.coinSel==num145) //Main.mouseX >= num146 && (float)Main.mouseX <= (float)num146 + (float)Main.inventoryBackTexture.Width * Main.inventoryScale && Main.mouseY >= num147 && (float)Main.mouseY <= (float)num147 + (float)Main.inventoryBackTexture.Height * Main.inventoryScale)
+                {
+                    Main.player[Main.myPlayer].mouseInterface = true;
+                    if (ModPlayer.invSelectItemRelease)
+                    {
+                        /*if (Main.keyState.IsKeyDown(Keys.LeftShift))
+                        {
+                            if (Main.player[Main.myPlayer].inventory[num148].type > 0)
+                            {
+                                if (Main.npcShop > 0)
+                                {
+                                    if (Main.player[Main.myPlayer].SellItem(Main.player[Main.myPlayer].inventory[num148].value, Main.player[Main.myPlayer].inventory[num148].stack))
+                                    {
+                                        this.shop[Main.npcShop].AddShop(Main.player[Main.myPlayer].inventory[num148]);
+                                        Main.player[Main.myPlayer].inventory[num148].SetDefaults(0, false);
+                                        Main.PlaySound(18, -1, -1, 1);
+                                    }
+                                    else
+                                    {
+                                        if (Main.player[Main.myPlayer].inventory[num148].value == 0)
+                                        {
+                                            this.shop[Main.npcShop].AddShop(Main.player[Main.myPlayer].inventory[num148]);
+                                            Main.player[Main.myPlayer].inventory[num148].SetDefaults(0, false);
+                                            Main.PlaySound(7, -1, -1, 1);
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    Main.PlaySound(7, -1, -1, 1);
+                                    Main.trashItem = (Item)Main.player[Main.myPlayer].inventory[num148].Clone();
+                                    Main.player[Main.myPlayer].inventory[num148].SetDefaults(0, false);
+                                    Recipe.FindRecipes();
+                                }
+                            }
+                        }
+                        else
+                        {*/
+                            if ((Main.player[Main.myPlayer].selectedItem != num148 || Main.player[Main.myPlayer].itemAnimation <= 0) && (Main.mouseItem.type == 0 || Main.mouseItem.type == 71 || Main.mouseItem.type == 72 || Main.mouseItem.type == 73 || Main.mouseItem.type == 74))
+                            {
+                                Item item7 = Main.mouseItem;
+                                Main.mouseItem = Main.player[Main.myPlayer].inventory[num148];
+                                Main.player[Main.myPlayer].inventory[num148] = item7;
+                                if (Main.player[Main.myPlayer].inventory[num148].type == 0 || Main.player[Main.myPlayer].inventory[num148].stack < 1)
+                                {
+                                    Main.player[Main.myPlayer].inventory[num148] = new Item();
+                                }
+                                if (Main.mouseItem.IsTheSameAs(Main.player[Main.myPlayer].inventory[num148]) && Main.player[Main.myPlayer].inventory[num148].stack != Main.player[Main.myPlayer].inventory[num148].maxStack && Main.mouseItem.stack != Main.mouseItem.maxStack)
+                                {
+                                    if (Main.mouseItem.stack + Main.player[Main.myPlayer].inventory[num148].stack <= Main.mouseItem.maxStack)
+                                    {
+                                        Main.player[Main.myPlayer].inventory[num148].stack += Main.mouseItem.stack;
+                                        Main.mouseItem.stack = 0;
+                                    }
+                                    else
+                                    {
+                                        int num149 = Main.mouseItem.maxStack - Main.player[Main.myPlayer].inventory[num148].stack;
+                                        Main.player[Main.myPlayer].inventory[num148].stack += num149;
+                                        Main.mouseItem.stack -= num149;
+                                    }
+                                }
+                                if (Main.mouseItem.type == 0 || Main.mouseItem.stack < 1)
+                                {
+                                    Main.mouseItem = new Item();
+                                }
+                                if (Main.mouseItem.type > 0 || Main.player[Main.myPlayer].inventory[num148].type > 0)
+                                {
+                                    Main.PlaySound(7, -1, -1, 1);
+                                }
+                                Recipe.FindRecipes();
+                            }
+                        //}
+                    }
+                    else
+                    {
+                        if (Main.stackSplit <= 1 && Main.mouseRight && (Main.mouseItem.IsTheSameAs(Main.player[Main.myPlayer].inventory[num148]) || Main.mouseItem.type == 0) && (Main.mouseItem.stack < Main.mouseItem.maxStack || Main.mouseItem.type == 0))
+                        {
+                            if (Main.mouseItem.type == 0)
+                            {
+                                Main.mouseItem = (Item)Main.player[Main.myPlayer].inventory[num148].Clone();
+                                Main.mouseItem.stack = 0;
+                            }
+                            Main.mouseItem.stack++;
+                            Main.player[Main.myPlayer].inventory[num148].stack--;
+                            if (Main.player[Main.myPlayer].inventory[num148].stack <= 0)
+                            {
+                                Main.player[Main.myPlayer].inventory[num148] = new Item();
+                            }
+                            Recipe.FindRecipes();
+                            Main.soundInstanceMenuTick.Stop();
+                            Main.soundInstanceMenuTick = Main.soundMenuTick.CreateInstance();
+                            Main.PlaySound(12, -1, -1, 1);
+                            if (Main.stackSplit == 0)
+                            {
+                                Main.stackSplit = 15;
+                            }
+                            else
+                            {
+                                Main.stackSplit = Main.stackDelay;
+                            }
+                        }
+                    }
+                    MouseTextString = Main.player[Main.myPlayer].inventory[num148].name;
+                    Main.toolTip = (Item)Main.player[Main.myPlayer].inventory[num148].ShallowClone();
+                    if (Main.player[Main.myPlayer].inventory[num148].stack > 1)
+                    {
+                        object obj = MouseTextString;
+                        MouseTextString = string.Concat(new object[]
+                    {
+                        obj, 
+                        " (", 
+                        Main.player[Main.myPlayer].inventory[num148].stack, 
+                        ")"
+                    });
+                    }
+                }
+
+                Texture2D back = Main.inventoryBackTexture;
+                if(ModPlayer.invMenu==ModPlayer.COINS && num145==ModPlayer.coinSel) back = Main.inventoryBack6Texture;
+                            
+
+                SpriteBatch arg_8C9C_0 = this.spriteBatch;
+                Texture2D arg_8C9C_1 = back;
+                Vector2 arg_8C9C_2 = new Vector2((float)num146, (float)num147);
+                Rectangle? arg_8C9C_3 = new Rectangle?(new Rectangle(0, 0, Main.inventoryBackTexture.Width, Main.inventoryBackTexture.Height));
+                Color arg_8C9C_4 = color2;
+                float arg_8C9C_5 = 0f;
+                origin = default(Vector2);
+                arg_8C9C_0.Draw(arg_8C9C_1, arg_8C9C_2, arg_8C9C_3, arg_8C9C_4, arg_8C9C_5, origin, Main.inventoryScale, SpriteEffects.None, 0f);
+                white11 = Color.White;
+                if (Main.player[Main.myPlayer].inventory[num148].type > 0 && Main.player[Main.myPlayer].inventory[num148].stack > 0)
+                {
+                    float num150 = 1f;
+                    if (Main.itemTexture[Main.player[Main.myPlayer].inventory[num148].type].Width > 32 || Main.itemTexture[Main.player[Main.myPlayer].inventory[num148].type].Height > 32)
+                    {
+                        if (Main.itemTexture[Main.player[Main.myPlayer].inventory[num148].type].Width > Main.itemTexture[Main.player[Main.myPlayer].inventory[num148].type].Height)
+                        {
+                            num150 = 32f / (float)Main.itemTexture[Main.player[Main.myPlayer].inventory[num148].type].Width;
+                        }
+                        else
+                        {
+                            num150 = 32f / (float)Main.itemTexture[Main.player[Main.myPlayer].inventory[num148].type].Height;
+                        }
+                    }
+                    num150 *= Main.inventoryScale;
+                    SpriteBatch arg_8F12_0 = this.spriteBatch;
+                    Texture2D arg_8F12_1 = Main.itemTexture[Main.player[Main.myPlayer].inventory[num148].type];
+                    Vector2 arg_8F12_2 = new Vector2((float)num146 + 26f * Main.inventoryScale - (float)Main.itemTexture[Main.player[Main.myPlayer].inventory[num148].type].Width * 0.5f * num150, (float)num147 + 26f * Main.inventoryScale - (float)Main.itemTexture[Main.player[Main.myPlayer].inventory[num148].type].Height * 0.5f * num150);
+                    Rectangle? arg_8F12_3 = new Rectangle?(new Rectangle(0, 0, Main.itemTexture[Main.player[Main.myPlayer].inventory[num148].type].Width, Main.itemTexture[Main.player[Main.myPlayer].inventory[num148].type].Height));
+                    Color arg_8F12_4 = Main.player[Main.myPlayer].inventory[num148].GetAlpha(white11);
+                    float arg_8F12_5 = 0f;
+                    origin = default(Vector2);
+                    arg_8F12_0.Draw(arg_8F12_1, arg_8F12_2, arg_8F12_3, arg_8F12_4, arg_8F12_5, origin, num150, SpriteEffects.None, 0f);
+                    Color arg_8F3D_0 = Main.player[Main.myPlayer].inventory[num148].color;
+                    Color b = default(Color);
+                    if (arg_8F3D_0 != b)
+                    {
+                        SpriteBatch arg_9071_0 = this.spriteBatch;
+                        Texture2D arg_9071_1 = Main.itemTexture[Main.player[Main.myPlayer].inventory[num148].type];
+                        Vector2 arg_9071_2 = new Vector2((float)num146 + 26f * Main.inventoryScale - (float)Main.itemTexture[Main.player[Main.myPlayer].inventory[num148].type].Width * 0.5f * num150, (float)num147 + 26f * Main.inventoryScale - (float)Main.itemTexture[Main.player[Main.myPlayer].inventory[num148].type].Height * 0.5f * num150);
+                        Rectangle? arg_9071_3 = new Rectangle?(new Rectangle(0, 0, Main.itemTexture[Main.player[Main.myPlayer].inventory[num148].type].Width, Main.itemTexture[Main.player[Main.myPlayer].inventory[num148].type].Height));
+                        Color arg_9071_4 = Main.player[Main.myPlayer].inventory[num148].GetColor(white11);
+                        float arg_9071_5 = 0f;
+                        origin = default(Vector2);
+                        arg_9071_0.Draw(arg_9071_1, arg_9071_2, arg_9071_3, arg_9071_4, arg_9071_5, origin, num150, SpriteEffects.None, 0f);
+                    }
+                    if (Main.player[Main.myPlayer].inventory[num148].stack > 1)
+                    {
+                        SpriteBatch arg_90FE_0 = this.spriteBatch;
+                        SpriteFont arg_90FE_1 = Main.fontItemStack;
+                        string arg_90FE_2 = string.Concat(Main.player[Main.myPlayer].inventory[num148].stack);
+                        Vector2 arg_90FE_3 = new Vector2((float)num146 + 10f * Main.inventoryScale, (float)num147 + 26f * Main.inventoryScale);
+                        Color arg_90FE_4 = white11;
+                        float arg_90FE_5 = 0f;
+                        origin = default(Vector2);
+                        arg_90FE_0.DrawString(arg_90FE_1, arg_90FE_2, arg_90FE_3, arg_90FE_4, arg_90FE_5, origin, num150, SpriteEffects.None, 0f);
+                    }
+                }
+            }
+
+            Main.MouseTextString = MouseTextString;
+
+            return false;
+        }
 
 
 		
