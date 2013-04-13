@@ -44,7 +44,7 @@ namespace Terraria_Control
 		public static bool rightStick = false;
 		public static bool useTile=false;
 		
-		public const int invMenuMax = 1;
+		public const int invMenuMax = 2;
 		public static int invMenu = 0; //Which section of the inventory menu is selected
 		public const int INVENTORY=0;
 		public static int invSelectionX = 0;
@@ -56,7 +56,11 @@ namespace Terraria_Control
 		public const int ARMOR=1;
 		public static int armorSel=0;
 
-		public const int CRAFT=2;
+		public const int CHEST=2;
+		public static int chestSelX = 0;
+		public static int chestSelY = 0;
+
+		public const int CRAFT=3;
 		public static int craftSel=0;
 		
 		
@@ -276,9 +280,11 @@ namespace Terraria_Control
 						if(ScrollValue!=0) {
 							invMenu+=ScrollValue;
 							scrollCooldown = scrollCooldownAmt;
+							if(invMenu==CHEST && Main.player[Main.myPlayer].chest==-1) invMenu+=ScrollValue;
+
 							if(invMenu>invMenuMax) invMenu=0;
 							if(invMenu<0) invMenu=invMenuMax;
-							
+
 							UpdateInvMouse();
 						}
 						
@@ -326,6 +332,36 @@ namespace Terraria_Control
 									if(oldSelectionX != invSelectionX || oldSelectionY != invSelectionY) {
 										invCool = invCoolAmt;
 										UpdateInvMouse();
+									}
+								}
+								else if(invMenu==CHEST)
+								{
+									if(Main.player[Main.myPlayer].chest==-1) {
+										invMenu=0;
+										UpdateInvMouse();
+									} else {
+										int oldSelectionX = chestSelX;
+										int oldSelectionY = chestSelY;
+										if(stickPoint.X > 0) {
+											chestSelX++;
+										}
+										else if(stickPoint.X < 0) {
+											chestSelX--;
+										}
+										else if (stickPoint.Y > 0) {
+											chestSelY--;
+										}
+										else if (stickPoint.Y < 0) {
+											chestSelY++;
+										}
+										if(chestSelX>4) chestSelX = 4;
+										if(chestSelX<0) chestSelX = 0;
+										if(chestSelY>3) chestSelY = 3;
+										if(chestSelY<0) chestSelY = 0;
+										if(oldSelectionX != chestSelX || oldSelectionY != chestSelY) {
+											invCool = invCoolAmt;
+											UpdateInvMouse();
+										}
 									}
 								}
 								/*else if(invMenu==COINS)
@@ -420,6 +456,11 @@ namespace Terraria_Control
 					x = Main.screenWidth - 64 - 28 - 47;
 					y = (int)(174f + (float)((armorSel - 8) * 80) * Main.inventoryScale);
 				}
+			}
+			else if (invMenu==CHEST)
+			{
+				x = (int)(73f + (float)(chestSelX * 56) * Main.inventoryScale);
+                y = (int)(210f + (float)(chestSelY * 56) * Main.inventoryScale);
 			}
 			Microsoft.Xna.Framework.Input.Mouse.SetPosition(x, y);
 		}
