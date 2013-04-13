@@ -163,6 +163,7 @@ namespace Epic_Loot
             this.skewMod = skewMod;
 
             GPrefix p = new GPrefix(this.affix, this.suffix);
+
             p.pAdd.defense += SkewedRand((int)pAddMin.defense, (int)pAddMax.defense);
             p.pAdd.crit += SkewedRand((int)pAddMin.crit, (int)pAddMax.crit);
             p.pAdd.mana += SkewedRand((int)pAddMin.mana, (int)pAddMax.mana);
@@ -181,10 +182,6 @@ namespace Epic_Loot
             p.multiply.knockback = SkewedRand(multiplyMin.knockback, multiplyMax.knockback);
             p.multiply.shootSpeed = SkewedRand(multiplyMin.shootSpeed, multiplyMax.shootSpeed);
 
-            foreach (Requirement r in this.customRequirements)
-            {
-                p.customRequirements.Add(r);
-            }
             p.requirements.accessory = requirements.accessory;
             p.requirements.melee = requirements.melee;
             p.requirements.ranged = requirements.ranged;

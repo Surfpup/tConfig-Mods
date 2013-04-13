@@ -74,6 +74,10 @@ namespace Epic_Loot
             Console.WriteLine("identifier:"+identifier);
             //Add dprefix stuff
 
+            this.Roll();
+        }
+        public void Roll()
+        {
             if (!ModGeneric.prefixByName.ContainsKey(identifier))
             {
                 this.affix = "";
