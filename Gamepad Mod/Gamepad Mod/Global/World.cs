@@ -160,7 +160,7 @@ namespace Terraria_Control
                                         }
                                         else
                                         {
-                                            if (Main.stackSplit <= 1 && Main.mouseRight && Main.player[Main.myPlayer].inventory[num81].maxStack > 1 && Main.player[Main.myPlayer].inventory[num81].type > 0 && (Main.mouseItem.IsTheSameAs(Main.player[Main.myPlayer].inventory[num81]) || Main.mouseItem.type == 0) && (Main.mouseItem.stack < Main.mouseItem.maxStack || Main.mouseItem.type == 0))
+                                            if (ModPlayer.stackSplit <= 1 && ModPlayer.invSelectMore && Main.player[Main.myPlayer].inventory[num81].maxStack > 1 && Main.player[Main.myPlayer].inventory[num81].type > 0 && (Main.mouseItem.IsTheSameAs(Main.player[Main.myPlayer].inventory[num81]) || Main.mouseItem.type == 0) && (Main.mouseItem.stack < Main.mouseItem.maxStack || Main.mouseItem.type == 0))
                                             {
                                                 if (Main.mouseItem.type == 0)
                                                 {
@@ -177,13 +177,13 @@ namespace Terraria_Control
                                                 Main.soundInstanceMenuTick.Stop();
                                                 Main.soundInstanceMenuTick = Main.soundMenuTick.CreateInstance();
                                                 Main.PlaySound(12, -1, -1, 1);
-                                                if (Main.stackSplit == 0)
+                                                if (ModPlayer.stackSplit == 0)
                                                 {
-                                                    Main.stackSplit = 15;
+                                                    ModPlayer.stackSplit = 15;
                                                 }
                                                 else
                                                 {
-                                                    Main.stackSplit = Main.stackDelay;
+                                                    ModPlayer.stackSplit = Main.stackDelay;
                                                 }
                                             }
                                         }
@@ -738,7 +738,7 @@ namespace Terraria_Control
                     }
                     else
                     {
-                        if (Main.stackSplit <= 1 && Main.mouseRight && (Main.mouseItem.IsTheSameAs(Main.player[Main.myPlayer].inventory[num148]) || Main.mouseItem.type == 0) && (Main.mouseItem.stack < Main.mouseItem.maxStack || Main.mouseItem.type == 0))
+                        if (ModPlayer.stackSplit <= 1 && ModPlayer.invSelectMore && (Main.mouseItem.IsTheSameAs(Main.player[Main.myPlayer].inventory[num148]) || Main.mouseItem.type == 0) && (Main.mouseItem.stack < Main.mouseItem.maxStack || Main.mouseItem.type == 0))
                         {
                             if (Main.mouseItem.type == 0)
                             {
@@ -755,13 +755,13 @@ namespace Terraria_Control
                             Main.soundInstanceMenuTick.Stop();
                             Main.soundInstanceMenuTick = Main.soundMenuTick.CreateInstance();
                             Main.PlaySound(12, -1, -1, 1);
-                            if (Main.stackSplit == 0)
+                            if (ModPlayer.stackSplit == 0)
                             {
-                                Main.stackSplit = 15;
+                                ModPlayer.stackSplit = 15;
                             }
                             else
                             {
-                                Main.stackSplit = Main.stackDelay;
+                                ModPlayer.stackSplit = Main.stackDelay;
                             }
                         }
                     }
@@ -925,7 +925,7 @@ namespace Terraria_Control
                     }
                     else
                     {
-                        if (Main.stackSplit <= 1 && Main.mouseRight && (Main.mouseItem.IsTheSameAs(Main.player[Main.myPlayer].inventory[num155]) || Main.mouseItem.type == 0) && (Main.mouseItem.stack < Main.mouseItem.maxStack || Main.mouseItem.type == 0))
+                        if (ModPlayer.stackSplit <= 1 && ModPlayer.invSelectMore && (Main.mouseItem.IsTheSameAs(Main.player[Main.myPlayer].inventory[num155]) || Main.mouseItem.type == 0) && (Main.mouseItem.stack < Main.mouseItem.maxStack || Main.mouseItem.type == 0))
                         {
                             if (Main.mouseItem.type == 0)
                             {
@@ -942,13 +942,13 @@ namespace Terraria_Control
                             Main.soundInstanceMenuTick.Stop();
                             Main.soundInstanceMenuTick = Main.soundMenuTick.CreateInstance();
                             Main.PlaySound(12, -1, -1, 1);
-                            if (Main.stackSplit == 0)
+                            if (ModPlayer.stackSplit == 0)
                             {
-                                Main.stackSplit = 15;
+                                ModPlayer.stackSplit = 15;
                             }
                             else
                             {
-                                Main.stackSplit = Main.stackDelay;
+                                ModPlayer.stackSplit = Main.stackDelay;
                             }
                         }
                     }
@@ -1214,7 +1214,7 @@ namespace Terraria_Control
                     if (selected) //Main.mouseX >= num190 && (float)Main.mouseX <= (float)num190 + (float)Main.inventoryBackTexture.Width * Main.inventoryScale && Main.mouseY >= num191 && (float)Main.mouseY <= (float)num191 + (float)Main.inventoryBackTexture.Height * Main.inventoryScale)
                     {
                         Main.player[Main.myPlayer].mouseInterface = true;
-                        if (ModPlayer.invSelectItemRelease)
+                        /*if (ModPlayer.invSelectItemRelease)
                         {
 
                             if (Main.player[Main.myPlayer].selectedItem != num192 || Main.player[Main.myPlayer].itemAnimation <= 0)
@@ -1227,7 +1227,7 @@ namespace Terraria_Control
                             }
                         }
                         else
-                        {
+                        {*/
                             if (Main.mouseRight && Main.mouseRightRelease && chest[num192].maxStack == 1)
                             {
                                 chest[num192] = Main.armorSwap(chest[num192]);
@@ -1238,7 +1238,7 @@ namespace Terraria_Control
                             }
                             else
                             {
-                                if (Main.stackSplit <= 1 && Main.mouseRight && chest[num192].maxStack > 1 && (Main.mouseItem.IsTheSameAs(chest[num192]) || Main.mouseItem.type == 0) && (Main.mouseItem.stack < Main.mouseItem.maxStack || Main.mouseItem.type == 0))
+                                if (ModPlayer.stackSplit <= 1 && ModPlayer.invSelectMore && chest[num192].maxStack > 1 && (Main.mouseItem.IsTheSameAs(chest[num192]) || Main.mouseItem.type == 0) && (Main.mouseItem.stack < Main.mouseItem.maxStack || Main.mouseItem.type == 0))
                                 {
                                     if (Main.mouseItem.type == 0)
                                     {
@@ -1255,13 +1255,13 @@ namespace Terraria_Control
                                     Main.soundInstanceMenuTick.Stop();
                                     Main.soundInstanceMenuTick = Main.soundMenuTick.CreateInstance();
                                     Main.PlaySound(12, -1, -1, 1);
-                                    if (Main.stackSplit == 0)
+                                    if (ModPlayer.stackSplit == 0)
                                     {
-                                        Main.stackSplit = 15;
+                                        ModPlayer.stackSplit = 15;
                                     }
                                     else
                                     {
-                                        Main.stackSplit = Main.stackDelay;
+                                        ModPlayer.stackSplit = Main.stackDelay;
                                     }
                                     if (netUpdate && Main.netMode == 1)
                                     {
@@ -1269,7 +1269,7 @@ namespace Terraria_Control
                                     }
                                 }
                             }
-                        }
+                        //}
                         mouseTip = chest[num192].name;
                         Main.toolTip = (Item)chest[num192].ShallowClone();
                         if (chest[num192].stack > 1)
@@ -1351,14 +1351,14 @@ namespace Terraria_Control
                     }
                     new Color((int)((byte)num135), (int)((byte)num135), (int)((byte)num135), (int)((byte)num135));
                     Color color7 = new Color((int)((byte)num136), (int)((byte)num136), (int)((byte)num136), (int)((byte)num136));
-                    if (Main.mouseX >= num133 && (float)Main.mouseX <= (float)num133 + (float)Main.inventoryBackTexture.Width * Main.inventoryScale && Main.mouseY >= num134 && (float)Main.mouseY <= (float)num134 + (float)Main.inventoryBackTexture.Height * Main.inventoryScale)
-                    {
+                    //if (Main.mouseX >= num133 && (float)Main.mouseX <= (float)num133 + (float)Main.inventoryBackTexture.Width * Main.inventoryScale && Main.mouseY >= num134 && (float)Main.mouseY <= (float)num134 + (float)Main.inventoryBackTexture.Height * Main.inventoryScale)
+                    //{
                         Main.player[Main.myPlayer].mouseInterface = true;
                         if (Main.focusRecipe == num132 && Main.guideItem.type == 0)
                         {
                             if (Main.mouseItem.type == 0 || (Main.mouseItem.IsTheSameAs(Main.recipe[Main.availableRecipe[num132]].createItem) && Main.mouseItem.stack + Main.recipe[Main.availableRecipe[num132]].createItem.stack <= Main.mouseItem.maxStack))
                             {
-                                if (Main.mouseLeftRelease && Main.mouseLeft)
+                                /*if (ModPlayer.craftBtn)
                                 {
                                     int stack = Main.mouseItem.stack;
                                     Main.mouseItem = (Item)Main.recipe[Main.availableRecipe[num132]].createItem.Clone();
@@ -1374,16 +1374,16 @@ namespace Terraria_Control
                                     }
                                 }
                                 else
-                                {
-                                    if (Main.stackSplit <= 1 && Main.mouseRight && (Main.mouseItem.stack < Main.mouseItem.maxStack || Main.mouseItem.type == 0))
+                                {*/
+                                    if (ModPlayer.stackSplit <= 1 && ModPlayer.craftBtn && (Main.mouseItem.stack < Main.mouseItem.maxStack || Main.mouseItem.type == 0))
                                     {
-                                        if (Main.stackSplit == 0)
+                                        if (ModPlayer.stackSplit == 0)
                                         {
-                                            Main.stackSplit = 15;
+                                            ModPlayer.stackSplit = 15;
                                         }
                                         else
                                         {
-                                            Main.stackSplit = Main.stackDelay;
+                                            ModPlayer.stackSplit = Main.stackDelay;
                                         }
                                         int stack2 = Main.mouseItem.stack;
                                         Main.mouseItem = (Item)Main.recipe[Main.availableRecipe[num132]].createItem.Clone();
@@ -1398,7 +1398,7 @@ namespace Terraria_Control
                                             Main.PlaySound(7, -1, -1, 1);
                                         }
                                     }
-                                }
+                                //}
                             }
                         }
                         else
@@ -1422,7 +1422,7 @@ namespace Terraria_Control
                             ")"
                         });
                         }
-                    }
+                    //}
                     if (Main.numAvailableRecipes > 0)
                     {
                         num135 -= 50.0;

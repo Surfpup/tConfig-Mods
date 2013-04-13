@@ -66,6 +66,11 @@ namespace Terraria_Control
 		//public static int craftScroll=0;
 		public static int craftCooldown=0;
 		public static int craftCooldownAmt=10;
+
+		public static bool craftBtn=false;
+
+		public static int stackSplit=0;
+		public static bool invSelectMore=false;
 		
 		
 		//0: Inventory
@@ -140,6 +145,9 @@ namespace Terraria_Control
 
         public void PreUpdatePlayer(Player player)
         {
+        	if (ModPlayer.stackSplit > 0)
+				ModPlayer.stackSplit--;
+
             tPlayer = player;
 			
 			controlInv = false;
@@ -283,6 +291,17 @@ namespace Terraria_Control
 							Main.menuMode = 10;
 							WorldGen.SaveAndQuit();
 						}
+
+			            
+
+						if (padState.IsButtonDown(Microsoft.Xna.Framework.Input.Buttons.LeftShoulder))
+						{
+							craftBtn=true;
+						} else {
+							craftBtn=false;
+							//ModPlayer.stackSplit=0;
+						}
+
 						if(ScrollValue!=0) {
 							invMenu+=ScrollValue;
 							scrollCooldown = scrollCooldownAmt;
@@ -322,6 +341,15 @@ namespace Terraria_Control
 						else if(invSelectItem) {
 							invSelectItem=false;
 							invSelectItemRelease = true;
+						}
+
+						if (padState.IsButtonDown(Microsoft.Xna.Framework.Input.Buttons.RightShoulder))
+						{
+							invSelectMore = true;
+						}
+						else {
+							invSelectMore=false;
+							//ModPlayer.stackSplit=0;
 						}
 
 						if(invCool<=0) {							
