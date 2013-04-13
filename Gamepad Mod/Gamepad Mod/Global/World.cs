@@ -1294,6 +1294,8 @@ namespace Terraria_Control
 
         public bool PreDrawAvailableRecipes(SpriteBatch s)
         {
+            if(!ModPlayer.showCraft) return false;
+            
             this.spriteBatch = s;
             int num109 = (Main.screenHeight - 600) / 2;
             int num110 = (int)((float)Main.screenHeight / 600f * 250f);

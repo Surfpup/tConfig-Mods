@@ -71,6 +71,9 @@ namespace Terraria_Control
 
 		public static int stackSplit=0;
 		public static bool invSelectMore=false;
+
+		public static bool showCraft=false;
+		public static bool enableCraft=false;
 		
 		
 		//0: Inventory
@@ -292,7 +295,14 @@ namespace Terraria_Control
 							WorldGen.SaveAndQuit();
 						}
 
-			            
+			            if (padState.Buttons.Start == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
+						{
+							enableCraft=true;
+						} else if(enableCraft)
+						{
+							showCraft=!showCraft;
+							enableCraft=false;
+						}
 
 						if (padState.IsButtonDown(Microsoft.Xna.Framework.Input.Buttons.LeftShoulder))
 						{
