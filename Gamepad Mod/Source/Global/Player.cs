@@ -70,9 +70,10 @@ namespace Terraria_Control
 
         }
 
-        public void HandleScroll()
-        {
-        	//Moving between items/menus with right trigger/left trigger
+        public int HandleScroll()
+        { //Moving between items/menus with right trigger/left trigger
+        	int ScrollValue = 0;
+        	
 			if(scrollCooldown<=0) {
 				
 				if(padState.IsButtonDown(Microsoft.Xna.Framework.Input.Buttons.RightTrigger))
@@ -84,6 +85,8 @@ namespace Terraria_Control
 
 			if(!padState.IsButtonDown(Microsoft.Xna.Framework.Input.Buttons.RightTrigger)
 				&& !padState.IsButtonDown(Microsoft.Xna.Framework.Input.Buttons.LeftTrigger)) scrollCooldown=0;
+
+			return ScrollValue;
         }
 
         public void HandleMovement(Player player)
@@ -127,10 +130,11 @@ namespace Terraria_Control
             if (!Main.gameMenu && (Main.netMode != 2))
             {
 				if(invCool>0) invCool--;
-				int ScrollValue = 0;
+				
                 if (padState.IsConnected)
                 {
-					HandleScroll();
+                	int ScrollValue = HandleScroll();
+					
 						
 					//Open Inventory
 					if (padState.IsButtonDown(Microsoft.Xna.Framework.Input.Buttons.Y))
@@ -182,7 +186,7 @@ namespace Terraria_Control
 								}
 							//}
 						}
-						
+
 						//Throw an Item!
 						if (padState.Buttons.X == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
 						//padState.IsButtonDown(Microsoft.Xna.Framework.Input.Buttons.X)) //
