@@ -62,6 +62,10 @@ namespace Terraria_Control
 
 		public const int CRAFT=3;
 		public static int craftSel=0;
+
+		//public static int craftScroll=0;
+		public static int craftCooldown=0;
+		public static int craftCooldownAmt=10;
 		
 		
 		//0: Inventory
@@ -141,6 +145,7 @@ namespace Terraria_Control
 			controlInv = false;
 			//invSelectItem = false;
 			invSelectItemRelease = false;
+			//craftScroll = 0;
 
             if (!Main.gameMenu && (Main.netMode != 2))
             {
@@ -288,6 +293,27 @@ namespace Terraria_Control
 
 							UpdateInvMouse();
 						}
+
+						int craftScroll=0;
+						//Handle craft selection
+						if(craftCooldown<=0) {
+				
+							if(padState.ThumbSticks.Right.Y < 0)
+								craftScroll++;
+							else if (padState.ThumbSticks.Right.Y > 0)
+								craftScroll--;
+
+							craftCooldown=craftCooldownAmt;
+						}
+						else craftCooldown--;
+
+						Main.focusRecipe+=craftScroll;
+						if(Main.focusRecipe<0) Main.focusRecipe=0;
+						if(Main.focusRecipe>Main.numAvailableRecipes) Main.focusRecipe=Main.numAvailableRecipes;
+
+						//if(!padState.IsButtonDown(right)
+						//	&& !padState.IsButtonDown(left)) scrollCooldown=0;
+
 						
 						if (padState.IsButtonDown(Microsoft.Xna.Framework.Input.Buttons.A))
 						{

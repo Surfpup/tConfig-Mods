@@ -1291,6 +1291,325 @@ namespace Terraria_Control
                 }
             }
         }
+
+        public bool PreDrawAvailableRecipes(SpriteBatch s)
+        {
+            this.spriteBatch = s;
+            int num109 = (Main.screenHeight - 600) / 2;
+            int num110 = (int)((float)Main.screenHeight / 600f * 250f);
+            string MouseTextString = Main.MouseTextString;
+
+            Color color6 = new Color((int)((byte)((float)Main.mouseTextColor * Main.craftingAlpha)), (int)((byte)((float)Main.mouseTextColor * Main.craftingAlpha)), (int)((byte)((float)Main.mouseTextColor * Main.craftingAlpha)), (int)((byte)((float)Main.mouseTextColor * Main.craftingAlpha)));
+
+            if (Main.numAvailableRecipes > 0)
+            {
+                SpriteBatch arg_7137_0 = this.spriteBatch;
+                SpriteFont arg_7137_1 = Main.fontMouseText;
+                string arg_7137_2 = Lang.inter[25];
+                Vector2 arg_7137_3 = new Vector2(76f, (float)(414 + num109));
+                Color arg_7137_4 = color6;
+                float arg_7137_5 = 0f;
+                origin = default(Vector2);
+                arg_7137_0.DrawString(arg_7137_1, arg_7137_2, arg_7137_3, arg_7137_4, arg_7137_5, origin, 1f, SpriteEffects.None, 0f);
+            }
+            for (int num132 = 0; num132 < Recipe.maxRecipes; num132++)
+            {
+                Main.inventoryScale = 100f / (Math.Abs(Main.availableRecipeY[num132]) + 100f);
+                if ((double)Main.inventoryScale < 0.75)
+                {
+                    Main.inventoryScale = 0.75f;
+                }
+                if (Main.availableRecipeY[num132] < (float)((num132 - Main.focusRecipe) * 65))
+                {
+                    if (Main.availableRecipeY[num132] == 0f)
+                    {
+                        Main.PlaySound(12, -1, -1, 1);
+                    }
+                    Main.availableRecipeY[num132] += 6.5f;
+                }
+                else
+                {
+                    if (Main.availableRecipeY[num132] > (float)((num132 - Main.focusRecipe) * 65))
+                    {
+                        if (Main.availableRecipeY[num132] == 0f)
+                        {
+                            Main.PlaySound(12, -1, -1, 1);
+                        }
+                        Main.availableRecipeY[num132] -= 6.5f;
+                    }
+                }
+                if (num132 < Main.numAvailableRecipes && Math.Abs(Main.availableRecipeY[num132]) <= (float)num110)
+                {
+                    int num133 = (int)(46f - 26f * Main.inventoryScale);
+                    int num134 = (int)(410f + Main.availableRecipeY[num132] * Main.inventoryScale - 30f * Main.inventoryScale + (float)num109);
+                    double num135 = (double)(color2.A + 50);
+                    double num136 = 255.0;
+                    if (Math.Abs(Main.availableRecipeY[num132]) > (float)(num110 - 100))
+                    {
+                        num135 = (double)(150f * (100f - (Math.Abs(Main.availableRecipeY[num132]) - (float)(num110 - 100)))) * 0.01;
+                        num136 = (double)(255f * (100f - (Math.Abs(Main.availableRecipeY[num132]) - (float)(num110 - 100)))) * 0.01;
+                    }
+                    new Color((int)((byte)num135), (int)((byte)num135), (int)((byte)num135), (int)((byte)num135));
+                    Color color7 = new Color((int)((byte)num136), (int)((byte)num136), (int)((byte)num136), (int)((byte)num136));
+                    if (Main.mouseX >= num133 && (float)Main.mouseX <= (float)num133 + (float)Main.inventoryBackTexture.Width * Main.inventoryScale && Main.mouseY >= num134 && (float)Main.mouseY <= (float)num134 + (float)Main.inventoryBackTexture.Height * Main.inventoryScale)
+                    {
+                        Main.player[Main.myPlayer].mouseInterface = true;
+                        if (Main.focusRecipe == num132 && Main.guideItem.type == 0)
+                        {
+                            if (Main.mouseItem.type == 0 || (Main.mouseItem.IsTheSameAs(Main.recipe[Main.availableRecipe[num132]].createItem) && Main.mouseItem.stack + Main.recipe[Main.availableRecipe[num132]].createItem.stack <= Main.mouseItem.maxStack))
+                            {
+                                if (Main.mouseLeftRelease && Main.mouseLeft)
+                                {
+                                    int stack = Main.mouseItem.stack;
+                                    Main.mouseItem = (Item)Main.recipe[Main.availableRecipe[num132]].createItem.Clone();
+                                    Main.mouseItem.Prefix(-1);
+                                    Main.mouseItem.stack += stack;
+                                    Main.mouseItem.position.X = Main.player[Main.myPlayer].position.X + (float)(Main.player[Main.myPlayer].width / 2) - (float)(Main.mouseItem.width / 2);
+                                    Main.mouseItem.position.Y = Main.player[Main.myPlayer].position.Y + (float)(Main.player[Main.myPlayer].height / 2) - (float)(Main.mouseItem.height / 2);
+                                    ItemText.NewText(Main.mouseItem, Main.recipe[Main.availableRecipe[num132]].createItem.stack);
+                                    Main.recipe[Main.availableRecipe[num132]].Create(Main.mouseItem);
+                                    if (Main.mouseItem.type > 0 || Main.recipe[Main.availableRecipe[num132]].createItem.type > 0)
+                                    {
+                                        Main.PlaySound(7, -1, -1, 1);
+                                    }
+                                }
+                                else
+                                {
+                                    if (Main.stackSplit <= 1 && Main.mouseRight && (Main.mouseItem.stack < Main.mouseItem.maxStack || Main.mouseItem.type == 0))
+                                    {
+                                        if (Main.stackSplit == 0)
+                                        {
+                                            Main.stackSplit = 15;
+                                        }
+                                        else
+                                        {
+                                            Main.stackSplit = Main.stackDelay;
+                                        }
+                                        int stack2 = Main.mouseItem.stack;
+                                        Main.mouseItem = (Item)Main.recipe[Main.availableRecipe[num132]].createItem.Clone();
+                                        Main.mouseItem.Prefix(-1);
+                                        Main.mouseItem.stack += stack2;
+                                        Main.mouseItem.position.X = Main.player[Main.myPlayer].position.X + (float)(Main.player[Main.myPlayer].width / 2) - (float)(Main.mouseItem.width / 2);
+                                        Main.mouseItem.position.Y = Main.player[Main.myPlayer].position.Y + (float)(Main.player[Main.myPlayer].height / 2) - (float)(Main.mouseItem.height / 2);
+                                        ItemText.NewText(Main.mouseItem, Main.recipe[Main.availableRecipe[num132]].createItem.stack);
+                                        Main.recipe[Main.availableRecipe[num132]].Create(Main.mouseItem);
+                                        if (Main.mouseItem.type > 0 || Main.recipe[Main.availableRecipe[num132]].createItem.type > 0)
+                                        {
+                                            Main.PlaySound(7, -1, -1, 1);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (Main.mouseLeftRelease && Main.mouseLeft)
+                            {
+                                Main.focusRecipe = num132;
+                            }
+                        }
+                        Main.craftingHide = true;
+                        MouseTextString = Main.recipe[Main.availableRecipe[num132]].createItem.name;
+                        Main.toolTip = (Item)Main.recipe[Main.availableRecipe[num132]].createItem.ShallowClone();
+                        if (Main.recipe[Main.availableRecipe[num132]].createItem.stack > 1)
+                        {
+                            object obj = MouseTextString;
+                            MouseTextString = string.Concat(new object[]
+                        {
+                            obj, 
+                            " (", 
+                            Main.recipe[Main.availableRecipe[num132]].createItem.stack, 
+                            ")"
+                        });
+                        }
+                    }
+                    if (Main.numAvailableRecipes > 0)
+                    {
+                        num135 -= 50.0;
+                        if (num135 < 0.0)
+                        {
+                            num135 = 0.0;
+                        }
+                        SpriteBatch arg_784D_0 = this.spriteBatch;
+                        Texture2D arg_784D_1 = Main.inventoryBack4Texture;
+                        Vector2 arg_784D_2 = new Vector2((float)num133, (float)num134);
+                        Rectangle? arg_784D_3 = new Rectangle?(new Rectangle(0, 0, Main.inventoryBackTexture.Width, Main.inventoryBackTexture.Height));
+                        Color arg_784D_4 = new Color((int)((byte)num135), (int)((byte)num135), (int)((byte)num135), (int)((byte)num135));
+                        float arg_784D_5 = 0f;
+                        origin = default(Vector2);
+                        arg_784D_0.Draw(arg_784D_1, arg_784D_2, arg_784D_3, arg_784D_4, arg_784D_5, origin, Main.inventoryScale, SpriteEffects.None, 0f);
+                        if (Main.recipe[Main.availableRecipe[num132]].createItem.type > 0 && Main.recipe[Main.availableRecipe[num132]].createItem.stack > 0)
+                        {
+                            float num137 = 1f;
+                            if (Main.itemTexture[Main.recipe[Main.availableRecipe[num132]].createItem.type].Width > 32 || Main.itemTexture[Main.recipe[Main.availableRecipe[num132]].createItem.type].Height > 32)
+                            {
+                                if (Main.itemTexture[Main.recipe[Main.availableRecipe[num132]].createItem.type].Width > Main.itemTexture[Main.recipe[Main.availableRecipe[num132]].createItem.type].Height)
+                                {
+                                    num137 = 32f / (float)Main.itemTexture[Main.recipe[Main.availableRecipe[num132]].createItem.type].Width;
+                                }
+                                else
+                                {
+                                    num137 = 32f / (float)Main.itemTexture[Main.recipe[Main.availableRecipe[num132]].createItem.type].Height;
+                                }
+                            }
+                            num137 *= Main.inventoryScale;
+                            SpriteBatch arg_7ABC_0 = this.spriteBatch;
+                            Texture2D arg_7ABC_1 = Main.itemTexture[Main.recipe[Main.availableRecipe[num132]].createItem.type];
+                            Vector2 arg_7ABC_2 = new Vector2((float)num133 + 26f * Main.inventoryScale - (float)Main.itemTexture[Main.recipe[Main.availableRecipe[num132]].createItem.type].Width * 0.5f * num137, (float)num134 + 26f * Main.inventoryScale - (float)Main.itemTexture[Main.recipe[Main.availableRecipe[num132]].createItem.type].Height * 0.5f * num137);
+                            Rectangle? arg_7ABC_3 = new Rectangle?(new Rectangle(0, 0, Main.itemTexture[Main.recipe[Main.availableRecipe[num132]].createItem.type].Width, Main.itemTexture[Main.recipe[Main.availableRecipe[num132]].createItem.type].Height));
+                            Color arg_7ABC_4 = Main.recipe[Main.availableRecipe[num132]].createItem.GetAlpha(color7);
+                            float arg_7ABC_5 = 0f;
+                            origin = default(Vector2);
+                            arg_7ABC_0.Draw(arg_7ABC_1, arg_7ABC_2, arg_7ABC_3, arg_7ABC_4, arg_7ABC_5, origin, num137, SpriteEffects.None, 0f);
+                            Color arg_7AE7_0 = Main.recipe[Main.availableRecipe[num132]].createItem.color;
+                            Color b = default(Color);
+                            if (arg_7AE7_0 != b)
+                            {
+                                SpriteBatch arg_7C1B_0 = this.spriteBatch;
+                                Texture2D arg_7C1B_1 = Main.itemTexture[Main.recipe[Main.availableRecipe[num132]].createItem.type];
+                                Vector2 arg_7C1B_2 = new Vector2((float)num133 + 26f * Main.inventoryScale - (float)Main.itemTexture[Main.recipe[Main.availableRecipe[num132]].createItem.type].Width * 0.5f * num137, (float)num134 + 26f * Main.inventoryScale - (float)Main.itemTexture[Main.recipe[Main.availableRecipe[num132]].createItem.type].Height * 0.5f * num137);
+                                Rectangle? arg_7C1B_3 = new Rectangle?(new Rectangle(0, 0, Main.itemTexture[Main.recipe[Main.availableRecipe[num132]].createItem.type].Width, Main.itemTexture[Main.recipe[Main.availableRecipe[num132]].createItem.type].Height));
+                                Color arg_7C1B_4 = Main.recipe[Main.availableRecipe[num132]].createItem.GetColor(color7);
+                                float arg_7C1B_5 = 0f;
+                                origin = default(Vector2);
+                                arg_7C1B_0.Draw(arg_7C1B_1, arg_7C1B_2, arg_7C1B_3, arg_7C1B_4, arg_7C1B_5, origin, num137, SpriteEffects.None, 0f);
+                            }
+                            if (Main.recipe[Main.availableRecipe[num132]].createItem.stack > 1)
+                            {
+                                SpriteBatch arg_7CA8_0 = this.spriteBatch;
+                                SpriteFont arg_7CA8_1 = Main.fontItemStack;
+                                string arg_7CA8_2 = string.Concat(Main.recipe[Main.availableRecipe[num132]].createItem.stack);
+                                Vector2 arg_7CA8_3 = new Vector2((float)num133 + 10f * Main.inventoryScale, (float)num134 + 26f * Main.inventoryScale);
+                                Color arg_7CA8_4 = color7;
+                                float arg_7CA8_5 = 0f;
+                                origin = default(Vector2);
+                                arg_7CA8_0.DrawString(arg_7CA8_1, arg_7CA8_2, arg_7CA8_3, arg_7CA8_4, arg_7CA8_5, origin, num137, SpriteEffects.None, 0f);
+                            }
+                        }
+                    }
+                }
+            }
+            if (Main.numAvailableRecipes > 0)
+            {
+                int num138 = 0;
+                while (num138 < Recipe.maxRequirements && Main.recipe[Main.availableRecipe[Main.focusRecipe]].requiredItem[num138].type != 0)
+                {
+                    int num139 = 80 + num138 * 40;
+                    int num140 = 380 + num109;
+                    double num141 = (double)(color2.A + 50);
+                    double num142 = 255.0;
+                    Color white9 = Color.White;
+                    Color white10 = Color.White;
+                    num141 = (double)((float)(color2.A + 50) - Math.Abs(Main.availableRecipeY[Main.focusRecipe]) * 2f);
+                    num142 = (double)(255f - Math.Abs(Main.availableRecipeY[Main.focusRecipe]) * 2f);
+                    if (num141 < 0.0)
+                    {
+                        num141 = 0.0;
+                    }
+                    if (num142 < 0.0)
+                    {
+                        num142 = 0.0;
+                    }
+                    white9.R = (byte)num141;
+                    white9.G = (byte)num141;
+                    white9.B = (byte)num141;
+                    white9.A = (byte)num141;
+                    white10.R = (byte)num142;
+                    white10.G = (byte)num142;
+                    white10.B = (byte)num142;
+                    white10.A = (byte)num142;
+                    Main.inventoryScale = 0.6f;
+                    if (num141 == 0.0)
+                    {
+                        break;
+                    }
+                    if (Main.mouseX >= num139 && (float)Main.mouseX <= (float)num139 + (float)Main.inventoryBackTexture.Width * Main.inventoryScale && Main.mouseY >= num140 && (float)Main.mouseY <= (float)num140 + (float)Main.inventoryBackTexture.Height * Main.inventoryScale)
+                    {
+                        Main.craftingHide = true;
+                        Main.player[Main.myPlayer].mouseInterface = true;
+                        MouseTextString = Main.recipe[Main.availableRecipe[Main.focusRecipe]].requiredItem[num138].name;
+                        Main.toolTip = (Item)Main.recipe[Main.availableRecipe[Main.focusRecipe]].requiredItem[num138].ShallowClone();
+                        if (Main.recipe[Main.availableRecipe[Main.focusRecipe]].requiredItem[num138].stack > 1)
+                        {
+                            object obj = MouseTextString;
+                            MouseTextString = string.Concat(new object[]
+                        {
+                            obj, 
+                            " (", 
+                            Main.recipe[Main.availableRecipe[Main.focusRecipe]].requiredItem[num138].stack, 
+                            ")"
+                        });
+                        }
+                    }
+                    num141 -= 50.0;
+                    if (num141 < 0.0)
+                    {
+                        num141 = 0.0;
+                    }
+                    SpriteBatch arg_7FD4_0 = this.spriteBatch;
+                    Texture2D arg_7FD4_1 = Main.inventoryBack4Texture;
+                    Vector2 arg_7FD4_2 = new Vector2((float)num139, (float)num140);
+                    Rectangle? arg_7FD4_3 = new Rectangle?(new Rectangle(0, 0, Main.inventoryBackTexture.Width, Main.inventoryBackTexture.Height));
+                    Color arg_7FD4_4 = new Color((int)((byte)num141), (int)((byte)num141), (int)((byte)num141), (int)((byte)num141));
+                    float arg_7FD4_5 = 0f;
+                    origin = default(Vector2);
+                    arg_7FD4_0.Draw(arg_7FD4_1, arg_7FD4_2, arg_7FD4_3, arg_7FD4_4, arg_7FD4_5, origin, Main.inventoryScale, SpriteEffects.None, 0f);
+                    if (Main.recipe[Main.availableRecipe[Main.focusRecipe]].requiredItem[num138].type > 0 && Main.recipe[Main.availableRecipe[Main.focusRecipe]].requiredItem[num138].stack > 0)
+                    {
+                        float num143 = 1f;
+                        if (Main.itemTexture[Main.recipe[Main.availableRecipe[Main.focusRecipe]].requiredItem[num138].type].Width > 32 || Main.itemTexture[Main.recipe[Main.availableRecipe[Main.focusRecipe]].requiredItem[num138].type].Height > 32)
+                        {
+                            if (Main.itemTexture[Main.recipe[Main.availableRecipe[Main.focusRecipe]].requiredItem[num138].type].Width > Main.itemTexture[Main.recipe[Main.availableRecipe[Main.focusRecipe]].requiredItem[num138].type].Height)
+                            {
+                                num143 = 32f / (float)Main.itemTexture[Main.recipe[Main.availableRecipe[Main.focusRecipe]].requiredItem[num138].type].Width;
+                            }
+                            else
+                            {
+                                num143 = 32f / (float)Main.itemTexture[Main.recipe[Main.availableRecipe[Main.focusRecipe]].requiredItem[num138].type].Height;
+                            }
+                        }
+                        num143 *= Main.inventoryScale;
+                        SpriteBatch arg_8297_0 = this.spriteBatch;
+                        Texture2D arg_8297_1 = Main.itemTexture[Main.recipe[Main.availableRecipe[Main.focusRecipe]].requiredItem[num138].type];
+                        Vector2 arg_8297_2 = new Vector2((float)num139 + 26f * Main.inventoryScale - (float)Main.itemTexture[Main.recipe[Main.availableRecipe[Main.focusRecipe]].requiredItem[num138].type].Width * 0.5f * num143, (float)num140 + 26f * Main.inventoryScale - (float)Main.itemTexture[Main.recipe[Main.availableRecipe[Main.focusRecipe]].requiredItem[num138].type].Height * 0.5f * num143);
+                        Rectangle? arg_8297_3 = new Rectangle?(new Rectangle(0, 0, Main.itemTexture[Main.recipe[Main.availableRecipe[Main.focusRecipe]].requiredItem[num138].type].Width, Main.itemTexture[Main.recipe[Main.availableRecipe[Main.focusRecipe]].requiredItem[num138].type].Height));
+                        Color arg_8297_4 = Main.recipe[Main.availableRecipe[Main.focusRecipe]].requiredItem[num138].GetAlpha(white10);
+                        float arg_8297_5 = 0f;
+                        origin = default(Vector2);
+                        arg_8297_0.Draw(arg_8297_1, arg_8297_2, arg_8297_3, arg_8297_4, arg_8297_5, origin, num143, SpriteEffects.None, 0f);
+                        Color arg_82C8_0 = Main.recipe[Main.availableRecipe[Main.focusRecipe]].requiredItem[num138].color;
+                        Color b = default(Color);
+                        if (arg_82C8_0 != b)
+                        {
+                            SpriteBatch arg_8420_0 = this.spriteBatch;
+                            Texture2D arg_8420_1 = Main.itemTexture[Main.recipe[Main.availableRecipe[Main.focusRecipe]].requiredItem[num138].type];
+                            Vector2 arg_8420_2 = new Vector2((float)num139 + 26f * Main.inventoryScale - (float)Main.itemTexture[Main.recipe[Main.availableRecipe[Main.focusRecipe]].requiredItem[num138].type].Width * 0.5f * num143, (float)num140 + 26f * Main.inventoryScale - (float)Main.itemTexture[Main.recipe[Main.availableRecipe[Main.focusRecipe]].requiredItem[num138].type].Height * 0.5f * num143);
+                            Rectangle? arg_8420_3 = new Rectangle?(new Rectangle(0, 0, Main.itemTexture[Main.recipe[Main.availableRecipe[Main.focusRecipe]].requiredItem[num138].type].Width, Main.itemTexture[Main.recipe[Main.availableRecipe[Main.focusRecipe]].requiredItem[num138].type].Height));
+                            Color arg_8420_4 = Main.recipe[Main.availableRecipe[Main.focusRecipe]].requiredItem[num138].GetColor(white10);
+                            float arg_8420_5 = 0f;
+                            origin = default(Vector2);
+                            arg_8420_0.Draw(arg_8420_1, arg_8420_2, arg_8420_3, arg_8420_4, arg_8420_5, origin, num143, SpriteEffects.None, 0f);
+                        }
+                        if (Main.recipe[Main.availableRecipe[Main.focusRecipe]].requiredItem[num138].stack > 1)
+                        {
+                            SpriteBatch arg_84B9_0 = this.spriteBatch;
+                            SpriteFont arg_84B9_1 = Main.fontItemStack;
+                            string arg_84B9_2 = string.Concat(Main.recipe[Main.availableRecipe[Main.focusRecipe]].requiredItem[num138].stack);
+                            Vector2 arg_84B9_3 = new Vector2((float)num139 + 10f * Main.inventoryScale, (float)num140 + 26f * Main.inventoryScale);
+                            Color arg_84B9_4 = white10;
+                            float arg_84B9_5 = 0f;
+                            origin = default(Vector2);
+                            arg_84B9_0.DrawString(arg_84B9_1, arg_84B9_2, arg_84B9_3, arg_84B9_4, arg_84B9_5, origin, num143, SpriteEffects.None, 0f);
+                        }
+                    }
+                    num138++;
+                }
+            }
+
+            Main.MouseTextString = MouseTextString;
+
+            return false;
+        }
 		
 #if DEBUG
     }
