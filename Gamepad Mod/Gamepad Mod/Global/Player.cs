@@ -41,6 +41,8 @@ namespace Terraria_Control
 		public static bool invSelectItem = false;
 		public static bool invSelectItemRelease = false;
 		
+		public static bool rightStick = false;
+		public static bool useTile=false;
 		
 		
 		public static int invMenu = 0; //Which section of the inventory menu is selected
@@ -141,10 +143,32 @@ namespace Terraria_Control
 					if (padState.IsButtonDown(Microsoft.Xna.Framework.Input.Buttons.Y))
 					{
 						controlInv = true;
-					}					
+					}
+
+					if (padState.IsButtonDown(Microsoft.Xna.Framework.Input.Buttons.RightStick))
+					{
+						rightStick=true;
+					}
+					else if(rightStick)
+					{
+						rightStick=false;
+						aimMode++;
+						if(aimMode>1) aimMode=0; 
+					}
 					
 					if (!Main.playerInventory)
 					{
+						//Use Tile
+						if (padState.IsButtonDown(Microsoft.Xna.Framework.Input.Buttons.B))
+						{
+							useTile=true;
+						}
+						else if(useTile)
+						{
+							useTile=false;
+							player.controlUseTile=true;
+						}
+
 						HandleMovement(player);
 
 						//Aiming
@@ -293,7 +317,7 @@ namespace Terraria_Control
 									if(invSelectionY<0) invSelectionY = 0;
 									if(oldSelectionX != invSelectionX || oldSelectionY != invSelectionY) {
 										invCool = invCoolAmt;
-										UpdateInvMouse();
+										//UpdateInvMouse();
 									}
 								}
 							}
@@ -332,7 +356,7 @@ namespace Terraria_Control
 									//if(invSelectionY<0) invSelectionY = 0;
 									if(oldSelectionX != armorSel) { // || oldSelectionY != invSelectionY) {
 										invCool = invCoolAmt;
-										UpdateInvMouse();
+										//UpdateInvMouse();
 									}
 								}
 							}

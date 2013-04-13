@@ -12,7 +12,61 @@ namespace Terraria_Control
     {
 #endif
 		private SpriteBatch spriteBatch;
+
+        public void PickItem(int num81)
+        {
+            if (Main.player[Main.myPlayer].selectedItem != num81 || Main.player[Main.myPlayer].itemAnimation <= 0)
+            {
+                Item item2 = Main.mouseItem;
+                Main.mouseItem = Main.player[Main.myPlayer].inventory[num81];
+                Main.player[Main.myPlayer].inventory[num81] = item2;
+                if (Main.player[Main.myPlayer].inventory[num81].type == 0 || Main.player[Main.myPlayer].inventory[num81].stack < 1)
+                {
+                    Main.player[Main.myPlayer].inventory[num81] = new Item();
+                }
+                if (Main.mouseItem.IsTheSameAs(Main.player[Main.myPlayer].inventory[num81]) && Main.player[Main.myPlayer].inventory[num81].stack != Main.player[Main.myPlayer].inventory[num81].maxStack && Main.mouseItem.stack != Main.mouseItem.maxStack)
+                {
+                    if (Main.mouseItem.stack + Main.player[Main.myPlayer].inventory[num81].stack <= Main.mouseItem.maxStack)
+                    {
+                        Main.player[Main.myPlayer].inventory[num81].stack += Main.mouseItem.stack;
+                        Main.mouseItem.stack = 0;
+                    }
+                    else
+                    {
+                        int num82 = Main.mouseItem.maxStack - Main.player[Main.myPlayer].inventory[num81].stack;
+                        Main.player[Main.myPlayer].inventory[num81].stack += num82;
+                        Main.mouseItem.stack -= num82;
+                    }
+                }
+                if (Main.mouseItem.type == 0 || Main.mouseItem.stack < 1)
+                {
+                    Main.mouseItem = new Item();
+                }
+                if (Main.mouseItem.type > 0 || Main.player[Main.myPlayer].inventory[num81].type > 0)
+                {
+                    Recipe.FindRecipes();
+                    Main.PlaySound(7, -1, -1, 1);
+                }
+            }
+        }
+
+
+        public bool InvSlotHighlighted(int x, int y)
+        { //Returns true if the mouse is highlighting the given item slot
+            //OR if the gamepad has it selected!
+            /*
+            return Main.mouseX >= x
+                && (float)Main.mouseX <= (float)x + (float)Main.inventoryBackTexture.Width * Main.inventoryScale
+                && Main.mouseY >= y 
+                && (float)Main.mouseY <= (float)y + (float)Main.inventoryBackTexture.Height * Main.inventoryScale;*/
+            return ModPlayer.invSelectionX == x && ModPlayer.invSelectionY == y;
+        }
+
 		public bool PreDrawInventorySlots(SpriteBatch s) {
+            if(ModPlayer.invMenu!=ModPlayer.INVENTORY) return false;
+
+            Main.inventoryScale = 1.5f;
+
 			this.spriteBatch = s;
 			Vector2 origin;
 			Color color2 = new Color((int)((byte)Main.invAlpha), (int)((byte)Main.invAlpha), (int)((byte)Main.invAlpha), (int)((byte)Main.invAlpha));
@@ -25,7 +79,7 @@ namespace Terraria_Control
                             int num80 = (int)(20f + (float)(num78 * 56) * Main.inventoryScale);
                             int num81 = num77 + num78 * 10;
                             Color white2 = new Color(100, 100, 100, 100);
-                            if (Main.mouseX >= num79 && (float)Main.mouseX <= (float)num79 + (float)Main.inventoryBackTexture.Width * Main.inventoryScale && Main.mouseY >= num80 && (float)Main.mouseY <= (float)num80 + (float)Main.inventoryBackTexture.Height * Main.inventoryScale)
+                            if (InvSlotHighlighted(num77, num78))
                             {
                                 Main.player[Main.myPlayer].mouseInterface = true;
                                 if (ModPlayer.invSelectItem && ModPlayer.invSelectItemRelease) //(Main.mouseLeftRelease && Main.mouseLeft)
@@ -63,39 +117,7 @@ namespace Terraria_Control
                                     }
                                     else
                                     {*/
-                                        if (Main.player[Main.myPlayer].selectedItem != num81 || Main.player[Main.myPlayer].itemAnimation <= 0)
-                                        {
-                                            Item item2 = Main.mouseItem;
-                                            Main.mouseItem = Main.player[Main.myPlayer].inventory[num81];
-                                            Main.player[Main.myPlayer].inventory[num81] = item2;
-                                            if (Main.player[Main.myPlayer].inventory[num81].type == 0 || Main.player[Main.myPlayer].inventory[num81].stack < 1)
-                                            {
-                                                Main.player[Main.myPlayer].inventory[num81] = new Item();
-                                            }
-                                            if (Main.mouseItem.IsTheSameAs(Main.player[Main.myPlayer].inventory[num81]) && Main.player[Main.myPlayer].inventory[num81].stack != Main.player[Main.myPlayer].inventory[num81].maxStack && Main.mouseItem.stack != Main.mouseItem.maxStack)
-                                            {
-                                                if (Main.mouseItem.stack + Main.player[Main.myPlayer].inventory[num81].stack <= Main.mouseItem.maxStack)
-                                                {
-                                                    Main.player[Main.myPlayer].inventory[num81].stack += Main.mouseItem.stack;
-                                                    Main.mouseItem.stack = 0;
-                                                }
-                                                else
-                                                {
-                                                    int num82 = Main.mouseItem.maxStack - Main.player[Main.myPlayer].inventory[num81].stack;
-                                                    Main.player[Main.myPlayer].inventory[num81].stack += num82;
-                                                    Main.mouseItem.stack -= num82;
-                                                }
-                                            }
-                                            if (Main.mouseItem.type == 0 || Main.mouseItem.stack < 1)
-                                            {
-                                                Main.mouseItem = new Item();
-                                            }
-                                            if (Main.mouseItem.type > 0 || Main.player[Main.myPlayer].inventory[num81].type > 0)
-                                            {
-                                                Recipe.FindRecipes();
-                                                Main.PlaySound(7, -1, -1, 1);
-                                            }
-                                        }
+                                        PickItem(num81);
                                     //}
                                 }
                                 else
@@ -314,6 +336,8 @@ namespace Terraria_Control
 		}
 		
 		public bool PreDrawPlayerEquipment(SpriteBatch s) {
+            if(ModPlayer.invMenu!=ModPlayer.ARMOR) return false;
+
 			Main.armorHide = false;
 			this.spriteBatch = s;
 			Vector2 origin;
@@ -360,7 +384,7 @@ namespace Terraria_Control
 				float arg_47F0_5 = 0f;
 				origin = default(Vector2);
 				arg_47F0_0.DrawString(arg_47F0_1, arg_47F0_2, arg_47F0_3, arg_47F0_4, arg_47F0_5, origin, 1f, SpriteEffects.None, 0f);
-				if (Main.mouseX >= num101 && (float)Main.mouseX <= (float)num101 + (float)Main.inventoryBackTexture.Width * Main.inventoryScale && Main.mouseY >= num102 && (float)Main.mouseY <= (float)num102 + (float)Main.inventoryBackTexture.Height * Main.inventoryScale)
+				if (num100==ModPlayer.armorSel) //Main.mouseX >= num101 && (float)Main.mouseX <= (float)num101 + (float)Main.inventoryBackTexture.Width * Main.inventoryScale && Main.mouseY >= num102 && (float)Main.mouseY <= (float)num102 + (float)Main.inventoryBackTexture.Height * Main.inventoryScale)
 				{
 					Main.armorHide = true;
 					Main.player[Main.myPlayer].mouseInterface = true;
@@ -521,7 +545,7 @@ namespace Terraria_Control
 				float arg_515F_5 = 0f;
 				origin = default(Vector2);
 				arg_515F_0.DrawString(arg_515F_1, arg_515F_2, arg_515F_3, arg_515F_4, arg_515F_5, origin, 1f, SpriteEffects.None, 0f);
-				if (Main.mouseX >= num106 && (float)Main.mouseX <= (float)num106 + (float)Main.inventoryBackTexture.Width * Main.inventoryScale && Main.mouseY >= num107 && (float)Main.mouseY <= (float)num107 + (float)Main.inventoryBackTexture.Height * Main.inventoryScale)
+				if (num105==ModPlayer.armorSel) //Main.mouseX >= num106 && (float)Main.mouseX <= (float)num106 + (float)Main.inventoryBackTexture.Width * Main.inventoryScale && Main.mouseY >= num107 && (float)Main.mouseY <= (float)num107 + (float)Main.inventoryBackTexture.Height * Main.inventoryScale)
 				{
 					Main.player[Main.myPlayer].mouseInterface = true;
 					Main.armorHide = true;
