@@ -1170,7 +1170,7 @@ namespace Terraria_Control
             if (type > -1) netUpdate = true;
             //Debug.WriteLine("drawChest:" + name + "," + chest.Length + "," + netUpdate);
 
-            Texture2D invTexture = Main.inventoryBackTexture;
+            Texture2D invTexture = null;
             if (type > -1) invTexture = Main.inventoryBack5Texture;
             if (type == -2 || type==-3) invTexture = Main.inventoryBack2Texture;
 
@@ -1284,9 +1284,10 @@ namespace Terraria_Control
                                     });
                         }
                     }
-
-                    if(selected) Interface.DrawItem(Main.inventoryBack6Texture, chest[num192], num190, num191);
-                    else Interface.DrawItem(invTexture, chest[num192], num190, num191);
+                    Texture2D back;
+                    if(selected) back = Main.inventoryBack6Texture;
+                    else back = invTexture;
+                    Interface.DrawItem(back, chest[num192], num190, num191);
                 }
             }
         }
