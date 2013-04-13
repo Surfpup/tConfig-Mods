@@ -128,8 +128,8 @@ namespace Terraria_Control
             tPlayer = player;
 			
 			controlInv = false;
-			invSelectItem = false;
-			//invSelectItemRelease = false;
+			//invSelectItem = false;
+			invSelectItemRelease = false;
 
             if (!Main.gameMenu && (Main.netMode != 2))
             {
@@ -276,12 +276,14 @@ namespace Terraria_Control
 							UpdateInvMouse();
 						}
 						
-						if (padState.Buttons.A == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
+						if (padState.IsButtonDown(Microsoft.Xna.Framework.Input.Buttons.A))
 						{
 							invSelectItem = true;
-							//invSelectItemRelease = false;
 						}
-						else invSelectItemRelease = true;
+						else if(invSelectItem) {
+							invSelectItem=false;
+							invSelectItemRelease = true;
+						}
 							
 						if(invMenu==INVENTORY) { //Main inventory of items
 													
@@ -318,7 +320,7 @@ namespace Terraria_Control
 									if(invSelectionY<0) invSelectionY = 0;
 									if(oldSelectionX != invSelectionX || oldSelectionY != invSelectionY) {
 										invCool = invCoolAmt;
-										//UpdateInvMouse();
+										UpdateInvMouse();
 									}
 								}
 							}
@@ -357,7 +359,7 @@ namespace Terraria_Control
 									//if(invSelectionY<0) invSelectionY = 0;
 									if(oldSelectionX != armorSel) { // || oldSelectionY != invSelectionY) {
 										invCool = invCoolAmt;
-										//UpdateInvMouse();
+										UpdateInvMouse();
 									}
 								}
 							}

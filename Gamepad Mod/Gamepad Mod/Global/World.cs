@@ -82,7 +82,7 @@ namespace Terraria_Control
                             if (InvSlotHighlighted(num77, num78))
                             {
                                 Main.player[Main.myPlayer].mouseInterface = true;
-                                if (ModPlayer.invSelectItem && ModPlayer.invSelectItemRelease) //(Main.mouseLeftRelease && Main.mouseLeft)
+                                if (ModPlayer.invSelectItemRelease) //(Main.mouseLeftRelease && Main.mouseLeft)
                                 {
                                     /*if (Main.keyState.IsKeyDown(Keys.LeftShift))
                                     {
@@ -388,7 +388,7 @@ namespace Terraria_Control
 				{
 					Main.armorHide = true;
 					Main.player[Main.myPlayer].mouseInterface = true;
-					if (ModPlayer.invSelectItem && ModPlayer.invSelectItemRelease && (Main.mouseItem.type == 0 || (Main.mouseItem.headSlot > -1 && num100 == 0) || (Main.mouseItem.bodySlot > -1 && num100 == 1) || (Main.mouseItem.legSlot > -1 && num100 == 2) || (Main.mouseItem.accessory && num100 > 2 && !AccCheck(Main.mouseItem, num100))))
+					if (ModPlayer.invSelectItemRelease && (Main.mouseItem.type == 0 || (Main.mouseItem.headSlot > -1 && num100 == 0) || (Main.mouseItem.bodySlot > -1 && num100 == 1) || (Main.mouseItem.legSlot > -1 && num100 == 2) || (Main.mouseItem.accessory && num100 > 2 && !AccCheck(Main.mouseItem, num100))))
 					{
 						if (!Main.mouseItem.CanEquip(Main.player[Main.myPlayer], num100))
 						{
@@ -549,7 +549,7 @@ namespace Terraria_Control
 				{
 					Main.player[Main.myPlayer].mouseInterface = true;
 					Main.armorHide = true;
-					if (ModPlayer.invSelectItem && ModPlayer.invSelectItemRelease)
+					if (ModPlayer.invSelectItemRelease)
 					{
 						if (Main.mouseItem.type == 0 || (Main.mouseItem.headSlot > -1 && num105 == 8) || (Main.mouseItem.bodySlot > -1 && num105 == 9) || (Main.mouseItem.legSlot > -1 && num105 == 10))
 						{
@@ -662,9 +662,9 @@ namespace Terraria_Control
 			}
 			Main.MouseTextString = MouseTextString;
 			
-					if(ModPlayer.invSelectItem && ModPlayer.invSelectItemRelease)
-						ModPlayer.invSelectItemRelease=false;
-						
+			/*if(ModPlayer.invSelectItem)
+				ModPlayer.invSelectItemRelease=false;
+            else ModPlayer.invSelectItemRelease=true;*/
 			return false;
 		}
 
