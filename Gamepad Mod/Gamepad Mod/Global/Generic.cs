@@ -5,23 +5,24 @@ public bool ItemMouseText(SpriteBatch s,string cursorText,int rare,byte diff,str
 	int num4=array.Length;
 	Vector2 origin;
 
-	int num = (int) (Main.screenWidth - 300); //Main.mouseX + 10;
-	int num2 = (int) (200); //Main.mouseY + 10;
+	int num = Main.mouseX + 10; //(int) (Main.screenWidth - 250); //Main.mouseX + 10;
+	int num2 = Main.mouseY + 10; //(int) (25); //Main.mouseY + 10;
 
 	//Draw background texture
+	/*float scale=6f;
 	Color color20 = new Color((int)((byte)Main.invAlpha), (int)((byte)Main.invAlpha), (int)((byte)Main.invAlpha), (int)((byte)Main.invAlpha));
 	SpriteBatch arg_5487_0 = this.spriteBatch;
 	
 	Texture2D back = Main.inventoryBackTexture;
 	
 	Texture2D arg_5487_1 = back;
-	Vector2 arg_5487_2 = new Vector2((float)num-20, (float)num2-20);
+	Vector2 arg_5487_2 = new Vector2((float)num-25, (float)num2-25);
 	Rectangle? arg_5487_3 = new Rectangle?(new Rectangle(0, 0, Main.inventoryBackTexture.Width, Main.inventoryBackTexture.Height));
 	Color arg_5487_4 = color20;
 	float arg_5487_5 = 0f;
 	origin = default(Vector2);
-	arg_5487_0.Draw(arg_5487_1, arg_5487_2, arg_5487_3, arg_5487_4, arg_5487_5, origin, 7f, SpriteEffects.None, 0f);
-
+	arg_5487_0.Draw(arg_5487_1, arg_5487_2, arg_5487_3, arg_5487_4, arg_5487_5, origin, scale, SpriteEffects.None, 0f);
+	*/
 	int num22 = 0;
 	float num20 = (float)Main.mouseTextColor / 255f;
 	Color color = new Color((int)Main.mouseTextColor, (int)Main.mouseTextColor, (int)Main.mouseTextColor, (int)Main.mouseTextColor);

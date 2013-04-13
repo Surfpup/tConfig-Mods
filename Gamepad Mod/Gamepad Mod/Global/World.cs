@@ -690,7 +690,8 @@ namespace Terraria_Control
                 int num147 = (int)(85f + (float)(num145 * 56) * Main.inventoryScale + 20f);
                 int num148 = num145 + 40;
                 Color white11 = new Color(100, 100, 100, 100);
-                if (ModPlayer.invMenu==ModPlayer.COINS && ModPlayer.coinSel==num145) //Main.mouseX >= num146 && (float)Main.mouseX <= (float)num146 + (float)Main.inventoryBackTexture.Width * Main.inventoryScale && Main.mouseY >= num147 && (float)Main.mouseY <= (float)num147 + (float)Main.inventoryBackTexture.Height * Main.inventoryScale)
+                bool selected=(ModPlayer.invMenu==ModPlayer.INVENTORY && ModPlayer.invSelectionX==10 && ModPlayer.invSelectionY==num145);
+                if (selected) //Main.mouseX >= num146 && (float)Main.mouseX <= (float)num146 + (float)Main.inventoryBackTexture.Width * Main.inventoryScale && Main.mouseY >= num147 && (float)Main.mouseY <= (float)num147 + (float)Main.inventoryBackTexture.Height * Main.inventoryScale)
                 {
                     Main.player[Main.myPlayer].mouseInterface = true;
                     if (ModPlayer.invSelectItemRelease)
@@ -808,7 +809,7 @@ namespace Terraria_Control
                 }
 
                 Texture2D back = Main.inventoryBackTexture;
-                if(ModPlayer.invMenu==ModPlayer.COINS && num145==ModPlayer.coinSel) back = Main.inventoryBack6Texture;
+                if(selected) back = Main.inventoryBack6Texture;
                             
 
                 SpriteBatch arg_8C9C_0 = this.spriteBatch;

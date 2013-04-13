@@ -44,19 +44,19 @@ namespace Terraria_Control
 		public static bool rightStick = false;
 		public static bool useTile=false;
 		
-		public const int invMenuMax = 2;
+		public const int invMenuMax = 1;
 		public static int invMenu = 0; //Which section of the inventory menu is selected
 		public const int INVENTORY=0;
 		public static int invSelectionX = 0;
 		public static int invSelectionY = 0;
 		
-		public const int COINS=1;
-		public static int coinSel=0;
+		//public const int COINS=1;
+		//public static int coinSel=0;
 
-		public const int ARMOR=2;
+		public const int ARMOR=1;
 		public static int armorSel=0;
 
-		public const int CRAFT=3;
+		public const int CRAFT=2;
 		public static int craftSel=0;
 		
 		
@@ -319,7 +319,7 @@ namespace Terraria_Control
 									else if (stickPoint.Y < 0) {
 										invSelectionY++;
 									}
-									if(invSelectionX>9) invSelectionX = 9;
+									if(invSelectionX>10) invSelectionX = 10;
 									if(invSelectionX<0) invSelectionX = 0;
 									if(invSelectionY>3) invSelectionY = 3;
 									if(invSelectionY<0) invSelectionY = 0;
@@ -328,7 +328,7 @@ namespace Terraria_Control
 										UpdateInvMouse();
 									}
 								}
-								else if(invMenu==COINS)
+								/*else if(invMenu==COINS)
 								{
 									int prev = coinSel;
 									if (stickPoint.Y > 0) {
@@ -340,7 +340,7 @@ namespace Terraria_Control
 									if(coinSel!=prev) {
 										invCool = invCoolAmt;
 									}
-								}
+								}*/
 								else if(invMenu==ARMOR) {			
 									//Inventory selection
 							  
@@ -406,6 +406,10 @@ namespace Terraria_Control
 			if(invMenu==INVENTORY) {
 				x = (int)(28f + (float)(invSelectionX * 80) * Main.inventoryScale);
 				y = (int)(28f + (float)(invSelectionY * 80) * Main.inventoryScale);
+				if(invSelectionX==10) {
+					y=(int)(85f + (float)(invSelectionY * 80) * Main.inventoryScale);
+				}
+				
 			}
 			else if(invMenu==ARMOR) {
 				if(armorSel<8) {
