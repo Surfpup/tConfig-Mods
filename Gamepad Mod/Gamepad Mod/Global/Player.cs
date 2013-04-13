@@ -29,7 +29,7 @@ namespace Terraria_Control
         private int aimMode = 1;
 		//Point stickPoint = new Point(1, 0);
 		
-		public int scrollCooldown = 0;
+		public static int scrollCooldown = 0;
 		public const int scrollCooldownAmt = 50;
 		
 		public int invCool = 0;
@@ -60,7 +60,7 @@ namespace Terraria_Control
 		
 		public static int armorSelection = 0;
 
-        public Microsoft.Xna.Framework.Input.GamePadState padState
+        public static Microsoft.Xna.Framework.Input.GamePadState padState
         {
             get
             {
@@ -74,21 +74,21 @@ namespace Terraria_Control
 
         }
 
-        public int HandleScroll()
+        public static int HandleScroll(Microsoft.Xna.Framework.Input.Buttons left, Microsoft.Xna.Framework.Input.Buttons right)
         { //Moving between items/menus with right trigger/left trigger
         	int ScrollValue = 0;
         	
 			if(scrollCooldown<=0) {
 				
-				if(padState.IsButtonDown(Microsoft.Xna.Framework.Input.Buttons.RightTrigger))
+				if(padState.IsButtonDown(right))
 					ScrollValue++;
-				else if (padState.IsButtonDown(Microsoft.Xna.Framework.Input.Buttons.LeftTrigger))
+				else if (padState.IsButtonDown(left))
 					ScrollValue--;
 			}
 			else scrollCooldown--;
 
-			if(!padState.IsButtonDown(Microsoft.Xna.Framework.Input.Buttons.RightTrigger)
-				&& !padState.IsButtonDown(Microsoft.Xna.Framework.Input.Buttons.LeftTrigger)) scrollCooldown=0;
+			if(!padState.IsButtonDown(right)
+				&& !padState.IsButtonDown(left)) scrollCooldown=0;
 
 			return ScrollValue;
         }
@@ -137,7 +137,8 @@ namespace Terraria_Control
 				
                 if (padState.IsConnected)
                 {
-                	int ScrollValue = HandleScroll();
+                	int ScrollValue = HandleScroll(Microsoft.Xna.Framework.Input.Buttons.LeftTrigger, 
+                		Microsoft.Xna.Framework.Input.Buttons.RightTrigger);
 
 					//Open Inventory
 					if (padState.IsButtonDown(Microsoft.Xna.Framework.Input.Buttons.Y))

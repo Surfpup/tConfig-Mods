@@ -3,13 +3,29 @@ public bool ItemMouseText(SpriteBatch s,string cursorText,int rare,byte diff,str
 {
 	this.spriteBatch = s;
 	int num4=array.Length;
+	Vector2 origin;
 
-	int num = (int) (Main.screenWidth - 200); //Main.mouseX + 10;
+	int num = (int) (Main.screenWidth - 300); //Main.mouseX + 10;
 	int num2 = (int) (200); //Main.mouseY + 10;
+
+	//Draw background texture
+	Color color20 = new Color((int)((byte)Main.invAlpha), (int)((byte)Main.invAlpha), (int)((byte)Main.invAlpha), (int)((byte)Main.invAlpha));
+	SpriteBatch arg_5487_0 = this.spriteBatch;
+	
+	Texture2D back = Main.inventoryBackTexture;
+	
+	Texture2D arg_5487_1 = back;
+	Vector2 arg_5487_2 = new Vector2((float)num-20, (float)num2-20);
+	Rectangle? arg_5487_3 = new Rectangle?(new Rectangle(0, 0, Main.inventoryBackTexture.Width, Main.inventoryBackTexture.Height));
+	Color arg_5487_4 = color20;
+	float arg_5487_5 = 0f;
+	origin = default(Vector2);
+	arg_5487_0.Draw(arg_5487_1, arg_5487_2, arg_5487_3, arg_5487_4, arg_5487_5, origin, 7f, SpriteEffects.None, 0f);
+
 	int num22 = 0;
 	float num20 = (float)Main.mouseTextColor / 255f;
 	Color color = new Color((int)Main.mouseTextColor, (int)Main.mouseTextColor, (int)Main.mouseTextColor, (int)Main.mouseTextColor);
-	Vector2 origin;
+	
 	for (int k = 0; k < num4; k++)
 	{
 		if(array[k]==null) continue;
@@ -95,4 +111,93 @@ public bool ItemMouseText(SpriteBatch s,string cursorText,int rare,byte diff,str
 		num22 += (int)(Main.fontMouseText.MeasureString(array[k]).Y); // + (float)num21
 	}
 	return false;
+}
+
+public Microsoft.Xna.Framework.Input.GamePadState padState
+{
+    get
+    {
+        return Microsoft.Xna.Framework.Input.GamePad.GetState(Microsoft.Xna.Framework.PlayerIndex.One);
+    }
+}
+
+int selectedMenu = 0;
+bool upPressed=false;
+bool controlUp=false;
+bool downPressed=false;
+bool controlDown=false;
+bool enterPressed=false;
+bool backPressed=false;
+int scrollCooldown=0;
+public const int scrollCooldownAmt = 10;
+
+public bool OverrideMenuSelection(int prevFocus, int numItems, Main main)
+{ //Handle main menu stuff
+    //if(gameMenu) {
+    	/*Microsoft.Xna.Framework.Input.Keys[] pressedKeys = Main.keyState.GetPressedKeys();
+
+		for (int i = 0; i < pressedKeys.Length; i++)
+		{
+			string a = pressedKeys[i].ToString();
+
+			if (a == Main.cUp)
+				controlUp = true;
+			else if (a == Main.cDown)
+				controlDown = true;
+		}*/
+
+		int ScrollValue = 0;
+		Vector2 stick=padState.ThumbSticks.Left;
+		if(scrollCooldown<=0) {
+			
+			if(padState.DPad.Down == Microsoft.Xna.Framework.Input.ButtonState.Pressed
+				|| stick.Y < 0)
+				ScrollValue++;
+			else if (padState.DPad.Up == Microsoft.Xna.Framework.Input.ButtonState.Pressed
+				|| stick.Y > 0)
+				ScrollValue--;
+		}
+		else scrollCooldown--;
+
+		if(!(padState.DPad.Down == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
+			&& !(padState.DPad.Up == Microsoft.Xna.Framework.Input.ButtonState.Pressed) && stick.Y==0) scrollCooldown=0;
+
+		if(ScrollValue!=0)
+			scrollCooldown = scrollCooldownAmt;
+
+		selectedMenu+=ScrollValue;
+        /*if () {
+            upPressed=true;
+        } else if(upPressed) {
+            selectedMenu--;
+            upPressed=false;
+        }
+
+        if () {
+            downPressed=true; 
+        } else if(downPressed) {
+            downPressed=false;
+            selectedMenu++;
+        }*/
+
+        if (padState.Buttons.A == Microsoft.Xna.Framework.Input.ButtonState.Pressed) {
+            enterPressed=true;
+        } else if(enterPressed) {
+            enterPressed=false;
+            main.selectedMenu=selectedMenu;
+        }
+
+       	if(selectedMenu<0) selectedMenu=numItems-1;
+       	if(selectedMenu>numItems-1) selectedMenu=0;
+
+        /*if (padState.IsButtonDown(Microsoft.Xna.Framework.Input.Buttons.B)) {
+            backPressed=true;
+        } else if(enterPressed) {
+            backPressed=false;
+            main.selectedMenu=selectedMenu;
+        }*/
+
+        main.focusMenu=selectedMenu;
+    //}
+    return false;
 }
