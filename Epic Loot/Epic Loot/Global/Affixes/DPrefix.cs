@@ -211,8 +211,9 @@ namespace Epic_Loot
 
             foreach(Stat s in sharedVals)
             {
-                float val = SkewedRand(s.min, s.max, p);
-                Main.NewText("Added range "+s.min+","+s.max+": "+val);
+                SkewedRand(s.min, s.max, p);
+                //Main.NewText("Added range "+s.min+","+s.max+": "+val);
+                //p.AddRand(val);
             }
 
             p.Roll(false, this.skewMod);

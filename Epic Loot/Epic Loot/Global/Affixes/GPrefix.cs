@@ -97,7 +97,14 @@ namespace Epic_Loot
             }
 
             //Load shared stuff first
-            float[] randArr = randValues.ToArray();
+            List<float> sharedVals = new List<float>();
+
+            for(int i=0;i<d.sharedVals.Count;i++)
+            {
+                sharedVals.Add( SkewedRand(d.sharedVals[i].min, d.sharedVals[i].max, skewMod, true) );
+            }
+
+            float[] randArr = sharedVals.ToArray();
 
             foreach (DPrefix.SharedDelModifier<float[]> m in d.sharedDelModGens)
             {
