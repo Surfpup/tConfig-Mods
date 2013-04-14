@@ -180,14 +180,14 @@ namespace Epic_Loot
 
 	    			int healthCost = (int)Math.Round((double)(amt * v[1]));
 
-	        		return new MouseTip("+"+amt+" Health Cost"); 
+	        		return new MouseTip("+"+amt+" Health Cost", true, true); 
         		});
         	}),
 
             new DPrefix("Kamikaze")
                 //Increases damage, reduces defense, by the same percentage
             .Require(armor)
-            .AddVal(0.8f, 1f)
+            .AddVal(0.1f, 1f)
             .DMod( (float[] v) => {
                 return (Player p) => {
                     //Increase damage
@@ -196,17 +196,17 @@ namespace Epic_Loot
                     p.meleeDamage += v[0];
 
                     //Decrease defense
-                    p.statDefense = (int)(p.statDefense * v[0]);
+                    p.statDefense = (int)(p.statDefense * (1f-v[0]));
                 }; 
             })
             .AddDTip((float[] v) => {
                 return (Prefix.TipMod) ((Item i) => {
-                    return new MouseTip("+"+Math.Round((double)v[0]*100f,2)+"% ("+v[0]+") Damage", true);
+                    return new MouseTip("+"+Math.Round((double)v[0]*100f,2)+"% Damage", true);
                 });
             })
             .AddDTip((float[] v) => {
                 return (Prefix.TipMod) ((Item i) => {
-                    return new MouseTip("-"+Math.Round((double)v[0]*100f,2)+"% ("+v[0]+") Defense", false);
+                    return new MouseTip("-"+Math.Round((double)v[0]*100f,2)+"% Defense", true, true);
                 });
             }),
          });
