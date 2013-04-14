@@ -1,6 +1,6 @@
 Created by Surfpup
 
-version 0.2.6
+version 0.2.7
 
 Description
  * Overrides the vanilla prefix system entirely
@@ -25,6 +25,10 @@ Ideas:
  * Add Nephalem Valor-like system, and Elite monsters?
 
 Changelog
+
+v0.2.7
+ * Added new functionality for creating affixes with anonymous functions that can access an array of random values
+ * Added Sacrificial and Kamikaze affixes.
 
 v0.2.6
  * Fixed issue with npc affixes appearing as 'bla' in multiplayer

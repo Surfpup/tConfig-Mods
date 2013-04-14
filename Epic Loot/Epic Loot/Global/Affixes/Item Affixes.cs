@@ -30,6 +30,7 @@ namespace Epic_Loot
         public delegate void DealtNPC_Del(Player myPlayer, NPC npc, double damage);
         public delegate void UpdatePlayer_Del(Player myPlayer);
         public delegate void DealtPlayer(Player myPlayer, double damage, NPC npc);
+        public delegate void DamagePlayer_Del(Player p, ref int d, NPC npc);
 
         //TODO: Implement ability to specify additional affixes for higher/rarer values
         //Also, make suffixes go into one group; each item should only have one suffix. Thus, suffixes should be more unique in nature.
@@ -210,6 +211,17 @@ namespace Epic_Loot
                         return new MouseTip("-"+Math.Round((double)(v[0]*v[1])*100f,2)+"% Defense", true, true);
                     });
                 }),
+
+            /*new DPrefix("Dodgy")
+
+                .Require(armor)
+                .AddVal(0.01f, 0.03f)
+                .AddDel( "DamagePlayer", (float[] v) => { 
+                    return (DamagePlayer_Del) ((Player p, ref int damage, NPC npc) => { 
+                        //if(ModGeneric.rand.Next() < v[0]) 
+                        damage = 0;
+                    });
+                }),*/
          });
 
             /*DPrefix colorPrefix = new DPrefix("Colored").DMod( (int index) => { return (Item i) => 
