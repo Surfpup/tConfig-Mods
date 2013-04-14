@@ -130,9 +130,6 @@ namespace Epic_Loot
         	//.AddVal(0f,1f) //Dummy value to use for storing something
         	.DMod( (float[] v) => {  //Reduce mana cost
 				return (Item i) => { 
-					//The amount of mana reduced will be stored in the array
-					int amt = (int)Math.Round((double)((float)i.mana * v[0]));
-					//v[1] = (float)amt;
 					i.mana = (int)Math.Round((double)((float)i.mana * (1f - v[0]))); 
 				}; 
 			})
@@ -187,6 +184,31 @@ namespace Epic_Loot
         		});
         	}),
 
+            new DPrefix("Kamikaze")
+                //Increases damage, reduces defense, by the same percentage
+            .Require(armor)
+            .AddVal(0.8f, 1f)
+            .DMod( (float[] v) => {
+                return (Player p) => {
+                    //Increase damage
+                    p.magicDamage += v[0];
+                    p.rangedDamage += v[0];
+                    p.meleeDamage += v[0];
+
+                    //Decrease defense
+                    p.statDefense = (int)(p.statDefense * v[0]);
+                }; 
+            })
+            .AddDTip((float[] v) => {
+                return (Prefix.TipMod) ((Item i) => {
+                    return new MouseTip("+"+Math.Round((double)v[0]*100f,2)+"% ("+v[0]+") Damage", true);
+                });
+            })
+            .AddDTip((float[] v) => {
+                return (Prefix.TipMod) ((Item i) => {
+                    return new MouseTip("-"+Math.Round((double)v[0]*100f,2)+"% ("+v[0]+") Defense", false);
+                });
+            }),
          });
 
             /*DPrefix colorPrefix = new DPrefix("Colored").DMod( (int index) => { return (Item i) => 
