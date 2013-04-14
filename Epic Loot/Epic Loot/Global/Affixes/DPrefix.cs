@@ -24,7 +24,7 @@ using Terraria;
 namespace Epic_Loot
 {
 
-    public class DPrefix : Prefix
+    public class DPrefix : Epic_Loot.Prefix
     {
         //public delegate PlayerMod PlayerModGen(Player player, int val);
         //public delegate PlayerMod PlayerModGenF(Player player, float val);

@@ -119,6 +119,7 @@ namespace Epic_Loot
                 combined.itemMods.AddRange(prefix.itemMods);
                 combined.customRequirements.AddRange(prefix.customRequirements);
                 combined.toolTips.AddRange(prefix.toolTips);
+                combined.dynamicTips.AddRange(prefix.dynamicTips);
 
                 //'register' delegates
                 foreach (string name in prefix.delegates.Keys)

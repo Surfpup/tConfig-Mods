@@ -127,15 +127,19 @@ namespace Epic_Loot
         	//As in, it might reduce mana cost by 2 but increase health cost by 10.
         	.Require(magic)
         	.AddVal(0.1f, 1f)
+        	//.AddVal(0f,1f) //Dummy value to use for storing something
         	.DMod( (float[] v) => {  //Reduce mana cost
 				return (Item i) => { 
+					//The amount of mana reduced will be stored in the array
+					int amt = (int)Math.Round((double)((float)i.mana * v[0]));
+					//v[1] = (float)amt;
 					i.mana = (int)Math.Round((double)((float)i.mana * (1f - v[0]))); 
 				}; 
 			})
 			.AddDTip((float[] v) => {
 				return (Prefix.TipMod) ((Item i) => {
 					int amt = (int)Math.Round((double)((float)i.mana * v[0]));
-					return new MouseTip("-"+v[0]+"% ("+amt+") Mana Cost", true);
+					return new MouseTip("-"+Math.Round((double)v[0]*100f,2)+"% ("+amt+") Mana Cost", true);
 				});
 			})
 
@@ -143,14 +147,32 @@ namespace Epic_Loot
         	.AddDel( "CanUse", (float[] v) => { 
         		//CanUse_Del d =
         		return (CanUse_Del) ((Player p, int ind) => { 
-        			Item i = p.inventory[ind];
-        			int amt = (int)Math.Round((double)((float)i.mana * v[0]));
+        			Item i = p.inventory[p.selectedItem];
+        			int amt = (int)Math.Round((double)((float)i.mana / (1f-v[0])));
 
         			int healthCost = (int)Math.Round((double)(amt * v[1]));
-        			if(healthCost<p.statLife) return false;
+        			//Main.NewText("test");
+        			if(healthCost>p.statLife) return false;
 
         			float defMod = (p.statDefense/2f);
-        			int dmg = (int)((healthCost * 0.1f) + defMod);
+        			int dmg = (int)((healthCost) + defMod);
+        			p.Hurt(dmg, 0);
+        			return true;
+        		}); //return d;
+        	})
+        	.AddDel( "PreShoot", (float[] v) => { 
+        		//CanUse_Del d =
+        		return (PreShoot_Del) ((Player p, Vector2 ShootPos, Vector2 ShootVelocity, int projType, int Damage, float knockback, int owner) => { 
+					Item i = p.inventory[p.selectedItem];
+        			int amt = (int)Math.Round((double)((float)i.mana / (1f-v[0])));
+
+        			int healthCost = (int)Math.Round((double)(amt * v[1]));
+        			//Main.NewText("test2");
+        			if(healthCost>p.statLife) return false;
+
+        			float defMod = (p.statDefense/2f);
+        			//Main.NewText(healthCost+": "+defMod);
+        			int dmg = (int)((healthCost) + defMod);
         			p.Hurt(dmg, 0);
         			return true;
         		}); //return d;
@@ -161,7 +183,7 @@ namespace Epic_Loot
 
 	    			int healthCost = (int)Math.Round((double)(amt * v[1]));
 
-	        		return new MouseTip("+"+healthCost+" Health Cost"); 
+	        		return new MouseTip("+"+amt+" Health Cost"); 
         		});
         	}),
 

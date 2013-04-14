@@ -718,7 +718,8 @@ namespace Epic_Loot
 
             foreach (TipMod m in dynamicTips)
             {
-                this.AddTip(m(item));
+                MouseTip tip = m(item);
+                this.AddTip(tip);
             }
 
             foreach (ItemMod m in itemMods)
