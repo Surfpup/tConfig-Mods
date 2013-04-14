@@ -115,7 +115,6 @@ namespace Epic_Loot
                 return code; }, (int val) => { return new MouseTip("+"+val+" HP On Hit", true); }, 1, 5),
 		new DPrefix("Stabby").Require(melee).Require((Item i) => { return i.useStyle==1; })
 			.DMod( (int v) => { return (Item i) => { i.crit += v; i.useStyle=3; }; }, (int val) => { return new MouseTip("Stick 'em with the pointy end", true); }, 5, 15),
-		//new DPrefix("Thorned").Require(armor).AddDel( "DealtPlayer", (int val) => { DealtPlayer_Del d = (Player myPlayer, double damage, NPC npc) => {  }; return d; }, (int val) => { return new MouseTip("+"+val+" Mana On Hit", true); }, 1, 10),
         new DPrefix("of Willpower", true).Require(weapon).Require((Item item) => { return (int)Math.Round((double)((float)item.damage * (0.15f))) > 0; }).DMod( (float v) => { return (Item i) => { i.damage = (int)Math.Round((double)((float)i.damage * v)); i.magic=true; int manaBonus = (int)Math.Round((double)(((float)i.damage * (v-1f))/2f)) + 1; i.mana+=manaBonus; i.toolTip7 = "+"+manaBonus+" mana cost"; }; }, null, 1.15f, 1.25f),
         new DPrefix("Vengeful").Require(melee).Require((Item item) => { return (int)Math.Round((double)((float)item.damage * (0.20f))) > 0; }).AddDel( "DamageNPC", (float val) => { Events.Player.DamageNPC_Del d = (Player p, NPC npc, ref int dmg, ref float k) => { dmg+=(int)Math.Round((double)((float)dmg * ((1f - (p.statLife / p.statLifeMax)) * val))); }; return d; }, (float val) => { return new MouseTip("+"+Math.Round((float)(val*100f), 2)+" Vengeance Damage", true); }, 0.20f, 0.5f),
         /*new DPrefix("Vengeful Ranged").AddAffix("Vengeful").Require(proj).Require((Item item) => { return (int)Math.Round((double)((float)item.damage * (0.20f))) > 0; }).
@@ -209,6 +208,21 @@ namespace Epic_Loot
                 .AddDTip((float[] v) => {
                     return (Prefix.TipMod) ((Item i) => {
                         return new MouseTip("-"+Math.Round((double)(v[0]*v[1])*100f,2)+"% Defense", true, true);
+                    });
+                }),
+
+            new DPrefix("Thorned")
+                .Require(armor)
+                .AddVal(1, 20) //Damage
+                .AddVal(1f, 2f) //Knockback
+                .AddDel( "DealtPlayer", (float[] v) => { 
+                    DealtPlayer d = (Player player, double damage, NPC npc) => {
+                        npc.StrikeNPC((int)v[0], v[1], npc.direction*-1);
+                    }; return d; 
+                })
+                .AddDTip((float[] v) => { 
+                    return (Prefix.TipMod) ((Item i) => {
+                        return new MouseTip("+"+(int)v[0]+" Thorns Damage with "+v[1]+" knockback", true);
                     });
                 }),
 
