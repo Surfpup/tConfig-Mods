@@ -67,6 +67,7 @@ namespace Epic_Loot
         public delegate bool Requirement(Item item);
         public delegate void ItemMod(Item item);
         public delegate void PlayerMod(Player player);
+        public delegate MouseTip TipMod(Item item);
 
         public string affix; //Name of prefix; appears in front of item name
         public bool suffix = false; //If true, the 'prefix' is a suffix
@@ -123,6 +124,8 @@ namespace Epic_Loot
         public List<Requirement> customRequirements;
         public List<ItemMod> itemMods;
         public List<PlayerMod> playerMods;
+
+        public List<TipMod> dynamicTips;
 
         public static void LoadPrefixes(string modpack, BinaryReader r, string modversion)
         {
@@ -301,6 +304,7 @@ namespace Epic_Loot
             this.itemMods = new List<ItemMod>();
             this.playerMods = new List<PlayerMod>();
             this.toolTips = new List<MouseTip>();
+            this.dynamicTips = new List<TipMod>();
         }
         public Prefix(string name, bool suffix=false, IPrefix code=null) {
             this.affix=name;
@@ -489,6 +493,11 @@ namespace Epic_Loot
         {
             //Debug.WriteLine("Adding playermod");
             playerMods.Add(m);
+            return this;
+        }
+        public Prefix AddDTip(TipMod tip)
+        {
+            dynamicTips.Add(tip);
             return this;
         }
         public Prefix AddTip(MouseTip tip)
@@ -707,10 +716,16 @@ namespace Epic_Loot
             num14 *= num14;
             item.value = (int)((float)item.value * num14);
 
+            foreach (TipMod m in dynamicTips)
+            {
+                this.AddTip(m(item));
+            }
+
             foreach (ItemMod m in itemMods)
             {
                 m(item);
-            }
+            }            
+
             if (code != null) code.Apply(item);
         }
         public virtual string AffixName(Item item)

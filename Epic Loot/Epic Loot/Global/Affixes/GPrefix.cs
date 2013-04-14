@@ -95,6 +95,30 @@ namespace Epic_Loot
             {
                 this.Mod(m);
             }
+
+            //Load shared stuff first
+            float[] randArr = randValues.ToArray();
+
+            foreach (DPrefix.SharedDelModifier<float[]> m in d.sharedDelModGens)
+            {
+                this.AddDel(m.name, m.gen(randArr));
+            }
+
+            foreach (Func<float[], PlayerMod> m in d.sharedPlayerGens)
+            {
+                this.Mod(m(randArr));
+            }
+
+            foreach (Func<float[], ItemMod> m in d.sharedItemGens)
+            {
+                this.Mod(m(randArr));
+            }
+
+            foreach(Func<float[], TipMod> m in d.sharedTips)
+            {
+                this.AddDTip(m(randArr));
+            }
+
             foreach (DPrefix.PModifier<float> m in d.playerModGensF)
             {
                 float val = SkewedRand(m.min, m.max, skewMod, preGen);

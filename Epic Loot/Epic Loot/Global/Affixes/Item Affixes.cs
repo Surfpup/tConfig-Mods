@@ -24,6 +24,7 @@ namespace Epic_Loot
 {
     public class Item_Affixes
     {
+    	public delegate bool CanUse_Del(Player p, int i);
         public delegate void OnSpawn_Del(Player p, int i);
         public delegate bool PreShoot_Del(Player P, Vector2 ShootPos, Vector2 ShootVelocity, int projType, int Damage, float knockback, int owner);
         public delegate void DealtNPC_Del(Player myPlayer, NPC npc, double damage);
@@ -119,6 +120,51 @@ namespace Epic_Loot
         /*new DPrefix("Vengeful Ranged").AddAffix("Vengeful").Require(proj).Require((Item item) => { return (int)Math.Round((double)((float)item.damage * (0.20f))) > 0; }).
             AddDel( "RegisterProjectile", (float val) => { Action<Projectile> code = (Projectile pr) => {  pr.RegisterDel(ref pr.DamageNPC, (NPC npc, ref int dmg, ref float k) => { dmg+=(int)Math.Round((double)((float)dmg * ((1f - (p.statLife / p.statLifeMax)) * val))) }, "DamageNPC"); }; return code; }, (float val) => { return new MouseTip("+"+Math.Round((float)(val*100f), 2)+" Vengeance Damage", true); }, 0.20f, 0.5f),
         */
+
+        new DPrefix("Sacrificial")
+        	//This affix will replace mana cost with health cost
+        	//The crappier affixes will make the health to mana ratio bad..
+        	//As in, it might reduce mana cost by 2 but increase health cost by 10.
+        	.Require(magic)
+        	.AddVal(0.1f, 1f)
+        	.DMod( (float[] v) => {  //Reduce mana cost
+				return (Item i) => { 
+					i.mana = (int)Math.Round((double)((float)i.mana * (1f - v[0]))); 
+				}; 
+			})
+			.AddDTip((float[] v) => {
+				return (Prefix.TipMod) ((Item i) => {
+					int amt = (int)Math.Round((double)((float)i.mana * v[0]));
+					return new MouseTip("-"+v[0]+"% ("+amt+") Mana Cost", true);
+				});
+			})
+
+			.AddVal(4f, 1f)
+        	.AddDel( "CanUse", (float[] v) => { 
+        		//CanUse_Del d =
+        		return (CanUse_Del) ((Player p, int ind) => { 
+        			Item i = p.inventory[ind];
+        			int amt = (int)Math.Round((double)((float)i.mana * v[0]));
+
+        			int healthCost = (int)Math.Round((double)(amt * v[1]));
+        			if(healthCost<p.statLife) return false;
+
+        			float defMod = (p.statDefense/2f);
+        			int dmg = (int)((healthCost * 0.1f) + defMod);
+        			p.Hurt(dmg, 0);
+        			return true;
+        		}); //return d;
+        	})
+        	.AddDTip((float[] v) => { 
+        		return (Prefix.TipMod) ((Item i) => {
+	        		int amt = (int)Math.Round((double)((float)i.mana * v[0]));
+
+	    			int healthCost = (int)Math.Round((double)(amt * v[1]));
+
+	        		return new MouseTip("+"+healthCost+" Health Cost"); 
+        		});
+        	}),
+
          });
 
             /*DPrefix colorPrefix = new DPrefix("Colored").DMod( (int index) => { return (Item i) => 

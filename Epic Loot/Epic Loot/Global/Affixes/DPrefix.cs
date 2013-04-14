@@ -108,6 +108,26 @@ namespace Epic_Loot
         public float randTotal;
         public float skewMod; //Temporarily stores a modifier that may increase or decrease loot goodness
 
+        public List<Stat> sharedVals;
+
+        public class SharedDelModifier<T>
+        {
+           // public delegate Delegate DelModifier(T val);
+            public Func<T, Delegate> gen;
+
+            public string name;
+            public SharedDelModifier(string name, Func<T, Delegate> gen)
+            {
+                this.name = name;
+                this.gen = gen;
+            }
+        }
+
+        public List<SharedDelModifier<float[]>> sharedDelModGens;
+        public List<Func<float[], PlayerMod>> sharedPlayerGens;
+        public List<Func<float[], ItemMod>> sharedItemGens;
+        public List<Func<float[], TipMod>> sharedTips;
+
         public DPrefix(string name, bool suffix = false, IPrefix code = null)
             : base(name, suffix, code)
         {
@@ -144,6 +164,12 @@ namespace Epic_Loot
             affixes = new List<string>();
             delModGens = new List<DelMod<int>>();
             delModGensF = new List<DelMod<float>>();
+
+            sharedVals = new List<Stat>();
+            sharedDelModGens = new List<SharedDelModifier<float[]>>();
+            sharedPlayerGens = new List<Func<float[], PlayerMod>>();
+            sharedItemGens = new List<Func<float[], ItemMod>>();
+            sharedTips = new List<Func<float[], TipMod>>();
 
             ModGeneric.prefixByName[this.affix] = this;
 
@@ -182,6 +208,11 @@ namespace Epic_Loot
             p.requirements.bodyArmor = requirements.bodyArmor;
             p.requirements.headArmor = requirements.headArmor;
             p.requirements.notVanity = requirements.notVanity;
+
+            foreach(Stat s in sharedVals)
+            {
+                SkewedRand(s.min, s.max, p);
+            }
 
             p.Roll(false, this.skewMod);
 
@@ -250,6 +281,34 @@ namespace Epic_Loot
             double val = (r * range) + min; //Normal value
             return (int) Math.Round(val, System.MidpointRounding.AwayFromZero);
         }*/
+
+        //New methods which handle storing of randomly generated floats and accessing multiple ones within delegates
+        public DPrefix AddVal(float min, float max)
+        {
+            this.sharedVals.Add(new Stat(min, max));
+            return this;
+        }
+        public DPrefix AddDel(string name, Func<float[], Delegate> del)
+        {
+            this.sharedDelModGens.Add(new SharedDelModifier<float[]>(name, del));
+            return this;
+        }
+        public DPrefix DMod(Func<float[], PlayerMod> m)
+        {
+            this.sharedPlayerGens.Add(m);
+            return this;
+        }
+        public DPrefix DMod(Func<float[], ItemMod> m)
+        {
+            this.sharedItemGens.Add(m);
+            return this;
+        }
+        public DPrefix AddDTip(Func<float[], TipMod> g)
+        {
+            sharedTips.Add(g);
+            return this;
+        }
+
 
         public DPrefix AddDel(string name, DelMod<int>.DelModifier del, DelMod<int>.ToolTip t, int min, int max)
         {
