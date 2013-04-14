@@ -74,9 +74,9 @@ namespace Epic_Loot
             Console.WriteLine("identifier:"+identifier);
             //Add dprefix stuff
 
-            this.Roll();
+            this.Roll(true);
         }
-        public void Roll()
+        public void Roll(bool preGen=false, float skewMod=0f)
         {
             if (!ModGeneric.prefixByName.ContainsKey(identifier))
             {
@@ -97,42 +97,42 @@ namespace Epic_Loot
             }
             foreach (DPrefix.PModifier<float> m in d.playerModGensF)
             {
-                float val = SkewedRand(m.min, m.max);
+                float val = SkewedRand(m.min, m.max, skewMod, preGen);
 
                 this.Mod(m.gen(val));
                 if (m.tip != null) this.AddTip(m.tip(val));
             }
             foreach (DPrefix.PModifier<int> m in d.playerModGens)
             {
-                int val = SkewedRand(m.min, m.max);
+                int val = SkewedRand(m.min, m.max, skewMod, preGen);
 
                 this.Mod(m.gen(val));
                 if (m.tip != null) this.AddTip(m.tip(val));
             }
             foreach (DPrefix.IModifier<float> m in d.itemModGensF)
             {
-                float val = SkewedRand(m.min, m.max);
+                float val = SkewedRand(m.min, m.max, skewMod, preGen);
 
                 this.Mod(m.gen(val));
                 if (m.tip != null) this.AddTip(m.tip(val));
             }
             foreach (DPrefix.IModifier<int> m in d.itemModGens)
             {
-                int val = SkewedRand(m.min, m.max);
+                int val = SkewedRand(m.min, m.max, skewMod, preGen);
 
                 this.Mod(m.gen(val));
                 if (m.tip != null) this.AddTip(m.tip(val));
             }
             foreach (DPrefix.DelMod<int> m in d.delModGens)
             {
-                int val = SkewedRand(m.min, m.max);
+                int val = SkewedRand(m.min, m.max, skewMod, preGen);
 
                 this.AddDel(m.name, m.gen(val));
                 if (m.tip != null) this.AddTip(m.tip(val));
             }
             foreach (DPrefix.DelMod<float> m in d.delModGensF)
             {
-                float val = SkewedRand(m.min, m.max);
+                float val = SkewedRand(m.min, m.max, skewMod, preGen);
 
                 this.AddDel(m.name, m.gen(val));
                 if (m.tip != null) this.AddTip(m.tip(val));
@@ -158,23 +158,46 @@ namespace Epic_Loot
                 this.affix = d.affixes[index];
             }
         }
-        public int SkewedRand(int min, int max)
-        {
-            float range = max - min;
-            if (range == 0f) return min;
-            int v = (int)Math.Round((((double)randValues[curRand] * range) + min), System.MidpointRounding.AwayFromZero); //Normal value
-            //int v = ModGeneric.Range(min, max, (double) randValues[curRand]);
-            curRand++;
-            return v;
+        public int SkewedRand(int min, int max, float skewMod, bool preGen)
+        { //Higher values are more rare
+            /*Use exponents to make higher values harder to achieve
+            Cubing it makes last 10% pretty hard to get to.
+            */
+            int range = max - min;
+            if (range == 0) return min;
+            if(preGen) 
+            {
+                int v = (int)Math.Round((((double)randValues[curRand] * range) + min), System.MidpointRounding.AwayFromZero); //Normal value
+                curRand++;
+                return v;
+            }
+
+            double r = Rand.Skew(ModGeneric.rand.NextDouble(), skewMod);
+            this.AddRand((float)r);
+            //randAmt += (float)r;
+            //randTotal += 1f;
+            double val = ((r * (float)range) + (float)min); //Normal value
+            return (int)Math.Round(val, System.MidpointRounding.AwayFromZero);
         }
-        public float SkewedRand(float min, float max)
-        {
+        public float SkewedRand(float min, float max, float skewMod, bool preGen)
+        { //Higher values are more rare
+            /*Use exponents to make higher values harder to achieve
+            Cubing it makes last 10% pretty hard to get to.
+            */
             float range = max - min;
             if (range == 0f) return min;
-            float v = (float)(((double)randValues[curRand] * range) + min); //Normal value
-            //float v = ModGeneric.Range(min, max, (double) randValues[curRand]);
-            curRand++;
-            return v;
+            if(preGen) 
+            {
+                float v = (float)(((double)randValues[curRand] * range) + min);
+                curRand++;
+                return v;
+            }
+
+            double r = Rand.Skew(ModGeneric.rand.NextDouble(), skewMod);
+            this.AddRand((float)r);
+
+            double val = ((r * range) + (float)min); //Normal value
+            return (float)val;
         }
     }
 }

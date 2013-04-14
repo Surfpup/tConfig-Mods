@@ -183,7 +183,7 @@ namespace Epic_Loot
             p.requirements.headArmor = requirements.headArmor;
             p.requirements.notVanity = requirements.notVanity;
 
-            p.Roll();
+            p.Roll(false, this.skewMod);
 
             float avgRand = 0f;
             if (randTotal > 0f)
