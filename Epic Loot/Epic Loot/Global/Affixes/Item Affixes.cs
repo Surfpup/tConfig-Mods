@@ -186,29 +186,30 @@ namespace Epic_Loot
 
             new DPrefix("Kamikaze")
                 //Increases damage, reduces defense, by the same percentage
-            .Require(armor)
-            .AddVal(0.1f, 1f)
-            .DMod( (float[] v) => {
-                return (Player p) => {
-                    //Increase damage
-                    p.magicDamage += v[0];
-                    p.rangedDamage += v[0];
-                    p.meleeDamage += v[0];
+                .Require(armor)
+                .AddVal(0.1f, 1f)
+                .AddVal(1f, 0.8f)
+                .DMod( (float[] v) => {
+                    return (Player p) => {
+                        //Increase damage
+                        p.magicDamage += v[0];
+                        p.rangedDamage += v[0];
+                        p.meleeDamage += v[0];
 
-                    //Decrease defense
-                    p.statDefense = (int)(p.statDefense * (1f-v[0]));
-                }; 
-            })
-            .AddDTip((float[] v) => {
-                return (Prefix.TipMod) ((Item i) => {
-                    return new MouseTip("+"+Math.Round((double)v[0]*100f,2)+"% Damage", true);
-                });
-            })
-            .AddDTip((float[] v) => {
-                return (Prefix.TipMod) ((Item i) => {
-                    return new MouseTip("-"+Math.Round((double)v[0]*100f,2)+"% Defense", true, true);
-                });
-            }),
+                        //Decrease defense
+                        p.statDefense = (int)(p.statDefense * (1f-(v[0]*v[1])));
+                    }; 
+                })
+                .AddDTip((float[] v) => {
+                    return (Prefix.TipMod) ((Item i) => {
+                        return new MouseTip("+"+Math.Round((double)v[0]*100f,2)+"% Damage", true);
+                    });
+                })
+                .AddDTip((float[] v) => {
+                    return (Prefix.TipMod) ((Item i) => {
+                        return new MouseTip("-"+Math.Round((double)(v[0]*v[1])*100f,2)+"% Defense", true, true);
+                    });
+                }),
          });
 
             /*DPrefix colorPrefix = new DPrefix("Colored").DMod( (int index) => { return (Item i) => 
