@@ -214,7 +214,7 @@ namespace Epic_Loot
             new DPrefix("Thorned")
                 .Require(armor)
                 .AddVal(1, 20) //Damage
-                .AddVal(1f, 2f) //Knockback
+                .AddVal(0.1f, 2f) //Knockback
                 .AddDel( "DealtPlayer", (float[] v) => { 
                     DealtPlayer d = (Player player, double damage, NPC npc) => {
                         npc.StrikeNPC((int)v[0], v[1], npc.direction*-1);
