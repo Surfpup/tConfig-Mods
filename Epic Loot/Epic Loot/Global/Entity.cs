@@ -23,26 +23,67 @@ using Terraria;
 
 namespace Epic_Loot
 {
-    public class Entity
+    public abstract class Entity
     {
-    	public static int GetMaxHP(this Player p)
-    	{
-			return p.statLifeMax
-    	}
+        abstract public int maxLife { get; set;}
+        abstract public int life { get; set;}
+        abstract public int defense { get; set;}
+        //int GetMaxHP();
+        //int GetHP();
+        //int GetDefense();
+    }
 
-    	public static int GetMaxHP(this NPC n)
-    	{
-			return n.lifeMax;
-    	}
+    public class PlayerEnt : Entity
+    {
+        public Player player;
+        public PlayerEnt(Player p)
+        {
+            this.player = p;
+        }
 
-    	public static int GetHP(this Player p)
-    	{
-    		return p.statLife;
-    	}
+        public override int maxLife
+        {
+            get { return player.statLifeMax; }
+            set { player.statLifeMax = value; }
+        }
 
-    	public static int GetHP(this NPC n)
-    	{
-    		return n.life;
-    	}
+        public override int life
+        {
+            get { return player.statLife; }
+            set { player.statLife = value; }
+        }
+
+        public override int defense
+        {
+            get { return player.statDefense; }
+            set { player.statDefense = value; }
+        }
+    }
+
+    public class NPCEnt : Entity
+    {
+        public NPC npc;
+        public NPCEnt(NPC n)
+        {
+            this.npc = n;
+        }
+
+        public override int maxLife
+        {
+            get { return npc.lifeMax; }
+            set { npc.lifeMax = value; }
+        }
+
+        public override int life
+        {
+            get { return npc.life; }
+            set { npc.life = value; }
+        }
+
+        public override int defense
+        {
+            get { return npc.defense; }
+            set { npc.defense = value; }
+        }
     }
 }
