@@ -25,9 +25,10 @@ namespace Epic_Loot
 {
     public abstract class Entity
     {
-        abstract public int maxLife { get; set;}
-        abstract public int life { get; set;}
-        abstract public int defense { get; set;}
+        public abstract int maxLife { get; set;}
+        public abstract int life { get; set;}
+        public abstract int defense { get; set;}
+        //public abstract int damage { get; set; }
         //int GetMaxHP();
         //int GetHP();
         //int GetDefense();

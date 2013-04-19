@@ -1,0 +1,5 @@
+Affixes that can apply to players and NPCs
+
+Guarding: +1-4 Defense
+Vital: +1-40 Max HP
+Rejuvenating: Life Regen increased by 1-2
