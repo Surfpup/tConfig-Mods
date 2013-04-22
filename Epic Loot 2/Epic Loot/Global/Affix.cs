@@ -23,8 +23,6 @@ using Terraria;
 
 namespace Epic_Loot
 {
-    public class Affix
-    {
         /*public delegate bool Requirement(Item item);
 
         //Some common Item requirements
@@ -35,31 +33,244 @@ namespace Epic_Loot
         Requirement proj = (Item item) => item.ranged || item.magic;
         Requirement weapon = (Item item) => item.melee || item.ranged || item.magic;*/
 
+    public class Affix
+    {
+        public delegate bool CanUse_Del(Player p, int i);
+        public delegate void OnSpawn_Del(Player p, int i);
+        public delegate bool PreShoot_Del(Player P, Vector2 ShootPos, Vector2 ShootVelocity, int projType, int Damage, float knockback, int owner);
+        public delegate void DealtNPC_Del(Player myPlayer, NPC npc, double damage);
+        public delegate void UpdatePlayer_Del(Player myPlayer);
+        public delegate void DealtPlayer(Player myPlayer, double damage, NPC npc);
+        public delegate void DamagePlayer_Del(Player p, ref int d, NPC npc);
+
+
+        public enum Colors{Normal,Green,Red};
         public string name {set; get;}
-        public void Initialize(Item item)
+        public List<MouseTip> toolTips;
+
+        public void AddTooltip(string text, Colors color)
+        {
+            if(color==Colors.Normal) this.toolTips.Add(new MouseTip(text, false, false));
+            else if(color==Colors.Green) this.toolTips.Add(new MouseTip(text, true, false));
+            else if(color==Colors.Red) this.toolTips.Add(new MouseTip(text, true, true));
+        }
+    }
+
+    public class ItemAffix : Affix
+    {
+        public Item item;
+
+        public ItemAffix(Item item)
+        {
+            toolTips = new List<MouseTip>();
+            this.item = item;
+        }
+
+        public virtual void Initialize()
         { //Apply changes (when item is spawned)
         }
 
-        public bool Check(Item item)
+        public virtual bool Check()
         { //Check requirements
             return false;
         }
 
-        public void Apply(Player player)
+        /*public virtual void Load(params float[] values)
+        {
+
+        }
+
+        public virtual void Load(params int[] values)
+        {
+
+        }*/
+
+        public virtual void Apply(Player player)
         { //This one gets called every frame
         }
 
-        public void Apply(NPC npc)
-        { //Called every frame
+        public void AddDelegate(string name, Delegate addDel)
+        {
+            Delegate curDel = null;
+            item.delegates.TryGetValue(name, out curDel);
+            if (curDel != null)
+            {
+                Delegate newDel = Delegate.Combine(curDel, addDel);
+                item.delegates[name] = newDel;
+            }
+            else item.delegates[name] = addDel;
+        }
 
+        /*public MouseTip[] UpdateTooltip()
+        { //Used to display player-modified stats
+            List<MouseTip> tips = new List<MouseTip>();
+            if (pAdd.defense != 0f)
+            {
+                string symbol = "+";
+                if (pAdd.defense < 0) symbol = "-";
+                tips.Add(new MouseTip(symbol + pAdd.defense + " Defense", true));
+
+            }
+            if (pAdd.crit != 0f)
+            {
+                string symbol = "+";
+                if (pAdd.crit < 0) symbol = "-";
+                tips.Add(new MouseTip(symbol + pAdd.crit + "% Critical Hit Chance", true));
+            }
+            if (pAdd.meleeCrit != 0f)
+            {
+                string symbol = "+";
+                if (pAdd.meleeCrit < 0) symbol = "-";
+                tips.Add(new MouseTip(symbol + pAdd.meleeCrit + "% Melee Crit Chance", true));
+            }
+            if (pAdd.rangedCrit != 0f)
+            {
+                string symbol = "+";
+                if (pAdd.rangedCrit < 0) symbol = "-";
+                tips.Add(new MouseTip(symbol + pAdd.rangedCrit + "% Ranged Crit Chance", true));
+            }
+            if (pAdd.magicCrit != 0f)
+            {
+                string symbol = "+";
+                if (pAdd.magicCrit < 0) symbol = "-";
+                tips.Add(new MouseTip(symbol + pAdd.magicCrit + "% Magic Crit Chance", true));
+            }
+            if (pAdd.mana != 0f)
+            {
+                string symbol = "+";
+                if (pAdd.mana < 0) symbol = "-";
+                tips.Add(new MouseTip(symbol + pAdd.mana + " Mana", true));
+            }
+            if (pAdd.damage != 0f)
+            {
+                string symbol = "+";
+                if (pAdd.damage < 0) symbol = "";
+                tips.Add(new MouseTip(symbol + Math.Round((float)(pAdd.damage*100), 2) + "% Damage", true));
+            }
+            if (pAdd.meleeDamage != 0f)
+            {
+                string symbol = "+";
+                if (pAdd.meleeDamage < 0) symbol = "";
+                tips.Add(new MouseTip(symbol + Math.Round((float)(pAdd.meleeDamage * 100), 2) + "% Melee Damage", true));
+            }
+            if (pAdd.rangedDamage != 0f)
+            {
+                string symbol = "+";
+                if (pAdd.rangedDamage < 0) symbol = "";
+                tips.Add(new MouseTip(symbol + Math.Round((float)(pAdd.rangedDamage * 100), 2) + "% Ranged Damage", true));
+            }
+            if (pAdd.magicDamage != 0f)
+            {
+                string symbol = "+";
+                if (pAdd.magicDamage < 0) symbol = "";
+                tips.Add(new MouseTip(symbol + Math.Round((float)(pAdd.magicDamage * 100), 2) + "% Magic Damage", true));
+            }
+            if (pAdd.moveSpeed != 0)
+            {
+                string symbol = "+";
+                if (pAdd.moveSpeed < 0) symbol = "";
+                tips.Add(new MouseTip(symbol + Math.Round((float)(pAdd.moveSpeed*100), 2) + "% Movement Speed", true));
+            }
+            if (pAdd.meleeSpeed != 0)
+            {
+                string symbol = "+";
+                if (pAdd.meleeSpeed < 0) symbol = "";
+                tips.Add(new MouseTip(symbol + Math.Round((float)(pAdd.meleeSpeed*100), 2) + "% Melee Speed", true));
+            }
+            tips.AddRange(toolTips);
+            return tips.ToArray();
+        }*/
+    }
+
+    public class ManaPercent : ItemAffix
+    {
+        float percent;
+        public int amt;
+
+        public ManaPercent(Item item) : base(item)
+        {
+
+        }
+
+        public void Load(float percent)
+        {
+            //Percentage of mana increase
+            this.percent = percent;
+
+            if(percent<0)
+                this.name = "Decreased Mana %";
+            else this.name = "Increased Mana %";
+        }
+
+        public override bool Check()
+        {
+            return item.magic;
+        }
+
+        public override void Initialize()
+        {
+            amt = (int)Math.Round((double)((float)item.mana * percent));
+            item.mana += amt;
+
+            if(amt<0)
+                base.AddTooltip("-"+Math.Round((double)percent*100f*-1,2)+"% ("+amt+") Mana Cost", Colors.Red);
+            else
+                base.AddTooltip("+"+Math.Round((double)percent*100f,2)+"% ("+amt+") Mana Cost", Colors.Green);
         }
     }
 
-    public class SacrificialAffix : Affix
+    public class HealthCost : ItemAffix
     {
+        int cost;
 
+        public HealthCost(Item item) : base(item)
+        {
+            
+        }
+
+        public void Load(int cost)
+        {
+            this.name = "Added Health Cost";  
+
+            this.cost = cost;
+            this.AddDelegate("CanUse", (CanUse_Del) CanUse);
+        }
+
+        public bool CanUse(Player p, int ind)
+        { 
+            if(cost>p.statLife) return false;
+
+            float defMod = (p.statDefense/2f);
+            int dmg = (int)((cost) + defMod);
+            p.Hurt(dmg, 0);
+            return true;
+        }
     }
 
+    public class Sacrificial : ItemAffix
+    {
+        public HealthCost costAffix;
+        public ManaPercent manaAffix;
+        public Sacrificial(Item item) : base(item)
+        {
+            manaAffix = new ManaPercent(item);
+
+            costAffix = new HealthCost(item);
+        }
+
+        public override bool Check()
+        {
+            return manaAffix.Check() && costAffix.Check();
+        }
+
+        public void Load(float percent, float healthPercent)
+        {
+            manaAffix.Load(percent);
+
+            costAffix.Load( (int)Math.Round((double)(manaAffix.amt * healthPercent)) );
+        }
+    }
+/*
     new DPrefix("Sacrificial")
             //This affix will replace mana cost with health cost
             //The crappier affixes will make the health to mana ratio bad..
@@ -95,5 +306,5 @@ namespace Epic_Loot
                     p.Hurt(dmg, 0);
                     return true;
                 }); //return d;
-            })
+            })*/
 }
