@@ -16,6 +16,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
@@ -42,17 +43,32 @@ namespace Epic_Loot
         public delegate void UpdatePlayer_Del(Player myPlayer);
         public delegate void DealtPlayer(Player myPlayer, double damage, NPC npc);
         public delegate void DamagePlayer_Del(Player p, ref int d, NPC npc);
-
-
         public enum Colors{Normal,Green,Red};
-        public string name {set; get;}
+
+        public virtual string name {set; get;}
         public List<MouseTip> toolTips;
+        public virtual int numVals {set;get;}
 
         public void AddTooltip(string text, Colors color)
         {
             if(color==Colors.Normal) this.toolTips.Add(new MouseTip(text, false, false));
             else if(color==Colors.Green) this.toolTips.Add(new MouseTip(text, true, false));
             else if(color==Colors.Red) this.toolTips.Add(new MouseTip(text, true, true));
+        }
+
+        public virtual void Load(BinaryReader reader, int version)
+        {
+
+        }
+
+        public virtual void Save(BinaryWriter writer)
+        {
+            
+        }
+
+        public virtual void Load(float[] vals)
+        {
+
         }
     }
 
@@ -74,16 +90,6 @@ namespace Epic_Loot
         { //Check requirements
             return false;
         }
-
-        /*public virtual void Load(params float[] values)
-        {
-
-        }
-
-        public virtual void Load(params int[] values)
-        {
-
-        }*/
 
         public virtual void Apply(Player player)
         { //This one gets called every frame
@@ -217,6 +223,8 @@ namespace Epic_Loot
             else
                 base.AddTooltip("+"+Math.Round((double)percent*100f,2)+"% ("+amt+") Mana Cost", Colors.Green);
         }
+
+        public override int numVals { set{} get { return 1; }}
     }
 
     public class HealthCost : ItemAffix
@@ -245,6 +253,8 @@ namespace Epic_Loot
             p.Hurt(dmg, 0);
             return true;
         }
+
+        public override int numVals { set{} get { return 1; }}
     }
 
     public class Sacrificial : ItemAffix
@@ -269,7 +279,82 @@ namespace Epic_Loot
 
             costAffix.Load( (int)Math.Round((double)(manaAffix.amt * healthPercent)) );
         }
+
+        public override void Load(float[] vals)
+        {
+            this.Load(vals[0], vals[1]);
+        }
+
+        public override int numVals { set{} get { return 2; }}
     }
+
+    public class AffixHandler
+    {
+        Affix effect;
+        List<Stat> range;
+
+        public AffixHandler(params Stat[] range)
+        {
+            this.range.AddRange(range);
+        }
+
+        public void Load(float[] vals)
+        {
+            List<float> normalized = new List<float>();
+            for(int i=0;i<vals.Length;i++)
+            {
+                normalized.Add(Normalize(range[i], vals[i]));
+            }
+            effect.Load(normalized.ToArray());
+        }
+
+        public void Load(BinaryReader reader, int version)
+        {
+            List<float> vals = new List<float>(effect.numVals);
+            for(int i=0;i<effect.numVals;i++)
+            {
+                vals.Add(reader.ReadSingle());
+            }
+
+            this.Load(vals.ToArray());
+        }
+
+        public void Save(BinaryWriter writer)
+        {
+            
+        }
+
+        public float Normalize(Stat stat, float value)
+        {
+            float range = stat.max - stat.min;
+            return (float)(((double)value * range) + stat.min);
+        }
+    }
+
+    /*public class SacrificialAffix
+    {
+        Sacrificial effect;
+
+        Stat manaPercent;
+        Stat healthPercent;
+
+        public SacrificialAffix(Stat manaPercent, Stat healthPercent)
+        {
+            this.manaPercent = manaPercent;
+            this.healthPercent = healthPercent;
+        }
+
+        public override void Load(float manaPercentVal, float healthPercentVal)
+        {
+            effect.Load(Normalize(manaPercent, manaPercentVal), Normalize(healthPercent, healthPercentVal));
+        }
+
+        public float Normalize(Stat stat, float value)
+        {
+            float range = Stat.max - Stat.min;
+            return (float)(((double)value * range) + min);
+        }
+    }*/
 /*
     new DPrefix("Sacrificial")
             //This affix will replace mana cost with health cost
