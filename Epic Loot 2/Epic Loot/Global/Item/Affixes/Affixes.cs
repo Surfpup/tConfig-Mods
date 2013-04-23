@@ -30,8 +30,11 @@ namespace Epic_Loot
         {
             ModGeneric.affixes = new List<ItemAffix>();
 
-            ModGeneric.affixes.Add(
-                new ItemAffix(typeof(Sacrificial), new Stat(0.1f, 1f), new Stat(4f, 1f))
+            ModGeneric.affixes.AddRange(
+                new ItemAffix[]{
+                    new ItemAffix(typeof(Sacrificial), new Stat(0.1f, 1f), new Stat(4f, 1f)),
+                    new ItemAffix("Adept", typeof(ManaPercent), new Stat(-0.01f, -0.20f)),
+                }
             );
 
             //ModGeneric.prefixes.Add(elementalDamage);
