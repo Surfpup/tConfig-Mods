@@ -30,7 +30,7 @@ namespace Epic_Loot
 
         public HealthCost(Item item) : base(item)
         {
-            
+
         }
 
         public void Load(int cost)
@@ -39,6 +39,7 @@ namespace Epic_Loot
 
             this.cost = cost;
             this.AddDelegate("CanUse", (CanUse_Del) CanUse);
+            base.AddTooltip("+"+cost+" Health Cost", Colors.Red);
         }
 
         public bool CanUse(Player p, int ind)
