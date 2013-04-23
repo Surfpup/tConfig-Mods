@@ -38,6 +38,8 @@ namespace Epic_Loot
             if(percent<0)
                 this.name = "Decreased Mana %";
             else this.name = "Increased Mana %";
+
+            this.Initialize();
         }
 
         public override bool Check()

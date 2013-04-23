@@ -28,10 +28,10 @@ namespace Epic_Loot
     {
         public static void DefineAffixes()
         {
-            ModGeneric.affixes = new List<Affix>();
+            ModGeneric.affixes = new List<ItemAffix>();
 
             ModGeneric.affixes.Add(
-                new Affix("Sacrificial", new Sacrificial(), new Stat(0.1f, 1f), new Stat(4f, 1f))
+                new ItemAffix(typeof(Sacrificial), new Stat(0.1f, 1f), new Stat(4f, 1f))
             );
 
             //ModGeneric.prefixes.Add(elementalDamage);

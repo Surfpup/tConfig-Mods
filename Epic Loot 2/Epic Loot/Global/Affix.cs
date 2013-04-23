@@ -24,35 +24,63 @@ using Terraria;
 
 namespace Epic_Loot
 {
-    public class Affix
+    /*public class Affix
     {
-        string name; //Name of affix
-        public Effect effect; //The actual affix itself
+        string name;
         List<Stat> range; //List of ranges for the values to input to the affix
         int seed; //Seed used for RNG
         float skewMod; //Modifer that skews the RNG. Decided upon creation of affix, based on various factors.
 
-        public Affix(string name, Effect effect, params Stat[] range)
+        public Affix(string name, params Stat[] range)
         {
             this.name = name;
-            this.effect = effect;
+            this.range = range;
+        }
+    }*/
+
+    public class ItemAffix
+    {
+        string name; //Name of affix
+        public ItemEffect effect; //The actual affix itself
+        List<Stat> range; //List of ranges for the values to input to the affix
+        int seed; //Seed used for RNG
+        float skewMod; //Modifer that skews the RNG. Decided upon creation of affix, based on various factors.
+
+        public ItemAffix(string name, Type type, params Stat[] range)
+        {
+            this.Construct(name, type, range);
+        }
+
+        public ItemAffix(Type type, params Stat[] range)
+        {
+            this.Construct(type.Name, type, range);   
+        }
+
+        private void Construct(string name, Type type, Stat[] range)
+        {
+            this.name = type.Namespace+"-"+name;
+            this.effect = (ItemEffect)Activator.CreateInstance(type);
+
+            //ObjectType instance = (ObjectType)Activator.CreateInstance("MyNamespace.ObjectType, MyAssembly");
 
             if(range.Length != effect.numVals) throw new Exception("Incorrect number of range parameters for affix");
             this.range.AddRange(range);
         }
 
-        public void Initialize(float skewMod = 1f)
+        public void Initialize(Item item, float skewMod = 1f)
         { //Initialize with random values
             //skewMod is a modifier that may skew the results (maybe based on player or world stats)
 
             this.seed = ModGeneric.rand.Next(); //Get a random number to use for seed
             this.skewMod = skewMod;
             
-            this.Load();
+            this.Load(item);
         }
 
-        public void Load()
+        public void Load(Item item)
         {
+            effect.SetItem(item); //Be sure to set the item
+
             Random newRand = new Random(seed); //New RNG using seed
 
             List<float> randVals = new List<float>(effect.numVals);
@@ -67,13 +95,13 @@ namespace Epic_Loot
             effect.Load(randVals.ToArray());
         }
 
-        public void Load(BinaryReader reader, int version)
+        public void Load(Item item, BinaryReader reader, int version)
         {
             //Load the Seed and the skewMod value
             this.seed = reader.ReadInt32();
             this.skewMod = reader.ReadSingle();
 
-            this.Load(); //Load the affix
+            this.Load(item); //Load the affix
         }
 
         public void Save(BinaryWriter writer)
