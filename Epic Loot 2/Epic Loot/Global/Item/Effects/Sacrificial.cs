@@ -24,6 +24,14 @@ using Terraria;
 
 namespace Epic_Loot
 {
+    /*
+    Possible INI definition:
+    [Effects]
+    Sacrificial=(0.1,1),(4,1)
+
+    Need to come up with streamlined way of utilizing custom INI settings.
+
+    */
     public class Sacrificial : ItemEffect
     {
         public HealthCost costAffix;
