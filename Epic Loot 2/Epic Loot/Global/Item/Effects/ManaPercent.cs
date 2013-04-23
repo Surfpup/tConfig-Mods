@@ -30,6 +30,11 @@ namespace Epic_Loot
         float percent;
         public int amt;
 
+        public ManaPercent(Item item) : base(item)
+        {
+
+        }
+        
         public void Load(float percent)
         {
             //Percentage of mana increase

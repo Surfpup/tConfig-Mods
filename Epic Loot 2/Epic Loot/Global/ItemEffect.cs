@@ -29,10 +29,15 @@ namespace Epic_Loot
     {
         public Item item;
 
-        public virtual void SetItem(Item item)
+        public ItemEffect(Item item)
         {
             this.item = item;
         }
+        /*
+        public virtual void SetItem(Item item)
+        {
+            this.item = item;
+        }*/
 
         public virtual void Initialize()
         { //Apply changes (when item is spawned)

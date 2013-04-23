@@ -28,6 +28,11 @@ namespace Epic_Loot
     {
         int cost;
 
+        public HealthCost(Item item) : base(item)
+        {
+            
+        }
+
         public void Load(int cost)
         {
             this.name = "Added Health Cost";  

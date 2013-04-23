@@ -41,6 +41,7 @@ namespace Epic_Loot
     public class ItemAffix
     {
         string name; //Name of affix
+        Type type; //The type of affix
         public ItemEffect effect; //The actual affix itself
         List<Stat> range; //List of ranges for the values to input to the affix
         int seed; //Seed used for RNG
@@ -59,7 +60,7 @@ namespace Epic_Loot
         private void Construct(string name, Type type, Stat[] range)
         {
             this.name = type.Namespace+"-"+name;
-            this.effect = (ItemEffect)Activator.CreateInstance(type);
+            this.type = type;
 
             //ObjectType instance = (ObjectType)Activator.CreateInstance("MyNamespace.ObjectType, MyAssembly");
 
@@ -79,7 +80,8 @@ namespace Epic_Loot
 
         public void Load(Item item)
         {
-            effect.SetItem(item); //Be sure to set the item
+            effect = (ItemEffect)Activator.CreateInstance(type, item);
+            //effect.SetItem(item); //Be sure to set the item
 
             Random newRand = new Random(seed); //New RNG using seed
 

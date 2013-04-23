@@ -29,20 +29,20 @@ namespace Epic_Loot
         public HealthCost costAffix;
         public ManaPercent manaAffix;
 
-        public Sacrificial() : base()
+        public Sacrificial(Item item) : base(item)
         {
-            manaAffix = new ManaPercent();
+            manaAffix = new ManaPercent(item);
 
-            costAffix = new HealthCost();
+            costAffix = new HealthCost(item);
         }
 
-        public override void SetItem(Item item)
+        /*public override void SetItem(Item item)
         {
             base.SetItem(item);
 
             manaAffix.SetItem(item);
             costAffix.SetItem(item);
-        }
+        }*/
 
         public override bool Check()
         {
