@@ -24,37 +24,18 @@ using Terraria;
 
 namespace Epic_Loot
 {
-    public class Sacrificial : ItemEffect
+    public class ItemAffixes
     {
-        public HealthCost costAffix;
-        public ManaPercent manaAffix;
-
-        public override void SetItem(Item item)
+        public static void DefineAffixes()
         {
-            base.SetItem(item);
+            ModGeneric.affixes = new List<Affix>();
 
-            manaAffix = new ManaPercent(item);
+            ModGeneric.affixes.Add(
+                new Affix("Sacrificial", new Sacrificial(), new Stat(0.1f, 1f), new Stat(4f, 1f))
+            );
 
-            costAffix = new HealthCost(item);
+            //ModGeneric.prefixes.Add(elementalDamage);
+            Codable.RunGlobalMethod("ModGeneric", "AddEpicItemAffixes", ModGeneric.affixes);
         }
-
-        public override bool Check()
-        {
-            return manaAffix.Check() && costAffix.Check();
-        }
-
-        public void Load(float percent, float healthPercent)
-        {
-            manaAffix.Load(percent);
-
-            costAffix.Load( (int)Math.Round((double)(manaAffix.amt * healthPercent)) );
-        }
-
-        public override void Load(float[] vals)
-        {
-            this.Load(vals[0], vals[1]);
-        }
-
-        public override int numVals { set{} get { return 2; }}
     }
 }

@@ -46,6 +46,11 @@ namespace Epic_Loot
             return true;
         }
 
+        public override void Load(float[] vals)
+        {
+            this.Load((int) vals[0]);
+        }
+
         public override int numVals { set{} get { return 1; }}
     }
 }

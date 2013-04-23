@@ -52,7 +52,7 @@ namespace Epic_Loot
 		        colorNames.Add(prop.Name);
 	        }
             Console.WriteLine("Epic Loot OnLoad ran");
-	        //Item_Affixes.DefinePrefixes();
+	        ItemAffixes.DefineAffixes();
 	        //NPC_Affixes.DefineNPCAffixes();
         }
         /*public static void UpdateSpawn()

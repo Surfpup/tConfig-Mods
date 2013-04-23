@@ -56,6 +56,11 @@ namespace Epic_Loot
                 base.AddTooltip("+"+Math.Round((double)percent*100f,2)+"% ("+amt+") Mana Cost", Colors.Green);
         }
 
+        public override void Load(float[] vals)
+        {
+            this.Load(vals[0]);
+        }
+
         public override int numVals { set{} get { return 1; }}
     }
 }

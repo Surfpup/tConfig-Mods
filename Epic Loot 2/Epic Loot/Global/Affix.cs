@@ -26,13 +26,15 @@ namespace Epic_Loot
 {
     public class Affix
     {
-        Effect effect; //The actual affix itself
+        string name; //Name of affix
+        public Effect effect; //The actual affix itself
         List<Stat> range; //List of ranges for the values to input to the affix
         int seed; //Seed used for RNG
         float skewMod; //Modifer that skews the RNG. Decided upon creation of affix, based on various factors.
 
-        public Affix(Effect effect, params Stat[] range)
+        public Affix(string name, Effect effect, params Stat[] range)
         {
+            this.name = name;
             this.effect = effect;
 
             if(range.Length != effect.numVals) throw new Exception("Incorrect number of range parameters for affix");
