@@ -28,6 +28,7 @@ namespace Epic_Loot
     public class ItemEffect : Effect
     {
         public Item item;
+        //public virtual string type {set;get{return "ItemEffect";}}
 
         public ItemEffect(Item item)
         {

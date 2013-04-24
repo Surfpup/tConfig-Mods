@@ -28,8 +28,10 @@ namespace Epic_Loot
         public const int MAX_AFFIX = 4; //Maximum of 4 affixes on an item
         public static float skewValue = 5.0f; //Once the magic find stat reachs 1 / skewValue, the RNG is normal distribution
 
-        public static List<ItemAffix> affixes;
-        public static Dictionary<string, ItemAffix> affixByName; // = new Dictionary<string, DPrefix>();
+        public static List<ItemEffectDef> itemEffects; //Stores all effects, including affixes
+        public static List<ItemAffixDef> itemAffixes; //Only stores affixes, used for spawning purposes
+        
+        //public static Dictionary<string, ItemAffix> affixByName; // = new Dictionary<string, DPrefix>();
 
         //public static List<NPCAffix> npcAffixes = new List<NPCAffix>();
         //public static Dictionary<string, NPCAffix> npcAffixByName = new Dictionary<string, NPCAffix>();

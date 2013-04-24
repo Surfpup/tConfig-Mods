@@ -31,6 +31,8 @@ namespace Epic_Loot
 
     Need to come up with streamlined way of utilizing custom INI settings.
 
+    Furthermore, coming up with a streamlined way of doing it via code would be great.
+
     */
     public class Sacrificial : ItemEffect
     {

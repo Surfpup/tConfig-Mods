@@ -28,17 +28,15 @@ namespace Epic_Loot
     {
         public static void DefineAffixes()
         {
-            ModGeneric.affixes = new List<ItemAffix>();
+            ModGeneric.itemEffects = new List<ItemEffectDef>();
+            ModGeneric.itemAffixes = new List<ItemAffixDef>();
 
-            ModGeneric.affixes.AddRange(
-                new ItemAffix[]{
-                    new ItemAffix(typeof(Sacrificial), new Stat(0.1f, 1f), new Stat(4f, 1f)),
-                    new ItemAffix("Adept", typeof(ManaPercent), new Stat(-0.01f, -0.20f)),
-                }
-            );
+            new ItemAffixDef(typeof(Sacrificial), new Stat(0.1f, 1f), new Stat(4f, 1f));
+            new ItemAffixDef("Adept", typeof(ManaPercent), new Stat(-0.01f, -0.20f));
+
 
             //ModGeneric.prefixes.Add(elementalDamage);
-            Codable.RunGlobalMethod("ModGeneric", "AddEpicItemAffixes", ModGeneric.affixes);
+            Codable.RunGlobalMethod("ModGeneric", "AddEpicItemEffects", ModGeneric.itemEffects);
         }
     }
 }

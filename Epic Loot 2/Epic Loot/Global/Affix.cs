@@ -38,21 +38,33 @@ namespace Epic_Loot
         }
     }*/
 
-    public class ItemAffix
-    {
-        string name; //Name of affix
-        Type type; //The type of affix
-        public ItemEffect effect; //The actual affix itself
-        List<Stat> range; //List of ranges for the values to input to the affix
-        int seed; //Seed used for RNG
-        float skewMod; //Modifer that skews the RNG. Decided upon creation of affix, based on various factors.
+    public class ItemEffectDef
+    { //Basic definition is pointer to the type and a spawn method
+        public Type type;
+        public ItemEffectDef(Type type)
+        {
+            this.type=type;
 
-        public ItemAffix(string name, Type type, params Stat[] range)
+            //Add to global arrays
+            ModGeneric.itemEffects.Add(this);
+        }
+        public virtual ItemEffect Gen(Item item) {
+            return (ItemEffect)Activator.CreateInstance(type, item);
+        }
+    }
+
+    public class ItemAffixDef : ItemEffectDef
+    { //Generates an ItemAffix
+        public string name; //Name of affix
+        //Type type; //The type of affix
+        public List<Stat> range; //List of ranges for the values to input to the affix
+
+        public ItemAffixDef(string name, Type type, params Stat[] range) : base(type)
         {
             this.Construct(name, type, range);
         }
 
-        public ItemAffix(Type type, params Stat[] range)
+        public ItemAffixDef(Type type, params Stat[] range) : base(type)
         {
             this.Construct(type.Name, type, range);   
         }
@@ -64,24 +76,47 @@ namespace Epic_Loot
 
             //ObjectType instance = (ObjectType)Activator.CreateInstance("MyNamespace.ObjectType, MyAssembly");
 
-            if(range.Length != effect.numVals) throw new Exception("Incorrect number of range parameters for affix");
+            
             this.range.AddRange(range);
+
+            //Add to global arrays
+            ModGeneric.itemAffixes.Add(this);
         }
 
-        public void Initialize(Item item, float skewMod = 1f)
+        public override ItemEffect Gen(Item item)
+        {
+            return new ItemAffix(item, this);
+        }
+    }
+
+    public class ItemAffix : ItemEffect
+    {
+        ItemAffixDef affix; //Definition of affix
+        public ItemEffect effect; //The actual affix itself
+        int seed; //Seed used for RNG
+        float skewMod; //Modifer that skews the RNG. Decided upon creation of affix, based on various factors.
+
+        //public override string type {set{} get{return "ItemAffix";}}
+
+        public ItemAffix(Item item, ItemAffixDef affix) : base(item)
+        {
+            this.affix = affix;
+        }
+
+        public void InitRandom(float skewMod = 1f)
         { //Initialize with random values
             //skewMod is a modifier that may skew the results (maybe based on player or world stats)
 
             this.seed = ModGeneric.rand.Next(); //Get a random number to use for seed
             this.skewMod = skewMod;
             
-            this.Load(item);
+            this.Load();
         }
 
-        public void Load(Item item)
+        public void Load()
         {
-            effect = (ItemEffect)Activator.CreateInstance(type, item);
-            //effect.SetItem(item); //Be sure to set the item
+            effect = (ItemEffect)Activator.CreateInstance(affix.type, item);
+            if(affix.range.Count != effect.numVals) throw new Exception("Incorrect number of range parameters for affix");
 
             Random newRand = new Random(seed); //New RNG using seed
 
@@ -91,22 +126,22 @@ namespace Epic_Loot
                 float val = (float) Rand.Skew(newRand.NextDouble(), skewMod);
                 //TODO: Calculate rarity using the rand values
 
-                randVals.Add(Rand.Normalize(range[i],val));
+                randVals.Add(Rand.Normalize(affix.range[i],val));
             }
 
             effect.Load(randVals.ToArray());
         }
 
-        public void Load(Item item, BinaryReader reader, int version)
+        public override void Load(BinaryReader reader, int version)
         {
             //Load the Seed and the skewMod value
             this.seed = reader.ReadInt32();
             this.skewMod = reader.ReadSingle();
 
-            this.Load(item); //Load the affix
+            this.Load(); //Load the affix
         }
 
-        public void Save(BinaryWriter writer)
+        public override void Save(BinaryWriter writer)
         {
             writer.Write(this.seed);
             writer.Write(this.skewMod);
