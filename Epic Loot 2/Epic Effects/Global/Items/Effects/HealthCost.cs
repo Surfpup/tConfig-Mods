@@ -43,8 +43,9 @@ namespace Effects.Items
             this.name = "Added Health Cost";  
 
             this.cost = cost;
-            this.AddDelegate("CanUse", (CanUse_Del) CanUse);
+            this.AddDelegate("CanUse", (Func<Player, int, bool>) CanUse);
             base.AddTooltip("+"+cost+" Health Cost", Colors.Red);
+            Main.NewText("Loaded HealthCost "+cost);
         }
 
         public bool CanUse(Player p, int ind)
