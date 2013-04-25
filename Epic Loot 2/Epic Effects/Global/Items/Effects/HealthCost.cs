@@ -24,7 +24,7 @@ using Terraria;
 
 namespace Effects.Items
 {
-    public class HealthCost : Effects.Effect<Item>
+    public class HealthCost : Effect<Item>
     {
         int cost;
 

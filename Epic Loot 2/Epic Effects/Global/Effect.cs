@@ -36,6 +36,7 @@ namespace Effects
 
     public class Effect<T> where T:Codable
     {
+        public delegate void Effects_Del(Player p);
         public delegate bool CanUse_Del(Player p, int i);
         public delegate void OnSpawn_Del(Player p, int i);
         public delegate bool PreShoot_Del(Player P, Vector2 ShootPos, Vector2 ShootVelocity, int projType, int Damage, float knockback, int owner);
