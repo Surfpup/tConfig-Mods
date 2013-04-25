@@ -1,4 +1,3 @@
-Effects.Items.HealthCost effect;
 public void Initialize()
 {
 	effect = new Effects.Items.HealthCost(this.item);

@@ -58,7 +58,7 @@ namespace Effects.Items
 
         public override void Initialize()
         {
-            this.AddDelegate("Effects", (Effects_Del) Effects);
+            this.item.Register(ref this.item.Effects, this, "Effects");
         }
 
         public void Effects(Player p)

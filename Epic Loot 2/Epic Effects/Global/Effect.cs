@@ -92,7 +92,7 @@ namespace Effects
         }
 
         public void AddDelegate(string name, Delegate addDel)
-        { //Used to add hooks
+        { //Used to add hooks, apparently might not work
             Delegate curDel = null;
             item.delegates.TryGetValue(name, out curDel);
             if (curDel != null)
