@@ -35,7 +35,7 @@ namespace Effects.Items
     Furthermore, coming up with a streamlined way of doing it via code would be great.
 
     */
-    public class Sacrificial : Effect<Item>
+    public class Sacrificial : ItemEffect
     {
         public HealthCost costAffix;
         public ManaPercent manaAffix;
@@ -47,31 +47,18 @@ namespace Effects.Items
             costAffix = new HealthCost(item);
         }
 
-        /*public override void SetItem(Item item)
-        {
-            base.SetItem(item);
-
-            manaAffix.SetItem(item);
-            costAffix.SetItem(item);
-        }*/
-
         public static bool Check(Item item)
         {
             return ManaPercent.Check(item) && HealthCost.Check(item);
         }
 
-        public void Load(float percent, float healthPercent)
+        public void Initialize(float percent, float healthPercent)
         {
-            manaAffix.Load(percent);
+            manaAffix.Initialize(percent);
 
-            costAffix.Load( (int)Math.Round((double)(manaAffix.amt * healthPercent)) );
+            costAffix.Initialize( (int)Math.Round((double)(manaAffix.amt * healthPercent)) );
+
+            base.Initialize();
         }
-
-        public override void Load(float[] vals)
-        {
-            this.Load(vals[0], vals[1]);
-        }
-
-        public override int numVals { set{} get { return 2; }}
     }
 }

@@ -24,7 +24,7 @@ using Terraria;
 
 namespace Effects.Items
 {
-    public class HealthCost : Effect<Item>
+    public class HealthCost : ItemEffect
     {
         int cost;
 
@@ -38,7 +38,7 @@ namespace Effects.Items
             return true;
         }
 
-        public void Load(int cost)
+        public void Initialize(int cost)
         {
             this.name = "Added Health Cost";  
 
@@ -47,6 +47,7 @@ namespace Effects.Items
             this.item.Register(ref this.item.CanUse, this, "CanUse");
             base.AddTooltip("+"+cost+" Health Cost", Colors.Red);
             Main.NewText("Loaded HealthCost "+cost);
+            base.Initialize();
         }
 
         public bool CanUse(Player p, int ind)
@@ -58,12 +59,5 @@ namespace Effects.Items
             p.Hurt(dmg, 0);
             return true;
         }
-
-        public override void Load(float[] vals)
-        {
-            this.Load((int) vals[0]);
-        }
-
-        public override int numVals { set{} get { return 1; }}
     }
 }

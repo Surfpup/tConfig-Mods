@@ -26,7 +26,7 @@ using Effects;
 namespace Effects.Items
 {
 
-    public class Defense : Effect<Item>
+    public class Defense : ItemEffect
     {
         int amt;
 
@@ -40,7 +40,7 @@ namespace Effects.Items
             return (item.accessory || item.bodySlot != -1 || item.legSlot != -1 || item.headSlot != -1);;
         }
         
-        public void Load(int amt)
+        public void Initialize(int amt)
         {
             //Percentage of mana increase
             this.amt = amt;
@@ -59,18 +59,12 @@ namespace Effects.Items
         public override void Initialize()
         {
             this.item.Register(ref this.item.Effects, this, "Effects");
+            base.Initialize();
         }
 
         public void Effects(Player p)
         {
             p.statDefense += amt;
         }
-
-        public override void Load(float[] vals)
-        {
-            this.Load((int) vals[0]);
-        }
-
-        public override int numVals { set{} get { return 1; }}
     }
 }

@@ -26,7 +26,7 @@ using Effects;
 namespace Effects.Items
 {
 
-    public class ManaPercent : Effect<Item>
+    public class ManaPercent : ItemEffect
     {
         float percent;
         public int amt;
@@ -41,7 +41,7 @@ namespace Effects.Items
             return item.magic;
         }
         
-        public void Load(float percent)
+        public void Initialize(float percent)
         {
             //Percentage of mana increase
             this.percent = percent;
@@ -62,13 +62,8 @@ namespace Effects.Items
                 base.AddTooltip("-"+Math.Round((double)percent*100f*-1,2)+"% ("+amt+") Mana Cost", Colors.Red);
             else
                 base.AddTooltip("+"+Math.Round((double)percent*100f,2)+"% ("+amt+") Mana Cost", Colors.Green);
-        }
 
-        public override void Load(float[] vals)
-        {
-            this.Load(vals[0]);
+            base.Initialize();
         }
-
-        public override int numVals { set{} get { return 1; }}
     }
 }

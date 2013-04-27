@@ -65,7 +65,7 @@ namespace Effects
 
         public virtual void Initialize()
         { //Apply changes (when item is spawned)
-
+            
         }
 
         //If the effect wants to have some save state, it can
@@ -82,6 +82,11 @@ namespace Effects
         public virtual void Load(float[] vals)
         { //Important function for initializing effect with specified values
 
+        }
+
+        public MouseTip[] UpdateTooltip()
+        {
+            return toolTips.ToArray();
         }
 
         public void AddTooltip(string text, Colors color)
