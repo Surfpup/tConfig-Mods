@@ -21,42 +21,43 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Effects;
 
-namespace Effects.Items
+namespace Effects.Players
 {
-    public class HealthCost : ItemEffect
-    {
-        int cost;
 
-        public HealthCost(Item item, int cost) : base(item)
+    public class Defense : Effect<Player>
+    {
+        int amt;
+
+        public Defense(Player p, int amt) : base(p)
         {
-            this.cost = cost;
+            this.amt = amt;
         }
 
-        public static bool Check(Item item)
+        public static bool Check(Player p)
         {
             return true;
         }
-
+        
         public override void Initialize()
         {
-            this.name = "Added Health Cost";  
+            if(amt<0) {
+                base.AddTooltip("-"+amt+" Defense", Colors.Red);
+                this.name = "Decreased Defense";
+            } else {
+                base.AddTooltip("+"+amt+" Defense", Colors.Green);
+                this.name = "Increased Defense";
+            }
 
-            //this.AddDelegate("CanUse", (Func<Player, int, bool>) CanUse);
-            this.item.Register(ref this.item.CanUse, this, "CanUse");
-            base.AddTooltip("+"+cost+" Health Cost", Colors.Red);
-
+            this.AddDelegate("UpdatePlayer", (Action<Player>) this.UpdatePlayer);
+            //this.item.Register(ref this.item.UpdatePlayer, this, "UpdatePlayer");
             base.Initialize();
         }
 
-        public bool CanUse(Player p, int ind)
-        { 
-            if(cost>p.statLife) return false;
-
-            float defMod = (p.statDefense/2f);
-            int dmg = (int)((cost) + defMod);
-            p.Hurt(dmg, 0);
-            return true;
+        public void UpdatePlayer(Player p)
+        {
+            p.statDefense += amt;
         }
     }
 }

@@ -40,11 +40,11 @@ namespace Effects.Items
         public HealthCost costAffix;
         public ManaPercent manaAffix;
 
-        public Sacrificial(Item item) : base(item)
+        public Sacrificial(Item item, float percent, float healthPercent) : base(item)
         {
-            manaAffix = new ManaPercent(item);
+            manaAffix = new ManaPercent(item, percent);
 
-            costAffix = new HealthCost(item);
+            costAffix = new HealthCost(item, (int)Math.Round((double)(manaAffix.amt * healthPercent)));
         }
 
         public static bool Check(Item item)
@@ -52,11 +52,13 @@ namespace Effects.Items
             return ManaPercent.Check(item) && HealthCost.Check(item);
         }
 
-        public void Initialize(float percent, float healthPercent)
+        public override void Initialize()
         {
-            manaAffix.Initialize(percent);
+            if(!Check(item)) return;
+            
+            manaAffix.Initialize();
 
-            costAffix.Initialize( (int)Math.Round((double)(manaAffix.amt * healthPercent)) );
+            costAffix.Initialize();
 
             base.Initialize();
         }

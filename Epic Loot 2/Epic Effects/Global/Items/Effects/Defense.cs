@@ -30,21 +30,20 @@ namespace Effects.Items
     {
         int amt;
 
-        public Defense(Item item) : base(item)
+        public Defense(Item item, int amt) : base(item)
         {
-
+            this.amt = amt;
         }
 
         public static bool Check(Item item)
         {
-            return (item.accessory || item.bodySlot != -1 || item.legSlot != -1 || item.headSlot != -1);;
+            return (item.accessory || item.bodySlot != -1 || item.legSlot != -1 || item.headSlot != -1);
         }
         
-        public void Initialize(int amt)
+        public override void Initialize()
         {
-            //Percentage of mana increase
-            this.amt = amt;
-
+            if(!Check(item)) return;
+            
             if(amt<0) {
                 base.AddTooltip("-"+amt+" Defense", Colors.Red);
                 this.name = "Decreased Defense";
@@ -53,11 +52,6 @@ namespace Effects.Items
                 this.name = "Increased Defense";
             }
 
-            this.Initialize();
-        }
-
-        public override void Initialize()
-        {
             this.item.Register(ref this.item.Effects, this, "Effects");
             base.Initialize();
         }

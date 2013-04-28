@@ -79,11 +79,6 @@ namespace Effects
             
         }
 
-        public virtual void Load(float[] vals)
-        { //Important function for initializing effect with specified values
-
-        }
-
         public MouseTip[] UpdateTooltip()
         {
             return toolTips.ToArray();

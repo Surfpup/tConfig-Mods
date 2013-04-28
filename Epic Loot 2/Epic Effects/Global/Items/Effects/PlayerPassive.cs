@@ -21,42 +21,32 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Effects;
 
 namespace Effects.Items
 {
-    public class HealthCost : ItemEffect
-    {
-        int cost;
+    public class PlayerPassive : ItemEffect
+    { //Simply applies a player effect
+        Effect<Player> effect;
 
-        public HealthCost(Item item, int cost) : base(item)
+        public PlayerPassive(Item item, Effect<Player> effect) : base(item)
         {
-            this.cost = cost;
+            this.effect = effect;
         }
-
-        public static bool Check(Item item)
-        {
-            return true;
-        }
-
+       
         public override void Initialize()
         {
-            this.name = "Added Health Cost";  
+            this.name = effect.name;
 
-            //this.AddDelegate("CanUse", (Func<Player, int, bool>) CanUse);
-            this.item.Register(ref this.item.CanUse, this, "CanUse");
-            base.AddTooltip("+"+cost+" Health Cost", Colors.Red);
+            foreach(MouseTip m in effect.toolTips)
+            { //Add tooltips
+                base.toolTips.Add(m);
+            }
 
+            //Register updateplayer method as effects for the item
+            
+            this.item.Register(ref this.item.Effects, effect, "UpdatePlayer");
             base.Initialize();
-        }
-
-        public bool CanUse(Player p, int ind)
-        { 
-            if(cost>p.statLife) return false;
-
-            float defMod = (p.statDefense/2f);
-            int dmg = (int)((cost) + defMod);
-            p.Hurt(dmg, 0);
-            return true;
         }
     }
 }

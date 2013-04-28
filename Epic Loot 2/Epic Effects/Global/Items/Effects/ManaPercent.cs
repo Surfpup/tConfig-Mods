@@ -31,17 +31,7 @@ namespace Effects.Items
         float percent;
         public int amt;
 
-        public ManaPercent(Item item) : base(item)
-        {
-
-        }
-
-        public static bool Check(Item item)
-        {
-            return item.magic;
-        }
-        
-        public void Initialize(float percent)
+        public ManaPercent(Item item, float percent) : base(item)
         {
             //Percentage of mana increase
             this.percent = percent;
@@ -50,12 +40,18 @@ namespace Effects.Items
                 this.name = "Decreased Mana %";
             else this.name = "Increased Mana %";
 
-            this.Initialize();
+            amt = (int)Math.Round((double)((float)item.mana * percent));
         }
 
+        public static bool Check(Item item)
+        {
+            return item.magic;
+        }
+        
         public override void Initialize()
         {
-            amt = (int)Math.Round((double)((float)item.mana * percent));
+            if(!Check(item)) return;
+            
             item.mana += amt;
 
             if(amt<0)

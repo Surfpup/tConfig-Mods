@@ -21,42 +21,44 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Effects;
 
 namespace Effects.Items
 {
-    public class HealthCost : ItemEffect
-    {
-        int cost;
 
-        public HealthCost(Item item, int cost) : base(item)
+    public class Mana : ItemEffect
+    {
+        int amt;
+
+        public Mana(Item item, int amt) : base(item)
         {
-            this.cost = cost;
+            this.amt = amt;
         }
 
         public static bool Check(Item item)
         {
-            return true;
+            return (item.accessory || item.bodySlot != -1 || item.legSlot != -1 || item.headSlot != -1);
         }
-
+        
         public override void Initialize()
         {
-            this.name = "Added Health Cost";  
+            if(!Check(item)) return;
+            
+            if(amt<0) {
+                base.AddTooltip("-"+amt+" Mana", Colors.Red);
+                this.name = "Decreased Mana";
+            } else {
+                base.AddTooltip("+"+amt+" Mana", Colors.Green);
+                this.name = "Increased Mana";
+            }
 
-            //this.AddDelegate("CanUse", (Func<Player, int, bool>) CanUse);
-            this.item.Register(ref this.item.CanUse, this, "CanUse");
-            base.AddTooltip("+"+cost+" Health Cost", Colors.Red);
-
+            this.item.Register(ref this.item.Effects, this, "Effects");
             base.Initialize();
         }
 
-        public bool CanUse(Player p, int ind)
-        { 
-            if(cost>p.statLife) return false;
-
-            float defMod = (p.statDefense/2f);
-            int dmg = (int)((cost) + defMod);
-            p.Hurt(dmg, 0);
-            return true;
+        public void Effects(Player p)
+        {
+            p.statMana += amt;
         }
     }
 }
