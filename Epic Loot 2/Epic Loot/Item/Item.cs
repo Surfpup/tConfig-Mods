@@ -45,17 +45,17 @@ namespace Epic_Loot
 
         }
 
-        List<ItemEffect> effects;
+        List<ItemAffix> effects;
 
         public void Initialize()
         {
-            effects = new List<ItemEffect>();
+            effects = new List<ItemAffix>();
         }
 
         public void Save(BinaryWriter writer)
         {
             writer.Write(effects.Count);
-            foreach (ItemEffect p in effects)
+            foreach (ItemAffix p in effects)
             {
                 p.Save(writer);
             }
@@ -65,12 +65,12 @@ namespace Epic_Loot
         {
             int num = reader.ReadInt32();
 
-            effects = new List<ItemEffect>();
+            effects = new List<ItemAffix>();
             for (int i = 0; i < num; i++)
             {
                 //Get the ID or the name of the effect
                 int id = reader.ReadInt32();
-                ItemEffect e = (ItemEffect) ModGeneric.itemEffects[id].Gen(this.item);
+                ItemAffix e = (ItemAffix) ModGeneric.itemAffixes[id].Gen(this.item);
                 e.Load(reader, v);
                 effects.Add(e);
             }
@@ -83,10 +83,8 @@ namespace Epic_Loot
                 ArrayList valid = new ArrayList();
                 for (int i = 0; i < ModGeneric.itemAffixes.Count; i++)
                 {
-                    //TODO: FIX THIS!!
-                    //We don't want to spawn affixes just to check requirements!
-                    ItemEffect e = ModGeneric.itemAffixes[i].Gen(this.item);
-                    if (e.Check()) valid.Add(i);
+                    if(ModGeneric.itemAffixes[i].Check(this.item))
+                        valid.Add(i);
                 }
                 return valid.Count > 0; //ability to reforge
                 //return true;
@@ -103,7 +101,7 @@ namespace Epic_Loot
                     Config.CopyAttributes(this.item, i);
                 }
             }
-            effects = new List<ItemEffect>();
+            effects = new List<ItemAffix>();
             int num = Rand.SkewedRand(0, ModGeneric.MAX_AFFIX); //Number of prefixes to add
 
             AssignAffixes(num);
@@ -116,7 +114,7 @@ namespace Epic_Loot
         {
             item.prefix = 0;
 
-            foreach(ItemEffect e in effects)
+            foreach(ItemAffix e in effects)
                 e.Initialize();
         }
 
@@ -125,10 +123,8 @@ namespace Epic_Loot
             ArrayList valid = new ArrayList();
             for (int i = 0; i < ModGeneric.itemAffixes.Count; i++)
             {
-                //TODO: FIX THIS!!
-                //We don't want to spawn affixes just to check requirements!
-                ItemEffect e = ModGeneric.itemAffixes[i].Gen(this.item);
-                if (e.Check()) valid.Add(i);
+                if(ModGeneric.itemAffixes[i].Check(this.item))
+                    valid.Add(i);
             }
             for (int i = 0; i < amt; i++)
             {
@@ -159,7 +155,7 @@ namespace Epic_Loot
             }
         }*/
 
-        public void Effects(Player player)
+        /*public void Effects(Player player)
         {
             //Main.NewText("Effects run");
             //combined.Apply(player);
@@ -167,7 +163,7 @@ namespace Epic_Loot
             {
                 e.Apply(player);
             }
-        }
+        }*/
 
         /*public void DealtNPC(Player myPlayer, NPC npc, double damage)
         {
@@ -214,14 +210,14 @@ namespace Epic_Loot
         public MouseTip[] UpdateTooltip()
         {
             List<MouseTip> tips = new List<MouseTip>();
-            foreach(ItemEffect e in effects)
+            foreach(ItemAffix e in effects)
             {
-                tips.AddRange(e.toolTips);
+                tips.AddRange(e.effect.toolTips);
             }
 
             return tips.ToArray();
         }
-        public List<ItemEffect> GetEffects()
+        public List<ItemAffix> GetEffects()
         {
             return effects;
         }

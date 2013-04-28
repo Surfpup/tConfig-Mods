@@ -24,13 +24,26 @@ namespace Epic_Loot
 {
     public class Stat
     {
+        public enum Kind{Float,Int};
+
     	public float min;
     	public float max;
+        public Kind type;
+
     	public Stat(float min, float max)
     	{
     		this.min=min;
     		this.max=max;
+            this.type=Kind.Float;
     	}
+
+        public Stat(int min, int max)
+        {
+            this.min=min;
+            this.max=max;
+            this.type=Kind.Int;
+        }
+
     	public int IntMin()
     	{
     		return (int) min;
