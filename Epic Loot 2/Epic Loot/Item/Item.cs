@@ -57,6 +57,7 @@ namespace Epic_Loot
             writer.Write(effects.Count);
             foreach (ItemAffix p in effects)
             {
+                writer.Write(p.affix.id);
                 p.Save(writer);
             }
         }
@@ -137,23 +138,24 @@ namespace Epic_Loot
                 valid.RemoveAt(index); //Remove from possible affixes
             }
         }
-        /*public void AffixName(ref string name)
+        public void AffixName(ref string name)
         {
             //Assign an affix for each stat that's modified, by a range
             //I.e. Large is +12-17% size, Massive is +18% and higher
             try {
-                foreach (GPrefix prefix in prefixes)
+                foreach (ItemAffix affix in effects)
                 {
-                    if (!name.Contains(prefix.affix))
+                    if (!name.Contains(affix.affix.name))
                     {
-                        if (!prefix.suffix) name = prefix.affix + " " + name;
-                        else name = name + " " + prefix.affix;
+                        //if (!prefix.suffix) 
+                        name = affix.affix.name + " " + name;
+                        //else name = name + " " + prefix.affix;
                     }
                 }
             } catch(Exception e) {
                 //Main.NewText("AffixName Exception: "+e.Message);
             }
-        }*/
+        }
 
         /*public void Effects(Player player)
         {
@@ -207,7 +209,7 @@ namespace Epic_Loot
             }
             return ran;
         }*/
-        public MouseTip[] UpdateTooltip()
+        /*public MouseTip[] UpdateTooltip()
         {
             List<MouseTip> tips = new List<MouseTip>();
             foreach(ItemAffix e in effects)
@@ -216,7 +218,7 @@ namespace Epic_Loot
             }
 
             return tips.ToArray();
-        }
+        }*/
         public List<ItemAffix> GetEffects()
         {
             return effects;

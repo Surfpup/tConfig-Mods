@@ -53,6 +53,7 @@ namespace Epic_Loot
         public Type type;
         public string name; //Name of affix
         public List<Stat> range; //List of ranges for the values to input to the affix
+        public int id; //ID mapping to dictionary
 
         public ItemAffixDef(string name, Type type, params Stat[] range)
         {
@@ -69,9 +70,11 @@ namespace Epic_Loot
             this.name = type.Namespace+"-"+name;
             this.type = type;
 
+            this.range = new List<Stat>();
             this.range.AddRange(range);
 
             //Add to global arrays
+            this.id = ModGeneric.itemAffixes.Count;
             ModGeneric.itemAffixes.Add(this);
         }
 
@@ -90,7 +93,7 @@ namespace Epic_Loot
     public class ItemAffix
     {
         Item item;
-        ItemAffixDef affix; //Definition of affix
+        public ItemAffixDef affix; //Definition of affix
         public Effects.ItemEffect effect; //The actual affix itself
         int seed; //Seed used for RNG
         float skewMod; //Modifer that skews the RNG. Decided upon creation of affix, based on various factors.
@@ -134,10 +137,11 @@ namespace Epic_Loot
                     param.Add((int) normVal);
             }
 
-            effect = (Effects.ItemEffect)Activator.CreateInstance(affix.type, false, 
-                        System.Reflection.BindingFlags.CreateInstance, null, 
-                        param.ToArray(),
-                        null, null);
+            effect = (Effects.ItemEffect)Activator.CreateInstance(affix.type, param.ToArray());
+                        //false, 
+                        //System.Reflection.BindingFlags.CreateInstance, null, 
+                        //param.ToArray(),
+                        //null, null);
 
 
             //effect = (Effects.ItemEffect)Activator.CreateInstance(affix.type, item);
